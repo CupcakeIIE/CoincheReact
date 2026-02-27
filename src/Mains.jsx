@@ -1,29 +1,21 @@
 import { Button, Typography } from "@mui/material";
 import useStyles from "./style";
 
-const Coinche = ({indexMe = false, player= '', index = 0}) => {
+const Main = ({indexMe = 0, player= '', index = 0, cards = []}) => {
 
   const classes = useStyles()
 
+  const cardBack = '/Cartes/card_back.png'
+
   // see for -212px => strange should be universal for all kind of screens
   const styleTop = {top: '0px', transform: 'rotate(180deg)', position: 'absolute'}
-  const styleLeft = {left: '-212px', transform: 'rotate(90deg)', position: 'absolute'}
-  const styleRight = {right: '-212px', transform: 'rotate(270deg)', position: 'absolute'}
+  const styleLeft = {left: '-205px', transform: 'rotate(90deg)', position: 'absolute'}
+  const styleRight = {right: '-205px', transform: 'rotate(270deg)', position: 'absolute'}
   const styleBottom = {bottom: '0px', position: 'absolute'}
 
   const isMe = indexMe === index
-
-  // cartes
-  const cards = [
-    "/Cartes/Coeur7.png",
-    "/Cartes/Coeur8.png",
-    "/Cartes/Coeur9.png",
-    "/Cartes/Coeur10.png",
-    "/Cartes/CoeurValet.png",
-    "/Cartes/CoeurDame.png",
-    "/Cartes/CoeurRoi.png",
-    "/Cartes/CoeurAs.png",
-  ]
+  const myCards = cards.slice(indexMe*8, (indexMe+1)*8)
+  console.log('myCards', myCards)
 
   // to know where to display the cards (top, left, right or bottom)
   // a player always see his card on the bottom
@@ -41,11 +33,14 @@ const Coinche = ({indexMe = false, player= '', index = 0}) => {
 
   return (
     <div style={getUsedStyle(index)}>
-      <Typography color={isMe ? 'success' : 'error'}>{player}</Typography>
+      <div className={classes.textMain}>
+        <Typography color={isMe ? 'success' : 'error'} className={classes.namePlayer} variant="h5"><b>{player}</b></Typography>
+        <Typography><b>110 Coeur</b></Typography>
+      </div>
       <div>
-        {cards.map((card, index) => (
+        {myCards.map((card, index) => (
           <Button key={index} className={classes.buttonCards}>
-            <img src={card} />
+            <img src={isMe ? `/Cartes/${card}.png` : cardBack} className={classes.imgCard} />
           </Button>
         ))}
       </div>
@@ -53,4 +48,4 @@ const Coinche = ({indexMe = false, player= '', index = 0}) => {
   )
 }
 
-export default Coinche;
+export default Main;

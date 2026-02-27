@@ -3,8 +3,9 @@ import { usePlayersList, insertCoin, useMultiplayerState, isHost, myPlayer } fro
 import { Typography } from '@mui/material';
 
 import './App.css'
-import Coinche from "./Coinche";
+import Main from "./Mains";
 import useStyles from "./style";
+import { mixCards, decoupe, distribution } from "./Coinche";
 
 function App() {
 
@@ -13,6 +14,7 @@ function App() {
   const players = usePlayersList();
 
   const [gameStarted, setGameStarted] = useMultiplayerState("gameStarted", false);
+  const [cards, setCards] = useMultiplayerState("cards", []);
 
   const me = myPlayer();
   const meIndex = players.findIndex(player => me.id === player.id) 
@@ -21,6 +23,7 @@ function App() {
   useEffect(() => {
     if (players.length === 4 && isHost()) {
       setGameStarted(true);
+      setCards(distribution(decoupe(mixCards())))
     }
   }, [players]);
 
@@ -34,7 +37,7 @@ function App() {
     <div className={classes.gameBoard}>
       {gameStarted && 
         players.map((player, index) => (
-          <Coinche indexMe={meIndex} player={player?.state?.profile?.name || `Player${index}`} index={index} />
+          <Main indexMe={meIndex} player={player?.state?.profile?.name || `Player${index}`} index={index} cards={cards} />
       ))}
     </div>
   )

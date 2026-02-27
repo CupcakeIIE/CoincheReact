@@ -12,7 +12,7 @@ const useStyles = makeStyles(theme => ({
     "&:focus": {
       outline: "none",
     },
-    padding: '0px',
+    padding: '0px !important',
   },
 }));
 

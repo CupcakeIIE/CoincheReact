@@ -24,6 +24,12 @@ const useStyles = makeStyles(theme => ({
     display: 'block',
   },
 
+  namePlayer: {
+    // display: 'flex',
+    // paddingLeft: '2em',
+    // justifyContent: 'flex-start',
+  },
+
   textMain: {
     display: 'flex',
     flexDirection: 'row',
@@ -47,11 +53,6 @@ const useStyles = makeStyles(theme => ({
     "&:hover": {
       borderColor: '#9500ae',
     },
-    backgroundColor: '#fff !important',
-    width: '130px',
-    borderRadius: '30px !important',
-    // paddingTop: '1em !important',
-    // paddingBottom: '1em !important'
   },
 
   nameMain: {
@@ -66,44 +67,26 @@ const useStyles = makeStyles(theme => ({
     '&:focus': {
       outline: 'none',
     },
-    "&:hover": {
-      borderColor: '#9500ae',
-    },
     paddingLeft: '1em !important',
     paddingRight: '1em !important',
-    margin: '0.5em 0.5em !important',
-    width: '120px',
-  },
-
-  buttonChoiceNumber: {
-    '&:focus': {
-      outline: 'none',
-    },
-    "&:hover": {
-      borderColor: '#9500ae',
-    },
-    paddingLeft: '1em !important',
-    paddingRight: '1em !important',
-    margin: '0.5em 1em !important',
-    width: '50px',
+    marginLeft: '1em !important',
+    marginRight: '1em !important',
   },
 
   dialogActions: {
-    backgroundColor: '#9500ae',
+    // backgroundColor: '#9500ae',
     borderTop: '1px solid #9500ae',
     display: 'flex !important',
-    justifyContent: 'space-between !important',
+    justifyContent: 'center !important',
     alignItems: 'center !important',
-    padding: '1em 10em !important',
-    // paddingRight: '10em !important',
   },
 
   dialogContent: {
     display: 'flex',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
     padding: '2em 2em !important',
-    flexDirection: 'row',
+    flexDirection: 'column',
   },
 
   buttonsBlock: {
@@ -111,9 +94,6 @@ const useStyles = makeStyles(theme => ({
     justifyContent: 'center',
     alignItems: 'center',
     flexWrap: 'wrap',
-    flexDirection: 'column',
-    marginRight: '1.7em !important',
-    marginLeft: '1.5em !important',
   },
 
   buttonsBlockNombres: {
@@ -121,38 +101,8 @@ const useStyles = makeStyles(theme => ({
     justifyContent: 'center',
     alignItems: 'center',
     flexWrap: 'wrap',
-    // paddingTop: '1em',
-    // flexDirection: 'column',
-  },
-
-  divider: {
-    backgroundColor: '#9500ae',
-    paddingTop: '2em',
-    // marginLeft: '1em !important',
-  },
-
-  wholeDialog: {
-    "& .MuiPaper-root": {
-      borderRadius: '30px !important',
-      maxWidth: '655px',
-    }
-  },
-
-  mains: {
-    position: 'absolute',
-    paddingLeft: '1em',
-    paddingRight: '1em',
     paddingTop: '1em',
   },
-  mainsEnCours: {
-    position: 'absolute',
-    paddingLeft: '1em',
-    paddingRight: '1em',
-    paddingTop: '1em',
-    backgroundColor: '#87fdff',
-    borderTopLeftRadius: '30px !important',
-    borderTopRightRadius: '30px !important',
-  }
 }));
 
 export default useStyles;

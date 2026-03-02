@@ -2,10 +2,10 @@ import { useEffect } from "react";
 import { usePlayersList, insertCoin, useMultiplayerState, isHost, myPlayer } from "playroomkit";
 
 import './App.css'
-import Main from "./Mains";
 import useStyles from "./style";
+import Main from "./Mains";
+import MainInGame from "./MainsInGame";
 import { mixCards, decoupe, distribution } from "./Coinche";
-import { Button, Typography } from "@mui/material";
 
 function App() {
 
@@ -25,6 +25,8 @@ function App() {
   const [nbPasses, setNbPasses] = useMultiplayerState('nbPasses', 0)
 
   const [gamePlaying, setGamePlaying] = useMultiplayerState('gamePlaying', false)
+  const [partance, setPartance] = useMultiplayerState('partance', 0)
+  const [cardsPlayed, setCardsPlayed] = useMultiplayerState('cardsPlayed', Array(4).fill(''))
 
   const me = myPlayer();
   const meIndex = players.findIndex(player => me.id === player.id) 
@@ -46,19 +48,24 @@ function App() {
 
   // gerer la fin des annonces en fonction du nombre de passe et/ou de la coinche
   useEffect(() => {
-    if (coinche)
+    if (coinche) {
       setGamePlaying(true)
+      setTurnPlayer(partance)
+    }
 
-    if (lastAnnonce !== '' && nbPasses >= 3)
+    if (lastAnnonce !== '' && nbPasses >= 3) {
       setGamePlaying(true)
+      setTurnPlayer(partance)
+    }
 
     if (nbPasses >= 4 && lastAnnonce === '') {
       setCards(distribution(decoupe(mixCards())))
       setTurnPlayer((turnPlayer + 2) % 4)
+      setPartance(partance+1)
     }
   }, [nbPasses, coinche, lastAnnonce])
 
-  console.log('gamePlaying', gamePlaying)
+  console.log('cartes jouées', cardsPlayed)
 
   return (
     <div className={classes.gameBoard}>
@@ -67,7 +74,10 @@ function App() {
           <b>{players[lastAnnoncePlayerIndex].state.profile.name}</b> a annoncé <b>{lastAnnonce}</b>
         </Typography>
       } */}
-      {gameStarted && 
+
+
+      {/* afficher les mains des joueurs pendant les annonces != du in game (pour plus de simplicté de compréhension) */}
+      {gameStarted && !gamePlaying &&
         players.map((player, index) => (
           <Main 
             indexMe={meIndex} 
@@ -83,6 +93,23 @@ function App() {
             setLastAnnoncePlayerIndex={setLastAnnoncePlayerIndex}
             nbPasses={nbPasses}
             setNbPasses={setNbPasses}
+          />
+      ))}
+
+      {/* afficher les mains des joueurs quand la partie a commencé */}
+      {gameStarted && gamePlaying &&
+        players.map((player, index) => (
+          <MainInGame
+            indexMe={meIndex} 
+            player={player?.state?.profile?.name || `Player${index}`} 
+            index={index} 
+            cards={cards} 
+            setCards={setCards}
+            annonceAll={annonceAll}
+            turnPlayer={turnPlayer}
+            setTurnPlayer={setTurnPlayer}
+            cardsPlayed={cardsPlayed}
+            setCardsPlayed={setCardsPlayed}
           />
       ))}
     </div>

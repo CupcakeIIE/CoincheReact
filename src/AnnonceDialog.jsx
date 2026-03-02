@@ -64,46 +64,54 @@ const AnnonceDialog = ({
         <Typography variant='h4'>Annonce</Typography>
       </DialogTitle>
       <DialogContent className={classes.dialogContent}>
-        <div className={classes.buttonsBlock}>
-          {allCouleurs.map((color, index) => (
-            <Button 
-              key={index} 
-              color='secondary' 
-              className={classes.buttonChoice} 
-              variant={couleur === color ? 'contained' : 'outlined'}
-              onClick={() => chooseColor(color)}
-            >
-              {color}
-            </Button>
-          ))}
+        <Typography>Annonce équipe alliée : <b>100 coeur</b></Typography>
+        <div className={classes.annonceEnnemie}>
+          <Typography>Annonce équipe ennemie : <b>120 trèfle</b></Typography>
+          <Button variant="outlined" color='secondary' className={classes.buttonDialog}>Coincher</Button>
         </div>
-        <Divider orientation="vertical" variant="middle" flexItem className={classes.divider} />
-        <div>
-          <div className={classes.buttonsBlockNombres}>
-            {allMises.slice(0, 11).map((valeur, index) => (
-              <Button 
-                key={index} 
-                color='secondary' 
-                className={classes.buttonChoiceNumber} 
-                variant={valeur === mise ? 'contained' : 'outlined'}
-                onClick={() => chooseMise(valeur)}
-              >
-                {valeur}
-              </Button>
-            ))}
-          </div>
-          <div className={classes.buttonsBlockNombres}>
-            {allMises.slice(11).map((valeur, index) => (
+        <Divider variant="middle" className={classes.dividerHorizontal} />
+        <div className={classes.dialogContentBis}>
+          <div className={classes.buttonsBlock}>
+            {allCouleurs.map((color, index) => (
               <Button 
                 key={index} 
                 color='secondary' 
                 className={classes.buttonChoice} 
-                variant={valeur === mise ? 'contained' : 'outlined'}
-                onClick={() => chooseMise(valeur)}
+                variant={couleur === color ? 'contained' : 'outlined'}
+                onClick={() => chooseColor(color)}
               >
-                {valeur}
+                {color}
               </Button>
             ))}
+          </div>
+          <Divider orientation="vertical" variant="middle" flexItem className={classes.divider} />
+          <div>
+            <div className={classes.buttonsBlockNombres}>
+              {allMises.slice(0, 11).map((valeur, index) => (
+                <Button 
+                  key={index} 
+                  color='secondary' 
+                  className={classes.buttonChoiceNumber} 
+                  variant={valeur === mise ? 'contained' : 'outlined'}
+                  onClick={() => chooseMise(valeur)}
+                >
+                  {valeur}
+                </Button>
+              ))}
+            </div>
+            <div className={classes.buttonsBlockNombres}>
+              {allMises.slice(11).map((valeur, index) => (
+                <Button 
+                  key={index} 
+                  color='secondary' 
+                  className={classes.buttonChoice} 
+                  variant={valeur === mise ? 'contained' : 'outlined'}
+                  onClick={() => chooseMise(valeur)}
+                >
+                  {valeur}
+                </Button>
+              ))}
+            </div>
           </div>
         </div>
       </DialogContent>

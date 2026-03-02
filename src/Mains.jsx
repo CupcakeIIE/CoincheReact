@@ -55,7 +55,7 @@ const Main = ({
       </div>
       <div>
         {myCards.map((card, index) => (
-          <Button key={index} className={classes.buttonCards}>
+          <Button key={index} className={classes.buttonCards} disabled>
             <img src={isMe ? `/Cartes/${card}.png` : cardBack} className={classes.imgCard} />
           </Button>
         ))}

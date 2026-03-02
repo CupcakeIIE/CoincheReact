@@ -17,6 +17,13 @@ const useStyles = makeStyles(theme => ({
     height: '100px',
   },
 
+  boxCarte: {
+    position: 'absolute',
+    padding: '0px !important',
+    width: '70px',
+    height: '100px',
+  },
+
   imgCard: {
     width: '100%',
     height: '100%',
@@ -103,6 +110,15 @@ const useStyles = makeStyles(theme => ({
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: '2em 2em !important',
+    flexDirection: 'column',
+  },
+
+  dialogContentBis: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    // padding: '2em 2em !important',
+    paddingTop: '1em',
     flexDirection: 'row',
   },
 
@@ -123,6 +139,21 @@ const useStyles = makeStyles(theme => ({
     flexWrap: 'wrap',
     // paddingTop: '1em',
     // flexDirection: 'column',
+  },
+
+  dividerHorizontal: {
+    backgroundColor: '#9500ae',
+    width: '80%',
+    // marginTop: '1em',
+    // marginLeft: '1em !important',
+  },
+
+  annonceEnnemie: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: '1em',
+    marginBottom: '1em',  
   },
 
   divider: {

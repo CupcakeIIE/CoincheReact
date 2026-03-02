@@ -27,6 +27,8 @@ function App() {
   const [gamePlaying, setGamePlaying] = useMultiplayerState('gamePlaying', false)
   const [partance, setPartance] = useMultiplayerState('partance', 0)
   const [cardsPlayed, setCardsPlayed] = useMultiplayerState('cardsPlayed', Array(4).fill(''))
+  const [atout, setAtout] = useMultiplayerState('atout', '')
+  const [couleurJouee, setCouleurJouee] = useMultiplayerState('couleurJouee', '')
 
   const me = myPlayer();
   const meIndex = players.findIndex(player => me.id === player.id) 
@@ -51,11 +53,15 @@ function App() {
     if (coinche) {
       setGamePlaying(true)
       setTurnPlayer(partance)
+      const annonceList = lastAnnonce.split(' ')
+      setAtout(annonceList[1])
     }
 
     if (lastAnnonce !== '' && nbPasses >= 3) {
       setGamePlaying(true)
       setTurnPlayer(partance)
+      const annonceList = lastAnnonce.split(' ')
+      setAtout(annonceList[1])
     }
 
     if (nbPasses >= 4 && lastAnnonce === '') {
@@ -65,7 +71,7 @@ function App() {
     }
   }, [nbPasses, coinche, lastAnnonce])
 
-  console.log('cartes jouées', cardsPlayed)
+  console.log('atout', atout)
 
   return (
     <div className={classes.gameBoard}>
@@ -110,6 +116,9 @@ function App() {
             setTurnPlayer={setTurnPlayer}
             cardsPlayed={cardsPlayed}
             setCardsPlayed={setCardsPlayed}
+            couleurJouee={couleurJouee}
+            setCouleurJouee={setCouleurJouee}
+            atout={atout}
           />
       ))}
     </div>

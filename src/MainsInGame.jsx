@@ -11,6 +11,8 @@ const MainInGame = ({
   annonceAll = [],
   turnPlayer = 0, setTurnPlayer, 
   cardsPlayed = [], setCardsPlayed,
+  couleurJouee = '', setCouleurJouee,
+  atout = '',
 }) => {
 
   const classes = useStyles()
@@ -41,6 +43,12 @@ const MainInGame = ({
   }
 
   const clickCard = (card, indexCarte) => {
+    const cardList = card.split(' ')
+
+    // si première carte du pli, sauvegarder la couleur
+    if  (couleurJouee === '')
+      setCouleurJouee(cardList[0])
+
     setCardsPlayed(cardsPlayed.map((c, i) => {
       if (i === turnPlayer)
         return card
@@ -72,6 +80,41 @@ const MainInGame = ({
       return styleRightCard
   }
 
+  const isJouable = (hand, card) => {
+    const cardList = card.split(' ')
+
+    // si aucune carte de jouee sur ce pli, on peut toutes les jouer
+    if (couleurJouee === '')
+      return true
+
+    // regarder si il y a de la couleur
+    const thereIsColor = hand.some(c => {
+      const cList = c.split(' ')
+      if (cList[0] === couleurJouee)
+        return true
+      else
+        return false
+    })
+    if (cardList[0] !== couleurJouee && thereIsColor)
+      return false
+
+    // si non, regarder si il y a de l'atout
+    const thereIsAtout = hand.some(c => {
+      const cList = c.split(' ')
+      if (cList[0] === atout)
+        return true
+      else
+        return false
+    })
+    if (cardList[0] !== atout && !thereIsColor && thereIsAtout)
+      return false
+
+    // si non, la mettre comme jouable
+    return true
+  }
+
+  // console.log('couleur', couleurJouee)
+
   return (
     <div>
       {/* afficher au centre les cartes jouées pour ce pli */}
@@ -91,16 +134,19 @@ const MainInGame = ({
           <Typography><b>{annonceAll[index]}</b></Typography>
         </div>
         <div>
-          {myCards.map((card, i) => (
-            <Button 
-            key={i} 
-            className={classes.buttonCards} 
-            disabled={indexMe !== index || indexMe !== turnPlayer}
-            onClick={() => clickCard(card, i)}
-            >
-              {card && <img src={isMe ? `/Cartes/${card}.png` : cardBack} className={classes.imgCard} />}
-            </Button>
-          ))}
+          {myCards.map((card, i) => {
+            const putClickable = isJouable(myCards, card)
+            return (
+              <Button 
+                key={i} 
+                className={classes.buttonCards} 
+                disabled={(indexMe !== index || indexMe !== turnPlayer) || !putClickable}
+                onClick={() => clickCard(card, i)}
+              >
+                {card && <img src={isMe ? `/Cartes/${card}.png` : cardBack} className={classes.imgCard} />}
+                {card && isMe && indexMe === turnPlayer && putClickable && <div className={classes.cardOverlay}></div>}
+              </Button>
+          )})}
         </div>
       </div>
     </div>

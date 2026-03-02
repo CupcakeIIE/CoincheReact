@@ -1,4 +1,4 @@
-import Cartes from "./cartes"
+import {Cartes} from "./cartes"
 
 const mixCards = () => {
   const mixedCards = [];

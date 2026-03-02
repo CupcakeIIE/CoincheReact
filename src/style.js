@@ -17,6 +17,14 @@ const useStyles = makeStyles(theme => ({
     height: '100px',
   },
 
+  cardOverlay: {
+    width: '100%',
+    height: '100%',
+    inset: '0',
+    position: 'absolute',
+    backgroundColor: 'rgba(89, 0, 255, 0.18)',
+  },
+
   boxCarte: {
     position: 'absolute',
     padding: '0px !important',

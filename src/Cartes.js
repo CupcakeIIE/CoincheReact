@@ -36,4 +36,16 @@ const Cartes = [
   "Carreau Roi",
 ]
 
-export default Cartes;
+
+const ordreAtout = [
+  'Valet',
+  '9',
+  'As',
+  '10',
+  'Roi',
+  'Dame',
+  '8',
+  '7',
+]
+
+export {Cartes, ordreAtout};

@@ -5,7 +5,8 @@ import './App.css'
 import useStyles from "./style";
 import Main from "./Mains";
 import MainInGame from "./MainsInGame";
-import { mixCards, decoupe, distribution } from "./Coinche";
+import { mixCards, decoupe, distribution, getHighestCard } from "./Coinche";
+import { ordreAtout, ordreNonAtout } from "./cartes";
 
 function App() {
 
@@ -29,6 +30,8 @@ function App() {
   const [cardsPlayed, setCardsPlayed] = useMultiplayerState('cardsPlayed', Array(4).fill(''))
   const [atout, setAtout] = useMultiplayerState('atout', '')
   const [couleurJouee, setCouleurJouee] = useMultiplayerState('couleurJouee', '')
+  const [highestCard, setHighestCard] = useMultiplayerState('highestCard', '')
+  const [indexHighestCard, setIndexHighestCard] = useMultiplayerState('indexHighestCard', 0)
 
   const me = myPlayer();
   const meIndex = players.findIndex(player => me.id === player.id) 
@@ -71,6 +74,14 @@ function App() {
     }
   }, [nbPasses, coinche, lastAnnonce])
 
+
+  // savoir quelle carte est la plus forte dans celles déjà jouées
+  // on recalcule à chaque fois qu'une carte est jouée
+  useEffect(() => {
+    const newHighestCard = getHighestCard(cardsPlayed, couleurJouee, atout)
+    setHighestCard(newHighestCard)
+  }, [cardsPlayed])
+
   console.log('atout', atout)
 
   return (
@@ -99,6 +110,7 @@ function App() {
             setLastAnnoncePlayerIndex={setLastAnnoncePlayerIndex}
             nbPasses={nbPasses}
             setNbPasses={setNbPasses}
+            partance={partance}
           />
       ))}
 
@@ -119,6 +131,8 @@ function App() {
             couleurJouee={couleurJouee}
             setCouleurJouee={setCouleurJouee}
             atout={atout}
+            highestCard={highestCard}
+            partance={partance}
           />
       ))}
     </div>

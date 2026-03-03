@@ -48,4 +48,15 @@ const ordreAtout = [
   '7',
 ]
 
-export {Cartes, ordreAtout};
+const ordreNonAtout = [
+  'As',
+  '10',
+  'Roi',
+  'Dame',
+  'Valet',
+  '9',
+  '8',
+  '7',
+]
+
+export {Cartes, ordreAtout, ordreNonAtout};

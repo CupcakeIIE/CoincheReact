@@ -1,4 +1,4 @@
-import {Cartes} from "./cartes"
+import {Cartes, ordreAtout, ordreNonAtout} from "./cartes"
 
 const mixCards = () => {
   const mixedCards = [];
@@ -56,4 +56,55 @@ const distribution = (cards = []) => {
   return cardsDistributed
 }
 
-export  {mixCards, decoupe, distribution}
+
+const getHighestCard = (cardsPlayed = [], couleurJouee = '', atout = '') => {
+  const newHighestCard = cardsPlayed.reduce((acc, c) => {
+    if (c === '')
+      return acc
+    if (acc === '')
+      return c
+
+    const cList = c.split(' ')
+    const arrList = acc.split(' ')
+    // cas les 2 sont de la couleur (qui n'est pas de l'atout)
+    if (cList[0] === arrList[0] && cList[0] === couleurJouee && couleurJouee !== atout) {
+      const cIndexNonAtout = ordreNonAtout.findIndex(o => o === cList[1])
+      const arrIndexNonAtout = ordreNonAtout.findIndex(o => o === arrList[1])
+      if (cIndexNonAtout < arrIndexNonAtout)
+        return c
+      else
+        return acc
+    }
+
+    // cas les 2 sont de l'atout (ou la couleur est de l'atout)
+    if (cList[0] === arrList[0] && ((cList[0] === couleurJouee && couleurJouee === atout) || cList[0] === atout)) {
+      const cIndexNonAtout = ordreAtout.findIndex(o => o === cList[1])
+      const arrIndexNonAtout = ordreAtout.findIndex(o => o === arrList[1])
+      if (cIndexNonAtout < arrIndexNonAtout)
+        return c
+      else
+        return acc
+    }
+
+    // cas un couleur un atout
+    if (cList[0] === couleurJouee && arrList[0] === atout && couleurJouee !== atout)
+      return acc
+    if (cList[0] === atout && arrList[0] === couleurJouee && couleurJouee !== atout)
+      return c
+
+    // cas un des 2 n'est ni atout ni couleur
+    if (cList[0] !== couleurJouee && cList[0] !== atout)
+      return acc
+    if (arrList[0] !== couleurJouee && arrList[0] !== atout)
+      return c
+
+  }, '')
+
+  return newHighestCard
+}
+
+const ramasserPli = (highestCard, cardsPlayed) => {
+
+}
+
+export  {mixCards, decoupe, distribution, getHighestCard, ramasserPli}

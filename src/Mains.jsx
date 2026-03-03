@@ -15,6 +15,7 @@ const Main = ({
   setLastAnnonce,
   setLastAnnoncePlayerIndex,
   nbPasses = 0, setNbPasses,
+  partance = 0,
 }) => {
 
   const classes = useStyles()
@@ -48,7 +49,7 @@ const Main = ({
     <div style={getUsedStyle(index)} className={index === turnPlayer ? classes.mainsEnCours : classes.mains}>
       <div className={classes.textMain}>
         <div className={classes.nameMain}>
-          {index === turnPlayer && <Brightness1Icon color='secondary' />}
+          {index === partance && <Brightness1Icon color='secondary' />}
           <Typography color={isMe ? 'success' : 'error'} className={classes.namePlayer} variant="h5"><b>{player}</b></Typography>
         </div>
         <Typography><b>{annonceAll[index]}</b></Typography>

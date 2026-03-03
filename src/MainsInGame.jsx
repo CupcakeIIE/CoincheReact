@@ -2,6 +2,7 @@ import { Button, Typography } from "@mui/material";
 import Brightness1Icon from '@mui/icons-material/Brightness1';
 
 import useStyles from "./style";
+import { ordreAtout } from "./cartes";
 
 const MainInGame = ({
   indexMe = 0, 
@@ -13,6 +14,8 @@ const MainInGame = ({
   cardsPlayed = [], setCardsPlayed,
   couleurJouee = '', setCouleurJouee,
   atout = '',
+  highestCard = '',
+  partance = 0,
 }) => {
 
   const classes = useStyles()
@@ -95,7 +98,26 @@ const MainInGame = ({
       else
         return false
     })
-    if (cardList[0] !== couleurJouee && thereIsColor)
+    console.log('card color', card, thereIsColor)
+    if (cardList[0] !== couleurJouee && thereIsColor && couleurJouee !== atout)
+      return false
+
+    // si non regarder si il y a de l'atout supérieur à celui déjà jouer (si un déjà jouer)
+    const hCardList = highestCard.split(' ')
+    const posHCardList = ordreAtout.findIndex(o => o === hCardList[1])
+    const thereIsAtoutHigher = hand.some(c => {
+      const cList = c.split(' ')
+      if (cList[0] === atout && hCardList[0] === atout) {
+        const posCList = ordreAtout.findIndex(o => o === cList[1])
+        if (posCList < posHCardList)
+          return true
+        else
+          return false
+      }
+    })
+    console.log('card atout higher', card, thereIsAtoutHigher)
+    const posCard = ordreAtout.findIndex(o => o === cardList[1])
+    if ((cardList[0] !== atout || (cardList[0] === atout && posCard > posHCardList)) && thereIsAtoutHigher && (!thereIsColor || couleurJouee === atout))
       return false
 
     // si non, regarder si il y a de l'atout
@@ -106,7 +128,8 @@ const MainInGame = ({
       else
         return false
     })
-    if (cardList[0] !== atout && !thereIsColor && thereIsAtout)
+    console.log('card atout', card, thereIsAtout)
+    if (cardList[0] !== atout && (!thereIsColor || couleurJouee === atout) && thereIsAtout)
       return false
 
     // si non, la mettre comme jouable
@@ -128,7 +151,7 @@ const MainInGame = ({
       <div style={getUsedStyle(index)} className={index === turnPlayer ? classes.mainsEnCours : classes.mains}>
         <div className={classes.textMain}>
           <div className={classes.nameMain}>
-            {index === turnPlayer && <Brightness1Icon color='secondary' />}
+            {index === partance && <Brightness1Icon color='secondary' />}
             <Typography color={isMe ? 'success' : 'error'} className={classes.namePlayer} variant="h5"><b>{player}</b></Typography>
           </div>
           <Typography><b>{annonceAll[index]}</b></Typography>

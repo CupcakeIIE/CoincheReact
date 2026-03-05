@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Typography } from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, IconButton, Typography } from "@mui/material";
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 import useStyles from "./style";
 
@@ -63,6 +65,9 @@ const AnnonceDialog = ({
     <Dialog open={open} className={classes.wholeDialog}>
       <DialogTitle className={classes.dialogTitle}>
         <Typography variant='h4'>Annonce</Typography>
+        <IconButton className={classes.iconButton}>
+          <VisibilityOffIcon className={classes.visibility} />
+        </IconButton>
       </DialogTitle>
       <DialogContent className={classes.dialogContent}>
         <Typography>Annonce équipe alliée : <b>100 coeur</b></Typography>

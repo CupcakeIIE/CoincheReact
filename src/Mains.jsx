@@ -46,33 +46,36 @@ const Main = ({
   }
 
   return (
-    <div style={getUsedStyle(index)} className={index === turnPlayer ? classes.mainsEnCours : classes.mains}>
-      <div className={classes.textMain}>
-        <div className={classes.nameMain}>
-          {index === partance && <Brightness1Icon color='secondary' />}
-          <Typography color={isMe ? 'success' : 'error'} className={classes.namePlayer} variant="h5"><b>{player}</b></Typography>
+    
+    <div style={getUsedStyle(index)} className={classes.mains}>
+      <div className={index === turnPlayer ? classes.colorPlayer : classes.noColorPlayer}>
+        <div className={classes.textMain}>
+          <div className={classes.nameMain}>
+            {index === partance && <Brightness1Icon color='secondary' />}
+            <Typography color={isMe ? 'success' : 'error'} className={classes.namePlayer} variant="h5"><b>{player}</b></Typography>
+          </div>
+          <Typography><b>{annonceAll[index]}</b></Typography>
         </div>
-        <Typography><b>{annonceAll[index]}</b></Typography>
+        <div>
+          {myCards.map((card, index) => (
+            <Button key={index} className={classes.buttonCards} disabled>
+              <img src={isMe ? `/Cartes/${card}.png` : cardBack} className={classes.imgCard} />
+            </Button>
+          ))}
+        </div>
+        <AnnonceDialog 
+          open={turnPlayer === indexMe && indexMe === index && openAnnonce} 
+          turnPlayer={turnPlayer} 
+          setTurnPlayer={setTurnPlayer} 
+          annonceAll={annonceAll}
+          setAnnonceAll={setAnnonceAll}
+          indexPlayer={indexMe}
+          setLastAnnonce={setLastAnnonce}
+          setLastAnnoncePlayerIndex={setLastAnnoncePlayerIndex}
+          nbPasses={nbPasses}
+          setNbPasses={setNbPasses}
+        />
       </div>
-      <div>
-        {myCards.map((card, index) => (
-          <Button key={index} className={classes.buttonCards} disabled>
-            <img src={isMe ? `/Cartes/${card}.png` : cardBack} className={classes.imgCard} />
-          </Button>
-        ))}
-      </div>
-      <AnnonceDialog 
-        open={turnPlayer === indexMe && indexMe === index && openAnnonce} 
-        turnPlayer={turnPlayer} 
-        setTurnPlayer={setTurnPlayer} 
-        annonceAll={annonceAll}
-        setAnnonceAll={setAnnonceAll}
-        indexPlayer={indexMe}
-        setLastAnnonce={setLastAnnonce}
-        setLastAnnoncePlayerIndex={setLastAnnoncePlayerIndex}
-        nbPasses={nbPasses}
-        setNbPasses={setNbPasses}
-      />
     </div>
   )
 }

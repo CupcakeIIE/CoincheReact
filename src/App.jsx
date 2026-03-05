@@ -31,7 +31,11 @@ function App() {
   const [atout, setAtout] = useMultiplayerState('atout', '')
   const [couleurJouee, setCouleurJouee] = useMultiplayerState('couleurJouee', '')
   const [highestCard, setHighestCard] = useMultiplayerState('highestCard', '')
-  const [indexHighestCard, setIndexHighestCard] = useMultiplayerState('indexHighestCard', 0)
+  // const [indexHighestCard, setIndexHighestCard] = useMultiplayerState('indexHighestCard', 0)
+  const [cardsDernierPli, setCardsDernierPli] = useMultiplayerState('cardsDernierPli', [])
+  const [dernierPliWinningCard, setDernierPliWinningCard] = useMultiplayerState('dernierPliWinningCard', '')
+  const [pointsPlayer, setPointsPlayer] = useMultiplayerState('pointsPlayer', Array(4).fill(0))
+  const [plisPlayer, setPlisPlayer] = useMultiplayerState('plisPlayer', Array(4).fill(0))
 
   const me = myPlayer();
   const meIndex = players.findIndex(player => me.id === player.id) 
@@ -80,9 +84,19 @@ function App() {
   useEffect(() => {
     const newHighestCard = getHighestCard(cardsPlayed, couleurJouee, atout)
     setHighestCard(newHighestCard)
+
+    const isTourPasFini = cardsPlayed.some(c => c === '')
+    if (!isTourPasFini) {
+      const indexHighestCard = cardsPlayed.findIndex(c => c === newHighestCard)
+      setCardsDernierPli([...cardsPlayed])
+      setDernierPliWinningCard(newHighestCard)
+      setTurnPlayer(indexHighestCard)
+      setCouleurJouee('')
+      setCardsPlayed(Array(4).fill(''))
+    }
   }, [cardsPlayed])
 
-  console.log('atout', atout)
+  console.log('dernierPli', dernierPliWinningCard)
 
   return (
     <div className={classes.gameBoard}>
@@ -133,6 +147,8 @@ function App() {
             atout={atout}
             highestCard={highestCard}
             partance={partance}
+            cardsDernierPli={cardsDernierPli}
+            dernierPliWinningCard={dernierPliWinningCard}
           />
       ))}
     </div>

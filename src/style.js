@@ -17,12 +17,32 @@ const useStyles = makeStyles(theme => ({
     height: '100px',
   },
 
+  iconButton: {
+    "&:focus": {
+      outline: "none",
+    },
+    right: '5%',
+    position: 'absolute !important',
+  },
+
+  visibility: {
+    color: '#fff',
+  },
+
   cardOverlay: {
     width: '100%',
     height: '100%',
     inset: '0',
     position: 'absolute',
     backgroundColor: 'rgba(89, 0, 255, 0.18)',
+  },
+
+  cardOverlayDernierPli: {
+    width: '100%',
+    height: '100%',
+    inset: '0',
+    position: 'absolute',
+    backgroundColor: 'rgba(255, 0, 0, 0.22)',
   },
 
   boxCarte: {
@@ -53,6 +73,7 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    position: 'relative',
   },
 
   buttonDialog: {
@@ -67,6 +88,18 @@ const useStyles = makeStyles(theme => ({
     borderRadius: '30px !important',
     // paddingTop: '1em !important',
     // paddingBottom: '1em !important'
+  },
+
+  buttonDialogBis: {
+    '&:focus': {
+      outline: 'none',
+    },
+    "&:hover": {
+      borderColor: '#9500ae',
+    },
+    backgroundColor: '#fff !important',
+    width: '160px',
+    borderRadius: '30px !important',
   },
 
   nameMain: {
@@ -113,12 +146,27 @@ const useStyles = makeStyles(theme => ({
     // paddingRight: '10em !important',
   },
 
+  dialogActionsBis: {
+    backgroundColor: '#9500ae',
+    borderTop: '1px solid #9500ae',
+    display: 'flex !important',
+    justifyContent: 'center !important',
+    alignItems: 'center !important',
+    padding: '1em 10em !important',
+    // paddingRight: '10em !important',
+  },
+
   dialogContent: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: '2em 2em !important',
     flexDirection: 'column',
+  },
+
+  dialogContentDernierPli: {
+    minHeight: '23em !important',
+    minWidth: '35em !important',
   },
 
   dialogContentBis: {
@@ -179,18 +227,36 @@ const useStyles = makeStyles(theme => ({
 
   mains: {
     position: 'absolute',
+    display: 'flex',
+    flexDirection: 'row',
+    gap: '2em',
+  },
+
+  colorPlayer: {
+    backgroundColor: '#87fdff',
+    borderTopLeftRadius: '30px !important',
+    borderTopRightRadius: '30px !important',
     paddingLeft: '1em',
     paddingRight: '1em',
     paddingTop: '1em',
   },
-  mainsEnCours: {
-    position: 'absolute',
+
+  noColorPlayer: {
     paddingLeft: '1em',
     paddingRight: '1em',
     paddingTop: '1em',
-    backgroundColor: '#87fdff',
-    borderTopLeftRadius: '30px !important',
-    borderTopRightRadius: '30px !important',
+  },
+
+  buttonDernierPli: {
+    height: '2em',
+    width: '2em',
+    '&:focus': {
+      outline: 'none',
+    },
+    "&:hover": {
+      borderColor: '#9500ae',
+    },
+    border: '1px solid #9500ae !important',
   }
 }));
 

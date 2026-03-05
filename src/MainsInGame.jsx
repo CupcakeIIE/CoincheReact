@@ -1,8 +1,15 @@
-import { Button, Typography } from "@mui/material";
+import { Button, IconButton, Typography } from "@mui/material";
 import Brightness1Icon from '@mui/icons-material/Brightness1';
+// import CachedIcon from '@mui/icons-material/Cached';
+// import CameraswitchIcon from '@mui/icons-material/Cameraswitch';
+// import FileCopyIcon from '@mui/icons-material/FileCopy';
+// import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 import useStyles from "./style";
 import { ordreAtout } from "./cartes";
+import { useState } from "react";
+import DernierPliDialog from "./DernierPliDialog";
 
 const MainInGame = ({
   indexMe = 0, 
@@ -16,6 +23,8 @@ const MainInGame = ({
   atout = '',
   highestCard = '',
   partance = 0,
+  cardsDernierPli = [],
+  dernierPliWinningCard = '',
 }) => {
 
   const classes = useStyles()
@@ -30,6 +39,8 @@ const MainInGame = ({
 
   const isMe = indexMe === index
   const myCards = cards.slice(index*8, (index+1)*8)
+
+  const [openDernierPli, setOpenDernierPli] = useState(false)
 
   // to know where to display the cards (top, left, right or bottom)
   // a player always see his card on the bottom
@@ -136,10 +147,22 @@ const MainInGame = ({
     return true
   }
 
+  const clickDernierPli = () => {
+    setOpenDernierPli(true)
+  }
+
   // console.log('couleur', couleurJouee)
 
   return (
     <div>
+      <DernierPliDialog 
+        openDernierPli={openDernierPli} 
+        setOpenDernierPli={setOpenDernierPli} 
+        cardsDernierPli={cardsDernierPli} 
+        dernierPliWinningCard={dernierPliWinningCard}
+        indexJoueur={indexMe}
+      />
+
       {/* afficher au centre les cartes jouées pour ce pli */}
       {index === indexMe &&
         cardsPlayed.map((carte, i) => (
@@ -148,28 +171,35 @@ const MainInGame = ({
           </div>
       ))}
 
-      <div style={getUsedStyle(index)} className={index === turnPlayer ? classes.mainsEnCours : classes.mains}>
-        <div className={classes.textMain}>
-          <div className={classes.nameMain}>
-            {index === partance && <Brightness1Icon color='secondary' />}
-            <Typography color={isMe ? 'success' : 'error'} className={classes.namePlayer} variant="h5"><b>{player}</b></Typography>
+      <div style={getUsedStyle(index)} className={classes.mains}>
+        {index === indexMe && cardsDernierPli.length !== 0 &&
+          <IconButton className={classes.buttonDernierPli} color="secondary" onClick={clickDernierPli}>
+            <VisibilityIcon />
+          </IconButton>
+        }
+        <div className={index === turnPlayer ? classes.colorPlayer : classes.noColorPlayer}>
+          <div className={classes.textMain}>
+            <div className={classes.nameMain}>
+              {index === partance && <Brightness1Icon color='secondary' />}
+              <Typography color={isMe ? 'success' : 'error'} className={classes.namePlayer} variant="h5"><b>{player}</b></Typography>
+            </div>
+            <Typography><b>{annonceAll[index]}</b></Typography>
           </div>
-          <Typography><b>{annonceAll[index]}</b></Typography>
-        </div>
-        <div>
-          {myCards.map((card, i) => {
-            const putClickable = isJouable(myCards, card)
-            return (
-              <Button 
-                key={i} 
-                className={classes.buttonCards} 
-                disabled={(indexMe !== index || indexMe !== turnPlayer) || !putClickable}
-                onClick={() => clickCard(card, i)}
-              >
-                {card && <img src={isMe ? `/Cartes/${card}.png` : cardBack} className={classes.imgCard} />}
-                {card && isMe && indexMe === turnPlayer && putClickable && <div className={classes.cardOverlay}></div>}
-              </Button>
-          )})}
+          <div>
+            {myCards.map((card, i) => {
+              const putClickable = isJouable(myCards, card)
+              return (
+                <Button 
+                  key={i} 
+                  className={classes.buttonCards} 
+                  disabled={(indexMe !== index || indexMe !== turnPlayer) || !putClickable}
+                  onClick={() => clickCard(card, i)}
+                >
+                  {card && <img src={isMe ? `/Cartes/${card}.png` : cardBack} className={classes.imgCard} />}
+                  {card && isMe && indexMe === turnPlayer && putClickable && <div className={classes.cardOverlay}></div>}
+                </Button>
+            )})}
+          </div>
         </div>
       </div>
     </div>

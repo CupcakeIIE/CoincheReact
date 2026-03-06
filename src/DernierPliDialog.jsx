@@ -31,8 +31,6 @@ const DernierPliDialog = ({
       return styleRightCard
   }
 
-  console.log('winning card', dernierPliWinningCard)
-
   return (
     <Dialog open={openDernierPli} className={classes.wholeDialog}>
       <DialogTitle className={classes.dialogTitle}>Dernier Pli</DialogTitle>

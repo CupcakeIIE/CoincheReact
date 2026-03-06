@@ -59,4 +59,48 @@ const ordreNonAtout = [
   '7',
 ]
 
-export {Cartes, ordreAtout, ordreNonAtout};
+const pointsNonAtout = [
+  11,
+  10,
+  4,
+  3,
+  2,
+  0,
+  0,
+  0,
+]
+
+const pointsAtout = [
+  20,
+  14,
+  11,
+  10,
+  4,
+  3,
+  0,
+  0,
+]
+
+const pointsToutAtout = [
+  14,
+  9,
+  6,
+  5,
+  3,
+  1,
+  0,
+  0,
+]
+
+const pointsSansAtout = [
+  19,
+  10,
+  4,
+  3,
+  2,
+  0,
+  0,
+  0,
+]
+
+export {Cartes, ordreAtout, ordreNonAtout, pointsAtout, pointsNonAtout, pointsToutAtout, pointsSansAtout};

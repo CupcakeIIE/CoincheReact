@@ -5,8 +5,9 @@ import './App.css'
 import useStyles from "./style";
 import Main from "./Mains";
 import MainInGame from "./MainsInGame";
-import { mixCards, decoupe, distribution, getHighestCard } from "./Coinche";
+import { mixCards, decoupe, distribution, getHighestCard, compterPoints, findIsWin } from "./Coinche";
 import { ordreAtout, ordreNonAtout } from "./cartes";
+import VictoryDialog from "./VictoryDialog";
 
 function App() {
 
@@ -36,6 +37,9 @@ function App() {
   const [dernierPliWinningCard, setDernierPliWinningCard] = useMultiplayerState('dernierPliWinningCard', '')
   const [pointsPlayer, setPointsPlayer] = useMultiplayerState('pointsPlayer', Array(4).fill(0))
   const [plisPlayer, setPlisPlayer] = useMultiplayerState('plisPlayer', Array(4).fill(0))
+  const [nbToursJoues, setNbToursJoues] = useMultiplayerState('nbToursJoues', 0)
+  const [openWinDialog, setOpenWinDialog] = useMultiplayerState('openWinDialog', false)
+  const [isWin, setIsWin] = useMultiplayerState('isWin', false)
 
   const me = myPlayer();
   const meIndex = players.findIndex(player => me.id === player.id) 
@@ -88,15 +92,45 @@ function App() {
     const isTourPasFini = cardsPlayed.some(c => c === '')
     if (!isTourPasFini) {
       const indexHighestCard = cardsPlayed.findIndex(c => c === newHighestCard)
+
+      // compter les points et attribuer le pli
+      setPointsPlayer(pointsPlayer.map((p, index) => {
+        if (index === indexHighestCard) {
+          const newPoints = p + compterPoints(cardsPlayed, couleurJouee, atout)
+          return newPoints
+        }
+        else
+          return p
+      }))
+      setPlisPlayer(plisPlayer.map((p, index) => {
+        if (index === indexHighestCard) {
+          const newNbPlis = p + 1
+          return newNbPlis
+        }
+        else
+          return
+      }))
+
+      // memoriser le dernier pli
       setCardsDernierPli([...cardsPlayed])
       setDernierPliWinningCard(newHighestCard)
+
+      // lancer un nouveau tour
       setTurnPlayer(indexHighestCard)
       setCouleurJouee('')
       setCardsPlayed(Array(4).fill(''))
+
+      // si les 8 tours ont été joués ouvrir la dialogue de victoire
+      if (nbToursJoues + 1 >= 8) {
+        setIsWin(findIsWin(pointsPlayer, plisPlayer, lastAnnonce, lastAnnoncePlayerIndex))
+        setOpenWinDialog(true)
+      }
+      else
+        setNbToursJoues(nbToursJoues + 1)
     }
   }, [cardsPlayed])
 
-  console.log('dernierPli', dernierPliWinningCard)
+  console.log('pointsArray', pointsPlayer, cardsDernierPli)
 
   return (
     <div className={classes.gameBoard}>
@@ -106,6 +140,7 @@ function App() {
         </Typography>
       } */}
 
+      <VictoryDialog win={isWin} open={openWinDialog} annoncePlayerIndex={lastAnnoncePlayerIndex} players={players} annonce={lastAnnonce} pointsPlayer={pointsPlayer} />
 
       {/* afficher les mains des joueurs pendant les annonces != du in game (pour plus de simplicté de compréhension) */}
       {gameStarted && !gamePlaying &&

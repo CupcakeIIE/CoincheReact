@@ -1,4 +1,5 @@
-import {Cartes, ordreAtout, ordreNonAtout} from "./cartes"
+import { createWebSocketModuleRunnerTransport } from "vite/module-runner";
+import {Cartes, ordreAtout, ordreNonAtout, pointsAtout, pointsNonAtout} from "./cartes"
 
 const mixCards = () => {
   const mixedCards = [];
@@ -107,4 +108,46 @@ const ramasserPli = (highestCard, cardsPlayed) => {
 
 }
 
-export  {mixCards, decoupe, distribution, getHighestCard, ramasserPli}
+const compterPoints = (cardsPlayed = [], couleurJouee = '', atout = '') => {
+  const pointsPli = cardsPlayed.reduce((acc, c) => {
+    const cArr = c.split(' ')
+    if (c[0] === atout) {
+      const pos = ordreAtout.findIndex(position => cArr[1] === position)
+      acc = acc + pointsAtout[pos]
+      return acc
+    }
+    else {
+      const pos = ordreNonAtout.findIndex(position => cArr[1] === position)
+      acc = acc + pointsNonAtout[pos]
+      return acc
+    }
+  }, 0)
+
+  return pointsPli
+}
+
+const findIsWin = (pointsPlayer = [], plisPlayer = [], annonce = '', annoncePlayerIndex = 0) => {
+  const annonceArray = annonce.split(' ')
+  const mise = annonceArray[0]
+
+  let win = false
+
+  if (mise === 'Capot') {
+    const plisTotal = plisPlayer[annoncePlayerIndex] + plisPlayer[(annoncePlayerIndex + 2) % 4]
+    if (plisTotal === 8)
+      win = true
+  }
+  else if (mise === 'Générale') {
+    if (plisPlayer[annoncePlayerIndex] === 8)
+      win = true
+  }
+  else {
+    const pointsTotal = pointsPlayer[annoncePlayerIndex] + pointsPlayer[(annoncePlayerIndex + 2) % 4]
+    if (pointsTotal >= mise)
+      win = true
+  }
+
+  return win
+}
+
+export  {mixCards, decoupe, distribution, getHighestCard, ramasserPli, compterPoints, findIsWin}

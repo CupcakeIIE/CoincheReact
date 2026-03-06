@@ -257,7 +257,15 @@ const useStyles = makeStyles(theme => ({
       borderColor: '#9500ae',
     },
     border: '1px solid #9500ae !important',
-  }
+  },
+
+  dialogContentVictory: {
+    padding: '2em !important',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
+  },
 }));
 
 export default useStyles;

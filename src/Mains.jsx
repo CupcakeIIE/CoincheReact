@@ -1,8 +1,15 @@
-import { Button, Typography } from "@mui/material";
+import { Button, IconButton, setRef, Typography } from "@mui/material";
 import Brightness1Icon from '@mui/icons-material/Brightness1';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import InfoOutlineIcon from '@mui/icons-material/InfoOutline';
+import AutorenewIcon from '@mui/icons-material/Autorenew';
+import ReplayIcon from '@mui/icons-material/Replay';
 
 import useStyles from "./style";
 import AnnonceDialog from "./AnnonceDialog";
+import { useEffect, useState } from "react";
+import RelanceDialog from "./RelanceDialog";
+import { pointsDebut } from "./Coinche";
 
 const Main = ({
   indexMe = 0, 
@@ -12,13 +19,19 @@ const Main = ({
   annonceAll = [], setAnnonceAll, 
   turnPlayer = 0, setTurnPlayer, 
   openAnnonce = false,
-  setLastAnnonce,
+  lastAnnonce = '', setLastAnnonce,
   setLastAnnoncePlayerIndex,
   nbPasses = 0, setNbPasses,
   partance = 0,
+  setRelanceGame,
 }) => {
 
   const classes = useStyles()
+
+  const [showAnnonce, setShowAnnonce] = useState(true)
+  const [showRelance, setShowRelance] = useState(false)
+  const [canRelance, setCanRelance] = useState(true)
+  const [displayRelance, setDisplayRelance] = useState(true)
 
   const cardBack = '/Cartes/card_back.png'
 
@@ -45,9 +58,34 @@ const Main = ({
       return styleRight
   }
 
+  const clickShowAnnonce = () => {
+    setShowAnnonce(true)
+  }
+
+  useEffect(() => {
+    if (canRelance) {
+      const points = pointsDebut(myCards)
+      if (points <= 40 && myCards.length > 0)
+        setShowRelance(true)
+      else
+        setShowRelance(false)
+    }
+  }, [myCards])
+
+
   return (
-    
     <div style={getUsedStyle(index)} className={classes.mains}>
+      
+      {index === indexMe && turnPlayer === indexMe && !showRelance &&
+        <IconButton className={classes.buttonDernierPli} color="secondary" onClick={clickShowAnnonce}>
+          <VisibilityIcon />
+        </IconButton>
+      }
+      {index === indexMe && showRelance &&
+        <IconButton className={classes.buttonDernierPli} color="secondary" onClick={() => setDisplayRelance(true)}>
+          <ReplayIcon />
+        </IconButton>
+      }
       <div className={index === turnPlayer ? classes.colorPlayer : classes.noColorPlayer}>
         <div className={classes.textMain}>
           <div className={classes.nameMain}>
@@ -64,7 +102,7 @@ const Main = ({
           ))}
         </div>
         <AnnonceDialog 
-          open={turnPlayer === indexMe && indexMe === index && openAnnonce} 
+          open={turnPlayer === indexMe && indexMe === index && openAnnonce && showAnnonce && !showRelance} 
           turnPlayer={turnPlayer} 
           setTurnPlayer={setTurnPlayer} 
           annonceAll={annonceAll}
@@ -74,8 +112,21 @@ const Main = ({
           setLastAnnoncePlayerIndex={setLastAnnoncePlayerIndex}
           nbPasses={nbPasses}
           setNbPasses={setNbPasses}
+          setShowAnnonce={setShowAnnonce}
+        />
+        <RelanceDialog 
+          open={indexMe === index && showRelance && lastAnnonce === '' && displayRelance}
+          setOpen={setShowRelance}
+          setCanRelance={setCanRelance}
+          setRelanceGame={setRelanceGame}
+          setDisplayRelance={setDisplayRelance}
         />
       </div>
+      {index === indexMe &&
+        <IconButton className={classes.buttonDernierPli} color="secondary">
+          <InfoOutlineIcon />
+        </IconButton>
+      }
     </div>
   )
 }

@@ -23,6 +23,7 @@ const useStyles = makeStyles(theme => ({
     },
     right: '5%',
     position: 'absolute !important',
+    border: '1px solid #fff !important',
   },
 
   visibility: {
@@ -120,7 +121,7 @@ const useStyles = makeStyles(theme => ({
     paddingLeft: '1em !important',
     paddingRight: '1em !important',
     margin: '0.5em 0.5em !important',
-    width: '120px',
+    width: '150px',
   },
 
   buttonChoiceNumber: {
@@ -162,6 +163,7 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'center',
     padding: '2em 2em !important',
     flexDirection: 'column',
+    maxWidth: '60em !important',
   },
 
   dialogContentDernierPli: {
@@ -174,8 +176,9 @@ const useStyles = makeStyles(theme => ({
     justifyContent: 'space-between',
     alignItems: 'center',
     // padding: '2em 2em !important',
-    paddingTop: '1em',
+    // paddingTop: '1em',
     flexDirection: 'row',
+    maxWidth: '60em !important',
   },
 
   buttonsBlock: {
@@ -184,8 +187,8 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'center',
     flexWrap: 'wrap',
     flexDirection: 'column',
-    marginRight: '1.7em !important',
-    marginLeft: '1.5em !important',
+    marginRight: '1.3em !important',
+    marginLeft: '1em !important',
   },
 
   buttonsBlockNombres: {
@@ -230,6 +233,8 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     flexDirection: 'row',
     gap: '2em',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 
   colorPlayer: {
@@ -257,6 +262,7 @@ const useStyles = makeStyles(theme => ({
       borderColor: '#9500ae',
     },
     border: '1px solid #9500ae !important',
+    marginTop: '3em !important',
   },
 
   dialogContentVictory: {

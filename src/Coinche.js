@@ -150,4 +150,15 @@ const findIsWin = (pointsPlayer = [], plisPlayer = [], annonce = '', annoncePlay
   return win
 }
 
-export  {mixCards, decoupe, distribution, getHighestCard, ramasserPli, compterPoints, findIsWin}
+const pointsDebut = (hand = []) => {
+  const points = hand.reduce((acc, c) => {
+    const cArr = c.split(' ')
+    const pos = ordreNonAtout.findIndex(position => cArr[1] === position)
+    acc = acc + pointsNonAtout[pos]
+    return acc
+  }, 0)
+
+  return points
+}
+
+export  {mixCards, decoupe, distribution, getHighestCard, ramasserPli, compterPoints, findIsWin, pointsDebut}

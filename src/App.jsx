@@ -25,6 +25,7 @@ function App() {
   const [lastAnnoncePlayerIndex, setLastAnnoncePlayerIndex] = useMultiplayerState('lastAnnoncePlayerIndex', 0)
   const [coinche, setCoinche] = useMultiplayerState('coinche', false)
   const [nbPasses, setNbPasses] = useMultiplayerState('nbPasses', 0)
+  const [relanceGame, setRelanceGame] = useMultiplayerState('relanceGame', false)
 
   const [gamePlaying, setGamePlaying] = useMultiplayerState('gamePlaying', false)
   const [partance, setPartance] = useMultiplayerState('partance', 0)
@@ -80,7 +81,14 @@ function App() {
       setTurnPlayer((turnPlayer + 2) % 4)
       setPartance(partance+1)
     }
-  }, [nbPasses, coinche, lastAnnonce])
+
+    if (relanceGame) {
+      setRelanceGame(false),
+      setCards(distribution(decoupe(mixCards())))
+      setTurnPlayer(partance+1)
+      setPartance(partance+1)
+    }
+  }, [nbPasses, coinche, lastAnnonce, relanceGame])
 
 
   // savoir quelle carte est la plus forte dans celles déjà jouées
@@ -155,11 +163,13 @@ function App() {
             turnPlayer={turnPlayer}
             setTurnPlayer={setTurnPlayer}
             openAnnonce={openAnnonce}
+            lastAnnonce={lastAnnonce}
             setLastAnnonce={setLastAnnonce}
             setLastAnnoncePlayerIndex={setLastAnnoncePlayerIndex}
             nbPasses={nbPasses}
             setNbPasses={setNbPasses}
             partance={partance}
+            setRelanceGame={setRelanceGame}
           />
       ))}
 

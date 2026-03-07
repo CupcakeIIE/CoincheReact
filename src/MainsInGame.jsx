@@ -1,10 +1,7 @@
 import { Button, IconButton, Typography } from "@mui/material";
 import Brightness1Icon from '@mui/icons-material/Brightness1';
-// import CachedIcon from '@mui/icons-material/Cached';
-// import CameraswitchIcon from '@mui/icons-material/Cameraswitch';
-// import FileCopyIcon from '@mui/icons-material/FileCopy';
-// import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import InfoOutlineIcon from '@mui/icons-material/InfoOutline';
 
 import useStyles from "./style";
 import { ordreAtout } from "./cartes";
@@ -201,6 +198,11 @@ const MainInGame = ({
             )})}
           </div>
         </div>
+        {index === indexMe &&
+          <IconButton className={classes.buttonDernierPli} color="secondary">
+            <InfoOutlineIcon />
+          </IconButton>
+        }
       </div>
     </div>
   )

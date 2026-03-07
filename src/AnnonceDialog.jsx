@@ -13,6 +13,7 @@ const AnnonceDialog = ({
   setLastAnnonce,
   setLastAnnoncePlayerIndex,
   nbPasses = 0, setNbPasses,
+  setShowAnnonce,
 }) => {
 
   const classes = useStyles()
@@ -20,7 +21,7 @@ const AnnonceDialog = ({
   const [couleur, setCouleur] = useState('')
   const [mise, setMise] = useState('')
 
-  const allCouleurs = ['Carreau', 'Coeur', 'Pique', 'Trèfle']
+  const allCouleurs = ['Carreau', 'Coeur', 'Pique', 'Trèfle', 'Sans Atout', 'Tout Atout']
   const allMises = ['80', '90', '100', '110', '120', '130', '140', '150', '160', '170', '180', 'Capot', 'Générale']
 
   const chooseColor = (colorSelected) => {
@@ -61,21 +62,25 @@ const AnnonceDialog = ({
     // setOpen(false)
   }
 
+  const clickHiding = () => {
+    setShowAnnonce(false)
+  }
+
   return (
     <Dialog open={open} className={classes.wholeDialog}>
       <DialogTitle className={classes.dialogTitle}>
         <Typography variant='h4'>Annonce</Typography>
-        <IconButton className={classes.iconButton}>
+        <IconButton className={classes.iconButton} onClick={clickHiding}>
           <VisibilityOffIcon className={classes.visibility} />
         </IconButton>
       </DialogTitle>
       <DialogContent className={classes.dialogContent}>
-        <Typography>Annonce équipe alliée : <b>100 coeur</b></Typography>
+        {/* <Typography>Annonce équipe alliée : <b>100 coeur</b></Typography>
         <div className={classes.annonceEnnemie}>
           <Typography>Annonce équipe ennemie : <b>120 trèfle</b></Typography>
           <Button variant="outlined" color='secondary' className={classes.buttonDialog}>Coincher</Button>
         </div>
-        <Divider variant="middle" className={classes.dividerHorizontal} />
+        <Divider variant="middle" className={classes.dividerHorizontal} /> */}
         <div className={classes.dialogContentBis}>
           <div className={classes.buttonsBlock}>
             {allCouleurs.map((color, index) => (
@@ -106,17 +111,24 @@ const AnnonceDialog = ({
               ))}
             </div>
             <div className={classes.buttonsBlockNombres}>
-              {allMises.slice(11).map((valeur, index) => (
                 <Button 
-                  key={index} 
                   color='secondary' 
                   className={classes.buttonChoice} 
-                  variant={valeur === mise ? 'contained' : 'outlined'}
-                  onClick={() => chooseMise(valeur)}
+                  variant={'Capot' === mise ? 'contained' : 'outlined'}
+                  onClick={() => chooseMise('Capot')}
                 >
-                  {valeur}
+                  Capot
                 </Button>
-              ))}
+            </div>
+            <div className={classes.buttonsBlockNombres}>
+                <Button 
+                  color='secondary' 
+                  className={classes.buttonChoice} 
+                  variant={'Générale' === mise ? 'contained' : 'outlined'}
+                  onClick={() => chooseMise('Générale')}
+                >
+                  Générale
+                </Button>
             </div>
           </div>
         </div>

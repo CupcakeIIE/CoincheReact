@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, IconButton, Typography } from "@mui/material";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
@@ -14,12 +14,16 @@ const AnnonceDialog = ({
   setLastAnnoncePlayerIndex,
   nbPasses = 0, setNbPasses,
   setShowAnnonce,
+  // setShowCoinche,
+  lastMise = 0, setLastMise,
 }) => {
 
   const classes = useStyles()
 
   const [couleur, setCouleur] = useState('')
   const [mise, setMise] = useState('')
+
+  const [posMise, setPosMise] = useState(0)
 
   const allCouleurs = ['Carreau', 'Coeur', 'Pique', 'Trèfle', 'Sans Atout', 'Tout Atout']
   const allMises = ['80', '90', '100', '110', '120', '130', '140', '150', '160', '170', '180', 'Capot', 'Générale']
@@ -55,6 +59,7 @@ const AnnonceDialog = ({
           return a
       })
     )
+    setLastMise(mise)
     setLastAnnonce(`${mise} ${couleur}`)
     setLastAnnoncePlayerIndex(indexPlayer)
     setNbPasses(0)
@@ -65,6 +70,12 @@ const AnnonceDialog = ({
   const clickHiding = () => {
     setShowAnnonce(false)
   }
+
+  useEffect(() => {
+    setPosMise(allMises.findIndex(m => m === lastMise) + 1)
+  }, [lastMise])
+
+  console.log('mise', lastMise)
 
   return (
     <Dialog open={open} className={classes.wholeDialog}>
@@ -105,6 +116,7 @@ const AnnonceDialog = ({
                   className={classes.buttonChoiceNumber} 
                   variant={valeur === mise ? 'contained' : 'outlined'}
                   onClick={() => chooseMise(valeur)}
+                  disabled={index < posMise}
                 >
                   {valeur}
                 </Button>

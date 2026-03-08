@@ -2,14 +2,15 @@ import { Button, IconButton, setRef, Typography } from "@mui/material";
 import Brightness1Icon from '@mui/icons-material/Brightness1';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import InfoOutlineIcon from '@mui/icons-material/InfoOutline';
-import AutorenewIcon from '@mui/icons-material/Autorenew';
 import ReplayIcon from '@mui/icons-material/Replay';
+import DoDisturbIcon from '@mui/icons-material/DoDisturb';
 
 import useStyles from "./style";
 import AnnonceDialog from "./AnnonceDialog";
 import { useEffect, useState } from "react";
 import RelanceDialog from "./RelanceDialog";
 import { pointsDebut } from "./Coinche";
+import CoincheDialog from "./CoincheDialog";
 
 const Main = ({
   indexMe = 0, 
@@ -20,18 +21,25 @@ const Main = ({
   turnPlayer = 0, setTurnPlayer, 
   openAnnonce = false,
   lastAnnonce = '', setLastAnnonce,
-  setLastAnnoncePlayerIndex,
+  lastAnnoncePlayerIndex = 0, setLastAnnoncePlayerIndex,
   nbPasses = 0, setNbPasses,
   partance = 0,
   setRelanceGame,
+  setCoinche,
+  lastMise = 0, setLastMise,
 }) => {
 
   const classes = useStyles()
 
   const [showAnnonce, setShowAnnonce] = useState(true)
+
   const [showRelance, setShowRelance] = useState(false)
   const [canRelance, setCanRelance] = useState(true)
   const [displayRelance, setDisplayRelance] = useState(true)
+
+  const [showCoinche, setShowCoinche] = useState(false)
+  const [displayCoinche, setDisplayCoinche] = useState(true)
+  // const [canCoinche, setCanCoinche] = useState(true)
 
   const cardBack = '/Cartes/card_back.png'
 
@@ -65,25 +73,36 @@ const Main = ({
   useEffect(() => {
     if (canRelance) {
       const points = pointsDebut(myCards)
-      if (points <= 40 && myCards.length > 0)
+      if (points <= 10 && myCards.length > 0)
         setShowRelance(true)
       else
         setShowRelance(false)
     }
   }, [myCards])
 
+  useEffect(() => {
+    if (lastAnnoncePlayerIndex % 2 !== indexMe % 2 && lastAnnonce !== '') {
+      setShowCoinche(true)
+    }
+  }, [lastAnnoncePlayerIndex, lastAnnonce])
+
 
   return (
     <div style={getUsedStyle(index)} className={classes.mains}>
       
-      {index === indexMe && turnPlayer === indexMe && !showRelance &&
+      {index === indexMe && turnPlayer === indexMe && !showRelance && !showCoinche &&
         <IconButton className={classes.buttonDernierPli} color="secondary" onClick={clickShowAnnonce}>
           <VisibilityIcon />
         </IconButton>
       }
-      {index === indexMe && showRelance &&
+      {index === indexMe && showRelance && lastAnnonce === '' &&
         <IconButton className={classes.buttonDernierPli} color="secondary" onClick={() => setDisplayRelance(true)}>
           <ReplayIcon />
+        </IconButton>
+      }
+      {indexMe === index && lastAnnonce !== '' && (lastAnnoncePlayerIndex%2) !== (indexMe%2) && showCoinche &&
+        <IconButton className={classes.buttonDernierPli} color="secondary" onClick={() => setDisplayCoinche(true)}>
+          <DoDisturbIcon />
         </IconButton>
       }
       <div className={index === turnPlayer ? classes.colorPlayer : classes.noColorPlayer}>
@@ -102,7 +121,7 @@ const Main = ({
           ))}
         </div>
         <AnnonceDialog 
-          open={turnPlayer === indexMe && indexMe === index && openAnnonce && showAnnonce && !showRelance} 
+          open={turnPlayer === indexMe && indexMe === index && openAnnonce && showAnnonce && !showRelance && !showCoinche} 
           turnPlayer={turnPlayer} 
           setTurnPlayer={setTurnPlayer} 
           annonceAll={annonceAll}
@@ -113,6 +132,9 @@ const Main = ({
           nbPasses={nbPasses}
           setNbPasses={setNbPasses}
           setShowAnnonce={setShowAnnonce}
+          // setShowCoinche={setShowCoinche}
+          lastMise={lastMise}
+          setLastMise={setLastMise}
         />
         <RelanceDialog 
           open={indexMe === index && showRelance && lastAnnonce === '' && displayRelance}
@@ -120,6 +142,17 @@ const Main = ({
           setCanRelance={setCanRelance}
           setRelanceGame={setRelanceGame}
           setDisplayRelance={setDisplayRelance}
+        />
+        <CoincheDialog
+          open={indexMe === index && lastAnnonce !== '' && (lastAnnoncePlayerIndex%2) !== (indexMe%2) && showCoinche && displayCoinche}
+          setOpen={setShowCoinche}
+          lastAnnonce={lastAnnonce}
+          setCoinched={setCoinche}
+          setDisplayCoinche={setDisplayCoinche}
+          // setCanCoinche={setCanCoinche}
+          annonceAll={annonceAll}
+          setAnnonceAll={setAnnonceAll}
+          indexPlayer={indexMe}
         />
       </div>
       {index === indexMe &&

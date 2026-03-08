@@ -23,6 +23,7 @@ function App() {
 
   const [lastAnnonce, setLastAnnonce] = useMultiplayerState('lastAnnonce', '')
   const [lastAnnoncePlayerIndex, setLastAnnoncePlayerIndex] = useMultiplayerState('lastAnnoncePlayerIndex', 0)
+  const [lastMise, setLastMise] = useMultiplayerState('lastMise', 0)
   const [coinche, setCoinche] = useMultiplayerState('coinche', false)
   const [nbPasses, setNbPasses] = useMultiplayerState('nbPasses', 0)
   const [relanceGame, setRelanceGame] = useMultiplayerState('relanceGame', false)
@@ -165,11 +166,15 @@ function App() {
             openAnnonce={openAnnonce}
             lastAnnonce={lastAnnonce}
             setLastAnnonce={setLastAnnonce}
+            lastAnnoncePlayerIndex={lastAnnoncePlayerIndex}
             setLastAnnoncePlayerIndex={setLastAnnoncePlayerIndex}
             nbPasses={nbPasses}
             setNbPasses={setNbPasses}
             partance={partance}
             setRelanceGame={setRelanceGame}
+            setCoinche={setCoinche}
+            lastMise={lastMise}
+            setLastMise={setLastMise}
           />
       ))}
 

@@ -49,9 +49,9 @@ function App() {
   // lancer une partie si 4 personnes dans la room
   useEffect(() => {
     if (players.length === 4 && isHost()) {
-      setGameStarted(true)
-      setCards(distribution(decoupe(mixCards())))
-      setOpenAnnonce(true)
+      setGameStarted(true, {reliable: true})
+      setCards(distribution(decoupe(mixCards())), {reliable: true})
+      setOpenAnnonce(true, {reliable: true})
     }
   }, [players]);
 
@@ -64,30 +64,30 @@ function App() {
   // gerer la fin des annonces en fonction du nombre de passe et/ou de la coinche
   useEffect(() => {
     if (coinche) {
-      setGamePlaying(true)
-      setTurnPlayer(partance)
+      setGamePlaying(true, {reliable: true})
+      setTurnPlayer(partance, {reliable: true})
       const annonceList = lastAnnonce.split(' ')
-      setAtout(annonceList[1])
+      setAtout(annonceList[1], {reliable: true})
     }
 
     if (lastAnnonce !== '' && nbPasses >= 3) {
-      setGamePlaying(true)
-      setTurnPlayer(partance)
+      setGamePlaying(true, {reliable: true})
+      setTurnPlayer(partance, {reliable: true})
       const annonceList = lastAnnonce.split(' ')
-      setAtout(annonceList[1])
+      setAtout(annonceList[1], {reliable: true})
     }
 
     if (nbPasses >= 4 && lastAnnonce === '') {
-      setCards(distribution(decoupe(mixCards())))
-      setTurnPlayer((turnPlayer + 2) % 4)
-      setPartance(partance+1)
+      setCards(distribution(decoupe(mixCards())), {reliable: true})
+      setTurnPlayer((turnPlayer + 2) % 4, {reliable: true})
+      setPartance(partance+1, {reliable: true})
     }
 
     if (relanceGame) {
-      setRelanceGame(false),
-      setCards(distribution(decoupe(mixCards())))
-      setTurnPlayer(partance+1)
-      setPartance(partance+1)
+      setRelanceGame(false, {reliable: true}),
+      setCards(distribution(decoupe(mixCards())), {reliable: true})
+      setTurnPlayer(partance+1, {reliable: true})
+      setPartance(partance+1, {reliable: true})
     }
   }, [nbPasses, coinche, lastAnnonce, relanceGame])
 
@@ -95,51 +95,58 @@ function App() {
   // savoir quelle carte est la plus forte dans celles déjà jouées
   // on recalcule à chaque fois qu'une carte est jouée
   useEffect(() => {
-    const newHighestCard = getHighestCard(cardsPlayed, couleurJouee, atout)
-    setHighestCard(newHighestCard)
+    let newHighestCard;
+    console.log(cardsPlayed, cardsDernierPli)
+    if (cardsPlayed.some(c => c !== '' && !cardsPlayed.some((c, index) => c === cardsDernierPli[index]))) {
+      newHighestCard = getHighestCard(cardsPlayed, couleurJouee, atout)
+      setHighestCard(newHighestCard, {reliable: true})
 
-    const isTourPasFini = cardsPlayed.some(c => c === '')
-    if (!isTourPasFini) {
-      const indexHighestCard = cardsPlayed.findIndex(c => c === newHighestCard)
+      const isTourPasFini = cardsPlayed.some(c => c === '')
+      console.log(cardsPlayed, isTourPasFini)
+      if (!isTourPasFini) {
+        const indexHighestCard = cardsPlayed.findIndex(c => c === newHighestCard)
 
-      // compter les points et attribuer le pli
-      setPointsPlayer(pointsPlayer.map((p, index) => {
-        if (index === indexHighestCard) {
-          const newPoints = p + compterPoints(cardsPlayed, couleurJouee, atout)
-          return newPoints
+        // compter les points et attribuer le pli
+        setPointsPlayer(pointsPlayer.map((p, index) => {
+          if (index === indexHighestCard) {
+            const newPoints = p + compterPoints(cardsPlayed, couleurJouee, atout)
+            return newPoints
+          }
+          else
+            return p
+        }), {reliable: true})
+        setPlisPlayer(plisPlayer.map((p, index) => {
+          if (index === indexHighestCard) {
+            const newNbPlis = p + 1
+            return newNbPlis
+          }
+          else
+            return p
+        }), {reliable: true})
+
+        // memoriser le dernier pli
+        setCardsDernierPli([...cardsPlayed], {reliable: true})
+        setDernierPliWinningCard(newHighestCard, {reliable: true})
+
+        console.log('wining card', newHighestCard, indexHighestCard)
+
+        // lancer un nouveau tour
+        setTurnPlayer(indexHighestCard, {reliable: true})
+        setCouleurJouee('', {reliable: true})
+        setCardsPlayed(Array(4).fill(''), {reliable: true})
+
+        // si les 8 tours ont été joués ouvrir la dialogue de victoire
+        if (nbToursJoues + 1 >= 8) {
+          setIsWin(findIsWin(pointsPlayer, plisPlayer, lastAnnonce, lastAnnoncePlayerIndex), {reliable: true})
+          setOpenWinDialog(true, {reliable: true})
         }
         else
-          return p
-      }))
-      setPlisPlayer(plisPlayer.map((p, index) => {
-        if (index === indexHighestCard) {
-          const newNbPlis = p + 1
-          return newNbPlis
-        }
-        else
-          return
-      }))
-
-      // memoriser le dernier pli
-      setCardsDernierPli([...cardsPlayed])
-      setDernierPliWinningCard(newHighestCard)
-
-      // lancer un nouveau tour
-      setTurnPlayer(indexHighestCard)
-      setCouleurJouee('')
-      setCardsPlayed(Array(4).fill(''))
-
-      // si les 8 tours ont été joués ouvrir la dialogue de victoire
-      if (nbToursJoues + 1 >= 8) {
-        setIsWin(findIsWin(pointsPlayer, plisPlayer, lastAnnonce, lastAnnoncePlayerIndex))
-        setOpenWinDialog(true)
+          setNbToursJoues(nbToursJoues + 1, {reliable: true})
       }
-      else
-        setNbToursJoues(nbToursJoues + 1)
     }
   }, [cardsPlayed])
 
-  console.log('pointsArray', pointsPlayer, cardsDernierPli)
+  console.log('nb tours', nbToursJoues)
 
   return (
     <div className={classes.gameBoard}>

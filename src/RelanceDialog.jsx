@@ -20,7 +20,7 @@ const RelanceDialog = ({
 
   const clickYes = () => {
     setOpen(false)
-    setRelanceGame(true)
+    setRelanceGame(true, {reliable: true})
   }
 
   const clickHidingRelance = () => {

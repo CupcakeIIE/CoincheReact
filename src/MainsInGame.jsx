@@ -7,6 +7,7 @@ import useStyles from "./style";
 import { ordreAtout } from "./cartes";
 import { useState } from "react";
 import DernierPliDialog from "./DernierPliDialog";
+import { isJouable } from "./Coinche";
 
 const MainInGame = ({
   indexMe = 0, 
@@ -58,20 +59,20 @@ const MainInGame = ({
 
     // si première carte du pli, sauvegarder la couleur
     if  (couleurJouee === '')
-      setCouleurJouee(cardList[0])
+      setCouleurJouee(cardList[0], {reliable: true})
 
     setCardsPlayed(cardsPlayed.map((c, i) => {
       if (i === turnPlayer)
         return card
       else 
         return c
-    }))
+    }), {reliable: true})
     setCards(cards.map((c, i) => {
       if (i === indexCarte + indexMe*8)
         return ''
       else return c
-    }))
-    setTurnPlayer((turnPlayer+1) % 4)
+    }), {reliable: true})
+    setTurnPlayer((turnPlayer+1) % 4, {reliable: true})
   }
 
 
@@ -89,59 +90,6 @@ const MainInGame = ({
       return styleTopCard
     else if (i === 3)
       return styleRightCard
-  }
-
-  const isJouable = (hand, card) => {
-    const cardList = card.split(' ')
-
-    // si aucune carte de jouee sur ce pli, on peut toutes les jouer
-    if (couleurJouee === '')
-      return true
-
-    // regarder si il y a de la couleur
-    const thereIsColor = hand.some(c => {
-      const cList = c.split(' ')
-      if (cList[0] === couleurJouee)
-        return true
-      else
-        return false
-    })
-    console.log('card color', card, thereIsColor)
-    if (cardList[0] !== couleurJouee && thereIsColor && couleurJouee !== atout)
-      return false
-
-    // si non regarder si il y a de l'atout supérieur à celui déjà jouer (si un déjà jouer)
-    const hCardList = highestCard.split(' ')
-    const posHCardList = ordreAtout.findIndex(o => o === hCardList[1])
-    const thereIsAtoutHigher = hand.some(c => {
-      const cList = c.split(' ')
-      if (cList[0] === atout && hCardList[0] === atout) {
-        const posCList = ordreAtout.findIndex(o => o === cList[1])
-        if (posCList < posHCardList)
-          return true
-        else
-          return false
-      }
-    })
-    console.log('card atout higher', card, thereIsAtoutHigher)
-    const posCard = ordreAtout.findIndex(o => o === cardList[1])
-    if ((cardList[0] !== atout || (cardList[0] === atout && posCard > posHCardList)) && thereIsAtoutHigher && (!thereIsColor || couleurJouee === atout))
-      return false
-
-    // si non, regarder si il y a de l'atout
-    const thereIsAtout = hand.some(c => {
-      const cList = c.split(' ')
-      if (cList[0] === atout)
-        return true
-      else
-        return false
-    })
-    console.log('card atout', card, thereIsAtout)
-    if (cardList[0] !== atout && (!thereIsColor || couleurJouee === atout) && thereIsAtout)
-      return false
-
-    // si non, la mettre comme jouable
-    return true
   }
 
   const clickDernierPli = () => {
@@ -184,7 +132,7 @@ const MainInGame = ({
           </div>
           <div>
             {myCards.map((card, i) => {
-              const putClickable = isJouable(myCards, card)
+              const putClickable = isJouable(myCards, card, couleurJouee, atout, highestCard)
               return (
                 <Button 
                   key={i} 

@@ -67,39 +67,90 @@ const getHighestCard = (cardsPlayed = [], couleurJouee = '', atout = '') => {
 
     const cList = c.split(' ')
     const arrList = acc.split(' ')
-    // cas les 2 sont de la couleur (qui n'est pas de l'atout)
-    if (cList[0] === arrList[0] && cList[0] === couleurJouee && couleurJouee !== atout) {
-      const cIndexNonAtout = ordreNonAtout.findIndex(o => o === cList[1])
-      const arrIndexNonAtout = ordreNonAtout.findIndex(o => o === arrList[1])
-      if (cIndexNonAtout < arrIndexNonAtout)
+
+    // tout atout
+    if (atout === 'Tout') {
+      // console.log('tout atout')
+      // les 2 sont de la couleur
+      if (cList[0] === arrList[0] && cList[0] === couleurJouee) {
+        const cIndexNonAtout = ordreAtout.findIndex(o => o === cList[1])
+        const arrIndexNonAtout = ordreAtout.findIndex(o => o === arrList[1])
+        if (cIndexNonAtout < arrIndexNonAtout)
+          return c
+        else
+          return acc
+      }
+
+      // un seul est de la couleur
+      if (cList[0] === couleurJouee && arrList[0] !== couleurJouee)
         return c
-      else
+      if (cList[0] !== couleurJouee && arrList[0] === couleurJouee)
         return acc
+      
+      return acc
     }
 
-    // cas les 2 sont de l'atout (ou la couleur est de l'atout)
-    if (cList[0] === arrList[0] && ((cList[0] === couleurJouee && couleurJouee === atout) || cList[0] === atout)) {
-      const cIndexNonAtout = ordreAtout.findIndex(o => o === cList[1])
-      const arrIndexNonAtout = ordreAtout.findIndex(o => o === arrList[1])
-      if (cIndexNonAtout < arrIndexNonAtout)
+    else if (atout === 'Sans') {
+      // console.log('sasn atput')
+      // les 2 sont de la couleur
+      if (cList[0] === arrList[0] && cList[0] === couleurJouee) {
+        const cIndexNonAtout = ordreNonAtout.findIndex(o => o === cList[1])
+        const arrIndexNonAtout = ordreNonAtout.findIndex(o => o === arrList[1])
+        if (cIndexNonAtout < arrIndexNonAtout)
+          return c
+        else
+          return acc
+      }
+
+      // un seul est de la couleur
+      if (cList[0] === couleurJouee && arrList[0] !== couleurJouee)
         return c
-      else
+      if (cList[0] !== couleurJouee && arrList[0] === couleurJouee)
         return acc
+    
+      return acc
     }
 
-    // cas un couleur un atout
-    if (cList[0] === couleurJouee && arrList[0] === atout && couleurJouee !== atout)
-      return acc
-    if (cList[0] === atout && arrList[0] === couleurJouee && couleurJouee !== atout)
-      return c
+    // classique
+    else {
+      // cas les 2 sont de la couleur (qui n'est pas de l'atout)
+      if (cList[0] === arrList[0] && cList[0] === couleurJouee && couleurJouee !== atout) {
+        const cIndexNonAtout = ordreNonAtout.findIndex(o => o === cList[1])
+        const arrIndexNonAtout = ordreNonAtout.findIndex(o => o === arrList[1])
+        if (cIndexNonAtout < arrIndexNonAtout)
+          return c
+        else
+          return acc
+      }
 
-    // cas un des 2 n'est ni atout ni couleur
-    if (cList[0] !== couleurJouee && cList[0] !== atout)
+      // cas les 2 sont de l'atout (ou la couleur est de l'atout)
+      if (cList[0] === arrList[0] && ((cList[0] === couleurJouee && couleurJouee === atout) || cList[0] === atout)) {
+        const cIndexNonAtout = ordreAtout.findIndex(o => o === cList[1])
+        const arrIndexNonAtout = ordreAtout.findIndex(o => o === arrList[1])
+        if (cIndexNonAtout < arrIndexNonAtout)
+          return c
+        else
+          return acc
+      }
+
+      // cas un couleur un atout
+      if (cList[0] === couleurJouee && arrList[0] === atout && couleurJouee !== atout)
+        return acc
+      if (cList[0] === atout && arrList[0] === couleurJouee && couleurJouee !== atout)
+        return c
+
+      // cas un des 2 n'est ni atout ni couleur
+      if (cList[0] !== couleurJouee && cList[0] !== atout)
+        return acc
+      if (arrList[0] !== couleurJouee && arrList[0] !== atout)
+        return c
+
       return acc
-    if (arrList[0] !== couleurJouee && arrList[0] !== atout)
-      return c
+    }
 
   }, '')
+
+  // console.log('carte gagnante', newHighestCard)
 
   return newHighestCard
 }
@@ -111,15 +162,27 @@ const ramasserPli = (highestCard, cardsPlayed) => {
 const compterPoints = (cardsPlayed = [], couleurJouee = '', atout = '') => {
   const pointsPli = cardsPlayed.reduce((acc, c) => {
     const cArr = c.split(' ')
-    if (c[0] === atout) {
+    if (atout === 'Tout') {
       const pos = ordreAtout.findIndex(position => cArr[1] === position)
       acc = acc + pointsAtout[pos]
       return acc
     }
-    else {
+    else if (atout === 'Sans') {
       const pos = ordreNonAtout.findIndex(position => cArr[1] === position)
       acc = acc + pointsNonAtout[pos]
       return acc
+    }
+    else {
+      if (c[0] === atout) {
+        const pos = ordreAtout.findIndex(position => cArr[1] === position)
+        acc = acc + pointsAtout[pos]
+        return acc
+      }
+      else {
+        const pos = ordreNonAtout.findIndex(position => cArr[1] === position)
+        acc = acc + pointsNonAtout[pos]
+        return acc
+      }
     }
   }, 0)
 
@@ -161,4 +224,112 @@ const pointsDebut = (hand = []) => {
   return points
 }
 
-export  {mixCards, decoupe, distribution, getHighestCard, ramasserPli, compterPoints, findIsWin, pointsDebut}
+const isJouable = (hand = [], card ='', couleurJouee = '', atout = '', highestCard = '') => {
+  const cardList = card.split(' ')
+
+  // si aucune carte de jouee sur ce pli, on peut toutes les jouer
+  if (couleurJouee === '')
+    return true
+
+
+  // tout atout
+  if (atout === 'Tout') {
+    // si non regarder si il y a de l'atout supérieur à celui déjà jouer (si un déjà jouer)
+    // console.log('highestCard', highestCard)
+    const hCardList = highestCard.split(' ')
+    const posHCardList = ordreAtout.findIndex(o => o === hCardList[1])
+    const thereIsAtoutHigher = hand.some(c => {
+      const cList = c.split(' ')
+      if (cList[0] === couleurJouee && hCardList[0] === couleurJouee) {
+        const posCList = ordreAtout.findIndex(o => o === cList[1])
+        if (posCList < posHCardList)
+          return true
+        else
+          return false
+      }
+    })
+    const posCard = ordreAtout.findIndex(o => o === cardList[1])
+    if ((cardList[0] !== couleurJouee || (cardList[0] === couleurJouee && posCard > posHCardList)) && thereIsAtoutHigher)
+      return false
+    
+    // si non, regarder si il y a de l'atout
+    const thereIsAtout = hand.some(c => {
+      const cList = c.split(' ')
+      if (cList[0] === couleurJouee)
+        return true
+      else
+        return false
+    })
+    // console.log('card atout', card, thereIsAtout)
+    if (cardList[0] !== couleurJouee && thereIsAtout)
+      return false
+
+    return true
+  }
+
+  // sans atout
+  else if (atout === 'Sans') {
+    // regarder si il y a de la couleur
+    const thereIsColor = hand.some(c => {
+      const cList = c.split(' ')
+      if (cList[0] === couleurJouee)
+        return true
+      else
+        return false
+    })
+    if (cardList[0] !== couleurJouee && thereIsColor && couleurJouee !== atout)
+      return false
+
+    return true
+  }
+
+  // classique
+  else {
+    // regarder si il y a de la couleur
+    const thereIsColor = hand.some(c => {
+      const cList = c.split(' ')
+      if (cList[0] === couleurJouee)
+        return true
+      else
+        return false
+    })
+    // console.log('card color', card, thereIsColor)
+    if (cardList[0] !== couleurJouee && thereIsColor && couleurJouee !== atout)
+      return false
+
+    // si non regarder si il y a de l'atout supérieur à celui déjà jouer (si un déjà jouer)
+    const hCardList = highestCard.split(' ')
+    const posHCardList = ordreAtout.findIndex(o => o === hCardList[1])
+    const thereIsAtoutHigher = hand.some(c => {
+      const cList = c.split(' ')
+      if (cList[0] === atout && hCardList[0] === atout) {
+        const posCList = ordreAtout.findIndex(o => o === cList[1])
+        if (posCList < posHCardList)
+          return true
+        else
+          return false
+      }
+    })
+    // console.log('card atout higher', card, thereIsAtoutHigher)
+    const posCard = ordreAtout.findIndex(o => o === cardList[1])
+    if ((cardList[0] !== atout || (cardList[0] === atout && posCard > posHCardList)) && thereIsAtoutHigher && (!thereIsColor || couleurJouee === atout))
+      return false
+
+    // si non, regarder si il y a de l'atout
+    const thereIsAtout = hand.some(c => {
+      const cList = c.split(' ')
+      if (cList[0] === atout)
+        return true
+      else
+        return false
+    })
+    // console.log('card atout', card, thereIsAtout)
+    if (cardList[0] !== atout && (!thereIsColor || couleurJouee === atout) && thereIsAtout)
+      return false
+
+    // si non, la mettre comme jouable
+    return true
+  }
+}
+
+export  {mixCards, decoupe, distribution, getHighestCard, ramasserPli, compterPoints, findIsWin, pointsDebut, isJouable}

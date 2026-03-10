@@ -21,15 +21,15 @@ const CoincheDialog = ({
 
   const clickYes = () => {
     setOpen(false)
-    setCoinched(true)
+    setCoinched(true, {reliable: true})
     setAnnonceAll(
       annonceAll.map((a, index) => {
         if (index === indexPlayer)
           return`Coinche`
         else
           return a
-      })
-    )
+      }),
+    {reliable: true})
   }
 
   const clickNo = () => {

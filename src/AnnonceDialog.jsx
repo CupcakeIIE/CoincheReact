@@ -43,10 +43,10 @@ const AnnonceDialog = ({
           return 'Passe'
         else
           return a
-      })
-    )
-    setNbPasses(nbPasses + 1)
-    setTurnPlayer((turnPlayer+1) % 4)
+      }),
+    {reliable: true})
+    setNbPasses(nbPasses + 1, {reliable: true})
+    setTurnPlayer((turnPlayer+1) % 4, {reliable: true})
     // setOpen(false)
   }
 
@@ -57,13 +57,13 @@ const AnnonceDialog = ({
           return`${mise} ${couleur}`
         else
           return a
-      })
-    )
-    setLastMise(mise)
-    setLastAnnonce(`${mise} ${couleur}`)
-    setLastAnnoncePlayerIndex(indexPlayer)
-    setNbPasses(0)
-    setTurnPlayer((turnPlayer+1) % 4)
+      }),
+    {reliable: true})
+    setLastMise(mise, {reliable: true})
+    setLastAnnonce(`${mise} ${couleur}`, {reliable: true})
+    setLastAnnoncePlayerIndex(indexPlayer, {reliable: true})
+    setNbPasses(0, {reliable: true})
+    setTurnPlayer((turnPlayer+1) % 4, {reliable: true})
     // setOpen(false)
   }
 
@@ -75,7 +75,7 @@ const AnnonceDialog = ({
     setPosMise(allMises.findIndex(m => m === lastMise) + 1)
   }, [lastMise])
 
-  console.log('mise', lastMise)
+  // console.log('mise', lastMise)
 
   return (
     <Dialog open={open} className={classes.wholeDialog}>

@@ -1,9 +1,33 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@mui/material";
 import useStyles from "./style";
 
-const VictoryDialog = ({win = false, open = false, annoncePlayerIndex = 0, players = [], annonce = '', pointsPlayer = []}) => {
+const VictoryDialog = ({
+  win = false, 
+  open = false,
+  setOpenWinDialog,
+  annoncePlayerIndex = 0, 
+  players = [], 
+  annonce = '', 
+  pointsPlayer = [], 
+  nbManches = 0, setNbManches,
+  // setResetGame,  
+  okNextGame = [], setOkNextGame,
+  indexPlayer = 0,
+}) => {
 
   const classes = useStyles()
+
+  const onClickOk = () => {
+    setNbManches(nbManches + 1, {reliable: true})
+    // setResetGame(true, {reliable: true})
+    // setOpenWinDialog(false)
+    setOkNextGame(okNextGame.map((a, index) => {
+      if (index === indexPlayer)
+        return true
+      else
+        return a
+    }))
+  }
 
   return (
     <Dialog open={open} className={classes.wholeDialog}>
@@ -16,7 +40,7 @@ const VictoryDialog = ({win = false, open = false, annoncePlayerIndex = 0, playe
         <Typography><b>{win ? 'Victoire !' : 'Défaite...'}</b></Typography>
       </DialogContent>
       <DialogActions className={classes.dialogActionsBis}>
-        <Button color="secondary" className={classes.buttonDialog} variant='outlined'>OK</Button>
+        <Button color="secondary" className={classes.buttonDialog} variant='outlined' onClick={onClickOk}>OK</Button>
       </DialogActions>
     </Dialog>
   )

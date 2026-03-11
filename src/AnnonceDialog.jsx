@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, IconButton, Typography } from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, IconButton, Tooltip, Typography } from "@mui/material";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
@@ -81,9 +81,11 @@ const AnnonceDialog = ({
     <Dialog open={open} className={classes.wholeDialog}>
       <DialogTitle className={classes.dialogTitle}>
         <Typography variant='h4'>Annonce</Typography>
-        <IconButton className={classes.iconButton} onClick={clickHiding}>
-          <VisibilityOffIcon className={classes.visibility} />
-        </IconButton>
+        <Tooltip title="Cacher la dialog">
+          <IconButton className={classes.iconButton} onClick={clickHiding}>
+            <VisibilityOffIcon className={classes.visibility} />
+          </IconButton>
+        </Tooltip>
       </DialogTitle>
       <DialogContent className={classes.dialogContent}>
         {/* <Typography>Annonce équipe alliée : <b>100 coeur</b></Typography>

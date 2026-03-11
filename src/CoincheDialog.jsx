@@ -1,4 +1,4 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Typography } from "@mui/material"
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Tooltip, Typography } from "@mui/material"
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import useStyles from "./style"
 
@@ -40,9 +40,11 @@ const CoincheDialog = ({
     <Dialog open={open} className={classes.wholeDialog}>
       <DialogTitle className={classes.dialogTitle}>
         <Typography variant='h4'>Coinche</Typography>
-        <IconButton className={classes.iconButton} onClick={clickHidingCoinche}>
-          <VisibilityOffIcon className={classes.visibility} />
-        </IconButton>
+        <Tooltip title="Cacher la dialog">
+          <IconButton className={classes.iconButton} onClick={clickHidingCoinche}>
+            <VisibilityOffIcon className={classes.visibility} />
+          </IconButton>
+        </Tooltip>
       </DialogTitle>
       <DialogContent className={classes.dialogContentVictory}>
         <Typography>L'équipe adverse a annoncé <b>{lastAnnonce}</b></Typography>

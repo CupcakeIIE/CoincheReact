@@ -1,4 +1,4 @@
-import { Button, IconButton, setRef, Typography } from "@mui/material";
+import { Button, IconButton, setRef, Tooltip, Typography } from "@mui/material";
 import Brightness1Icon from '@mui/icons-material/Brightness1';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import InfoOutlineIcon from '@mui/icons-material/InfoOutline';
@@ -91,19 +91,25 @@ const Main = ({
     <div style={getUsedStyle(index)} className={classes.mains}>
       
       {index === indexMe && turnPlayer === indexMe && !showRelance && !showCoinche &&
-        <IconButton className={classes.buttonDernierPli} color="secondary" onClick={clickShowAnnonce}>
-          <VisibilityIcon />
-        </IconButton>
+        <Tooltip title="Annoncer">
+          <IconButton className={classes.buttonDernierPli} color="secondary" onClick={clickShowAnnonce}>
+            <VisibilityIcon />
+          </IconButton>
+        </Tooltip>
       }
       {index === indexMe && showRelance && lastAnnonce === '' &&
-        <IconButton className={classes.buttonDernierPli} color="secondary" onClick={() => setDisplayRelance(true)}>
-          <ReplayIcon />
-        </IconButton>
+        <Tooltip title="Relancer">
+          <IconButton className={classes.buttonDernierPli} color="secondary" onClick={() => setDisplayRelance(true)}>
+            <ReplayIcon />
+          </IconButton>
+        </Tooltip>
       }
       {indexMe === index && lastAnnonce !== '' && (lastAnnoncePlayerIndex%2) !== (indexMe%2) && showCoinche &&
-        <IconButton className={classes.buttonDernierPli} color="secondary" onClick={() => setDisplayCoinche(true)}>
-          <DoDisturbIcon />
-        </IconButton>
+        <Tooltip title="Coincher">
+          <IconButton className={classes.buttonDernierPli} color="secondary" onClick={() => setDisplayCoinche(true)}>
+            <DoDisturbIcon />
+          </IconButton>
+        </Tooltip>
       }
       <div className={index === turnPlayer ? classes.colorPlayer : classes.noColorPlayer}>
         <div className={classes.textMain}>
@@ -156,9 +162,11 @@ const Main = ({
         />
       </div>
       {index === indexMe &&
-        <IconButton className={classes.buttonDernierPli} color="secondary">
-          <InfoOutlineIcon />
-        </IconButton>
+        <Tooltip title="Afficher les règles">
+          <IconButton className={classes.buttonDernierPli} color="secondary">
+            <InfoOutlineIcon />
+          </IconButton>
+        </Tooltip>
       }
     </div>
   )

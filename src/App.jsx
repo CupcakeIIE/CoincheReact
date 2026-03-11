@@ -8,6 +8,7 @@ import MainInGame from "./MainsInGame";
 import { mixCards, decoupe, distribution, getHighestCard, compterPoints, findIsWin } from "./Coinche";
 import { ordreAtout, ordreNonAtout } from "./cartes";
 import VictoryDialog from "./VictoryDialog";
+import WaitDialog from "./WaitDialog";
 
 function App() {
 
@@ -27,6 +28,12 @@ function App() {
   const [coinche, setCoinche] = useMultiplayerState('coinche', false)
   const [nbPasses, setNbPasses] = useMultiplayerState('nbPasses', 0)
   const [relanceGame, setRelanceGame] = useMultiplayerState('relanceGame', false)
+
+  const [okNextGame, setOkNextGame] = useMultiplayerState('okNextGame', Array(4).fill(false))
+  const [nbManches, setNbManches] = useMultiplayerState('nbManches', 0)
+  const [endGame, setEndGame] = useMultiplayerState('endGame', false)
+  const [resetGame, setResetGame] = useMultiplayerState('resetGame', false)
+  const [teamsPoints, setTeamsPoints] = useMultiplayerState('teamsPoints', [0, 0])
 
   const [gamePlaying, setGamePlaying] = useMultiplayerState('gamePlaying', false)
   const [partance, setPartance] = useMultiplayerState('partance', 0)
@@ -80,14 +87,15 @@ function App() {
     if (nbPasses >= 4 && lastAnnonce === '') {
       setCards(distribution(decoupe(mixCards())), {reliable: true})
       setTurnPlayer((turnPlayer + 2) % 4, {reliable: true})
-      setPartance(partance+1, {reliable: true})
+      setPartance((partance+1) % 4, {reliable: true})
+      setNbManches(nbManches + 1, {reliable: true})
     }
 
     if (relanceGame) {
       setRelanceGame(false, {reliable: true}),
       setCards(distribution(decoupe(mixCards())), {reliable: true})
-      setTurnPlayer(partance+1, {reliable: true})
-      setPartance(partance+1, {reliable: true})
+      setTurnPlayer((partance+1) % 4, {reliable: true})
+      setPartance((partance+1) % 4, {reliable: true})
     }
   }, [nbPasses, coinche, lastAnnonce, relanceGame])
 
@@ -96,21 +104,22 @@ function App() {
   // on recalcule à chaque fois qu'une carte est jouée
   useEffect(() => {
     let newHighestCard;
-    console.log(cardsPlayed, cardsDernierPli)
+    // console.log('cards + dernier pli', cardsPlayed, cardsDernierPli)
     if (cardsPlayed.some(c => c !== '' && !cardsPlayed.some((c, index) => c === cardsDernierPli[index]))) {
       newHighestCard = getHighestCard(cardsPlayed, couleurJouee, atout)
       setHighestCard(newHighestCard, {reliable: true})
 
       const isTourPasFini = cardsPlayed.some(c => c === '')
-      console.log(cardsPlayed, isTourPasFini)
+      // console.log('cards + toourFini', cardsPlayed, isTourPasFini)
       if (!isTourPasFini) {
         const indexHighestCard = cardsPlayed.findIndex(c => c === newHighestCard)
 
         // compter les points et attribuer le pli
+        const dixDer = nbToursJoues === 7 ? 10 : 0
         setPointsPlayer(pointsPlayer.map((p, index) => {
           if (index === indexHighestCard) {
             const newPoints = p + compterPoints(cardsPlayed, couleurJouee, atout)
-            return newPoints
+            return newPoints + dixDer
           }
           else
             return p
@@ -128,7 +137,7 @@ function App() {
         setCardsDernierPli([...cardsPlayed], {reliable: true})
         setDernierPliWinningCard(newHighestCard, {reliable: true})
 
-        console.log('wining card', newHighestCard, indexHighestCard)
+        // console.log('wining card', newHighestCard, indexHighestCard)
 
         // lancer un nouveau tour
         setTurnPlayer(indexHighestCard, {reliable: true})
@@ -146,7 +155,73 @@ function App() {
     }
   }, [cardsPlayed])
 
-  console.log('nb tours', nbToursJoues)
+
+  // si le nombre de manches dépasse 4 => indiquer la fin de la partie avec une dialog
+  useEffect(() => {
+    if (nbManches >= 4)
+      setEndGame(true)
+  }, [nbManches])
+
+  // lancer la manche suivante => reset pleins de var
+  useEffect(() => {
+    if (isHost()) {
+      setTurnPlayer((partance+1) % 4, {reliable: true})
+      setPartance((partance+1) % 4, {reliable: true})
+      setCards(distribution(decoupe(mixCards())), {reliable: true})
+      setGamePlaying(false, {reliable: true})
+
+      setAnnonceAll(Array(4).fill(''), {reliable: true})
+      setOpenAnnonce(true, {reliable: true})
+      setLastMise(0, {reliable: true})
+      setCoinche(false, {reliable: true})
+      setNbPasses(0, {reliable: true})
+      setAtout('', {reliable: true})
+      setCouleurJouee('', {reliable: true})
+      setCardsPlayed(Array(4).fill(''), {reliable: true})
+      setHighestCard('', {reliable: true})
+      setCardsDernierPli(Array(4).fill(''), {reliable: true})
+      setDernierPliWinningCard('', {reliable: true})
+      setPointsPlayer(Array(4).fill(''), {reliable: true})
+      setPlisPlayer(Array(4).fill(''), {reliable: true})
+      setNbToursJoues(0, {reliable: true})
+      
+      // stocker les points faits
+      const annonceArray = lastAnnonce.split(' ')
+      const coinchePoints = (coinche ? annonceArray[0] : 0)
+      if (isWin) {
+        setTeamsPoints(teamsPoints.map((t, index) => {
+          if (index === lastAnnoncePlayerIndex%2)
+            return t + annonceArray[0] + coinchePoints
+          else
+            return t
+        }))
+      }
+      else {
+        setTeamsPoints(teamsPoints.map((t, index) => {
+          if (index === lastAnnoncePlayerIndex%2)
+            return t
+          else
+            return t + annonceArray[0] + coinchePoints
+        }))
+      }
+
+      setIsWin(false, {reliable: true})
+      setOpenWinDialog(false, {reliable: true})
+      setLastAnnonce('', {reliable: true})
+      setLastAnnoncePlayerIndex(0, {reliable: true})
+      setCoinche(false, {reliable: true})
+      setOkNextGame(Array(4).fill(false), {reliable: true})
+
+      setResetGame(false)
+    }
+  }, [resetGame])
+
+  useEffect(() => {
+    if (!okNextGame.some(a => !a))
+      setResetGame(true)
+  }, [okNextGame])
+
+  console.log('partance + turnPlayer', partance, turnPlayer)
 
   return (
     <div className={classes.gameBoard}>
@@ -156,10 +231,24 @@ function App() {
         </Typography>
       } */}
 
-      <VictoryDialog win={isWin} open={openWinDialog} annoncePlayerIndex={lastAnnoncePlayerIndex} players={players} annonce={lastAnnonce} pointsPlayer={pointsPlayer} />
+      <VictoryDialog 
+        win={isWin} 
+        open={openWinDialog && !okNextGame[meIndex]} 
+        annoncePlayerIndex={lastAnnoncePlayerIndex} 
+        players={players} annonce={lastAnnonce} 
+        pointsPlayer={pointsPlayer} 
+        nbManches={nbManches} 
+        setNbManches={setNbManches} 
+        // setResetGame={setResetGame} 
+        setOpenWinDialog={setOpenWinDialog} 
+        okNextGame={okNextGame} 
+        setOkNextGame={setOkNextGame} 
+        indexPlayer={meIndex}
+      />
+      <WaitDialog open={openWinDialog && okNextGame[meIndex]} />
 
       {/* afficher les mains des joueurs pendant les annonces != du in game (pour plus de simplicté de compréhension) */}
-      {gameStarted && !gamePlaying &&
+      {gameStarted && !gamePlaying && !openWinDialog &&
         players.map((player, index) => (
           <Main 
             indexMe={meIndex} 
@@ -186,7 +275,7 @@ function App() {
       ))}
 
       {/* afficher les mains des joueurs quand la partie a commencé */}
-      {gameStarted && gamePlaying &&
+      {gameStarted && gamePlaying && !openWinDialog &&
         players.map((player, index) => (
           <MainInGame
             indexMe={meIndex} 

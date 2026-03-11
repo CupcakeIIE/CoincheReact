@@ -1,4 +1,4 @@
-import { Button, IconButton, Typography } from "@mui/material";
+import { Button, IconButton, Tooltip, Typography } from "@mui/material";
 import Brightness1Icon from '@mui/icons-material/Brightness1';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import InfoOutlineIcon from '@mui/icons-material/InfoOutline';
@@ -118,9 +118,11 @@ const MainInGame = ({
 
       <div style={getUsedStyle(index)} className={classes.mains}>
         {index === indexMe && cardsDernierPli.length !== 0 &&
-          <IconButton className={classes.buttonDernierPli} color="secondary" onClick={clickDernierPli}>
-            <VisibilityIcon />
-          </IconButton>
+          <Tooltip title="Consulter le dernier pli">
+            <IconButton className={classes.buttonDernierPli} color="secondary" onClick={clickDernierPli}>
+              <VisibilityIcon />
+            </IconButton>
+          </Tooltip>
         }
         <div className={index === turnPlayer ? classes.colorPlayer : classes.noColorPlayer}>
           <div className={classes.textMain}>
@@ -147,9 +149,11 @@ const MainInGame = ({
           </div>
         </div>
         {index === indexMe &&
-          <IconButton className={classes.buttonDernierPli} color="secondary">
-            <InfoOutlineIcon />
-          </IconButton>
+          <Tooltip title="Afficher les règles">
+            <IconButton className={classes.buttonDernierPli} color="secondary">
+              <InfoOutlineIcon />
+            </IconButton>
+          </Tooltip>
         }
       </div>
     </div>

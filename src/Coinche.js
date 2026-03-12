@@ -224,13 +224,14 @@ const pointsDebut = (hand = []) => {
   return points
 }
 
-const isJouable = (hand = [], card ='', couleurJouee = '', atout = '', highestCard = '') => {
+const isJouable = (hand = [], card ='', couleurJouee = '', atout = '', highestCard = '', cardsPlayed = [], indexMe = 0) => {
   const cardList = card.split(' ')
 
   // si aucune carte de jouee sur ce pli, on peut toutes les jouer
   if (couleurJouee === '')
     return true
 
+  const indexHighestCard = cardsPlayed.findIndex(c => c === highestCard)
 
   // tout atout
   if (atout === 'Tout') {
@@ -296,6 +297,10 @@ const isJouable = (hand = [], card ='', couleurJouee = '', atout = '', highestCa
     // console.log('card color', card, thereIsColor)
     if (cardList[0] !== couleurJouee && thereIsColor && couleurJouee !== atout)
       return false
+    
+    // pas de la couleur (couleur n'est pas de l'atout) et partenaire maitre
+    if (!thereIsColor && couleurJouee !== atout && indexHighestCard%2 === indexMe%2)
+      return true
 
     // si non regarder si il y a de l'atout supérieur à celui déjà jouer (si un déjà jouer)
     const hCardList = highestCard.split(' ')

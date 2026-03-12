@@ -4,6 +4,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import InfoOutlineIcon from '@mui/icons-material/InfoOutline';
 import ReplayIcon from '@mui/icons-material/Replay';
 import DoDisturbIcon from '@mui/icons-material/DoDisturb';
+import RadarIcon from '@mui/icons-material/Radar';
 
 import useStyles from "./style";
 import AnnonceDialog from "./AnnonceDialog";
@@ -11,6 +12,7 @@ import { useEffect, useState } from "react";
 import RelanceDialog from "./RelanceDialog";
 import { pointsDebut } from "./Coinche";
 import CoincheDialog from "./CoincheDialog";
+import ScoreDialog from "./ScoreDialog";
 
 const Main = ({
   indexMe = 0, 
@@ -27,6 +29,12 @@ const Main = ({
   setRelanceGame,
   setCoinche,
   lastMise = 0, setLastMise,
+  
+  // for scores dialog
+  nbManches = 0,
+  players = [],
+  manchesPoints = [],
+  manchesTeamWin = [],
 }) => {
 
   const classes = useStyles()
@@ -40,6 +48,8 @@ const Main = ({
   const [showCoinche, setShowCoinche] = useState(false)
   const [displayCoinche, setDisplayCoinche] = useState(true)
   // const [canCoinche, setCanCoinche] = useState(true)
+
+  const [openScores, setOpenScores] = useState(false)
 
   const cardBack = '/Cartes/card_back.png'
 
@@ -90,6 +100,14 @@ const Main = ({
   return (
     <div style={getUsedStyle(index)} className={classes.mains}>
       
+      {index === indexMe &&
+        <Tooltip title="Scores">
+          <IconButton className={classes.buttonDernierPli} color="secondary" onClick={() => setOpenScores(true)}>
+            <RadarIcon />
+          </IconButton>
+        </Tooltip>
+      }
+
       {index === indexMe && turnPlayer === indexMe && !showRelance && !showCoinche &&
         <Tooltip title="Annoncer">
           <IconButton className={classes.buttonDernierPli} color="secondary" onClick={clickShowAnnonce}>
@@ -160,9 +178,19 @@ const Main = ({
           setAnnonceAll={setAnnonceAll}
           indexPlayer={indexMe}
         />
+        <ScoreDialog
+          open={openScores && index === indexMe}
+          setOpen={setOpenScores}
+          
+          // for scores dialog
+          nbManches={nbManches}
+          players={players}
+          manchesPoints={manchesPoints}
+          manchesTeamWin={manchesTeamWin}
+        />
       </div>
       {index === indexMe &&
-        <Tooltip title="Afficher les règles">
+        <Tooltip title="Règles">
           <IconButton className={classes.buttonDernierPli} color="secondary">
             <InfoOutlineIcon />
           </IconButton>

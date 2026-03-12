@@ -235,6 +235,7 @@ const useStyles = makeStyles(theme => ({
     gap: '2em',
     justifyContent: 'center',
     alignItems: 'center',
+    // maxWidth: '1000em !important',
   },
 
   colorPlayer: {
@@ -244,12 +245,14 @@ const useStyles = makeStyles(theme => ({
     paddingLeft: '1em',
     paddingRight: '1em',
     paddingTop: '1em',
+    // maxWidth: '1000em !important',
   },
 
   noColorPlayer: {
     paddingLeft: '1em',
     paddingRight: '1em',
     paddingTop: '1em',
+    // maxWidth: '1000em !important',
   },
 
   buttonDernierPli: {

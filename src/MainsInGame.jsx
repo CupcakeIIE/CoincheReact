@@ -2,12 +2,14 @@ import { Button, IconButton, Tooltip, Typography } from "@mui/material";
 import Brightness1Icon from '@mui/icons-material/Brightness1';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import InfoOutlineIcon from '@mui/icons-material/InfoOutline';
+import RadarIcon from '@mui/icons-material/Radar';
 
 import useStyles from "./style";
 import { ordreAtout } from "./cartes";
 import { useState } from "react";
 import DernierPliDialog from "./DernierPliDialog";
 import { isJouable } from "./Coinche";
+import ScoreDialog from "./ScoreDialog";
 
 const MainInGame = ({
   indexMe = 0, 
@@ -23,6 +25,12 @@ const MainInGame = ({
   partance = 0,
   cardsDernierPli = [],
   dernierPliWinningCard = '',
+  
+  // for scores dialog
+  nbManches = 0,
+  players = [],
+  manchesPoints = [],
+  manchesTeamWin = [],
 }) => {
 
   const classes = useStyles()
@@ -34,11 +42,17 @@ const MainInGame = ({
   const styleLeft = {left: '0px', top: '50%', transform: 'translate(-36%, -50%) rotate(90deg)'}
   const styleRight = {right: '0px', top: '50%', transform: 'translate(36%, -50%) rotate(270deg)'}
   const styleBottom = {bottom: '0px', transform: 'translate(-50%, 0%)'}
+  
+  // const styleTop = {top: '0px', transform: 'rotate(180deg)'}
+  // const styleLeft = {left: '-212px', transform: 'rotate(90deg)'}
+  // const styleRight = {right: '-212px', transform: 'rotate(270deg)'}
+  // const styleBottom = {bottom: '0px'}
 
   const isMe = indexMe === index
   const myCards = cards.slice(index*8, (index+1)*8)
 
   const [openDernierPli, setOpenDernierPli] = useState(false)
+  const [openScores, setOpenScores] = useState(false)
 
   // to know where to display the cards (top, left, right or bottom)
   // a player always see his card on the bottom
@@ -80,6 +94,10 @@ const MainInGame = ({
   const styleLeftCard = {left: '50%', top:' 50%', transform: 'translate(-200%, -50%) rotate(90deg)'}
   const styleRightCard = {right: '50%', top: '50%', transform: 'translate(200%, -50%) rotate(270deg)'}
   const styleBottomCard = {bottom: '50%', left: '50%', transform: 'translate(-50%, 150%'}  
+  // const styleTopCard = {top: '0px', transform: 'rotate(180deg)'}
+  // const styleLeftCard = {left: '-212px', transform: 'rotate(90deg)'}
+  // const styleRightCard = {right: '-212px', transform: 'rotate(270deg)'}
+  // const styleBottomCard = {bottom: '0px'}
   const getUsedStyleInGame = (index) => {
     const i = (index - indexMe + 4) % 4;
     if (i === 0)
@@ -107,6 +125,17 @@ const MainInGame = ({
         dernierPliWinningCard={dernierPliWinningCard}
         indexJoueur={indexMe}
       />
+      
+      <ScoreDialog
+        open={openScores && index === indexMe}
+        setOpen={setOpenScores}
+        
+        // for scores dialog
+        nbManches={nbManches}
+        players={players}
+        manchesPoints={manchesPoints}
+        manchesTeamWin={manchesTeamWin}
+      />
 
       {/* afficher au centre les cartes jouées pour ce pli */}
       {index === indexMe &&
@@ -117,6 +146,13 @@ const MainInGame = ({
       ))}
 
       <div style={getUsedStyle(index)} className={classes.mains}>
+        {index === indexMe &&
+          <Tooltip title="Scores">
+            <IconButton className={classes.buttonDernierPli} color="secondary" onClick={() => setOpenScores(true)}>
+              <RadarIcon />
+            </IconButton>
+          </Tooltip>
+        }
         {index === indexMe && cardsDernierPli.length !== 0 &&
           <Tooltip title="Consulter le dernier pli">
             <IconButton className={classes.buttonDernierPli} color="secondary" onClick={clickDernierPli}>
@@ -134,7 +170,7 @@ const MainInGame = ({
           </div>
           <div>
             {myCards.map((card, i) => {
-              const putClickable = isJouable(myCards, card, couleurJouee, atout, highestCard)
+              const putClickable = isJouable(myCards, card, couleurJouee, atout, highestCard, cardsPlayed, indexMe)
               return (
                 <Button 
                   key={i} 
@@ -149,7 +185,7 @@ const MainInGame = ({
           </div>
         </div>
         {index === indexMe &&
-          <Tooltip title="Afficher les règles">
+          <Tooltip title="Règles">
             <IconButton className={classes.buttonDernierPli} color="secondary">
               <InfoOutlineIcon />
             </IconButton>

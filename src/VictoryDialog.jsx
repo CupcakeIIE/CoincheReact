@@ -18,7 +18,7 @@ const VictoryDialog = ({
   const classes = useStyles()
 
   const onClickOk = () => {
-    setNbManches(nbManches + 1, {reliable: true})
+    // setNbManches(nbManches + 1, {reliable: true})
     // setResetGame(true, {reliable: true})
     // setOpenWinDialog(false)
     setOkNextGame(okNextGame.map((a, index) => {

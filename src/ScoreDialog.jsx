@@ -18,7 +18,7 @@ const ScoreDialog = ({
     setOpen(false)
   }
 
-  console.log('scores', manchesPoints, manchesTeamWin)
+  console.log('scores', manchesPoints, manchesTeamWin, nbManches)
 
   const totalTeam1 = nbManches === 0 
     ? '-' 
@@ -61,26 +61,13 @@ const ScoreDialog = ({
             </TableHead>
 
             <TableBody>
-              <TableRow>
-                <TableCell align="center">Manche 1</TableCell>
-                <TableCell align="center">{manchesTeamWin === 0 ? manchesPoints : '-'}</TableCell>
-                <TableCell align="center">{manchesTeamWin === 1 ? manchesPoints : '-'}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell align="center">Manche 2</TableCell>
-                <TableCell align="center">{manchesTeamWin === 0 ? manchesPoints : '-'}</TableCell>
-                <TableCell align="center">{manchesTeamWin === 1 ? manchesPoints : '-'}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell align="center">Manche 3</TableCell>
-                <TableCell align="center">{manchesTeamWin === 0 ? manchesPoints : '-'}</TableCell>
-                <TableCell align="center">{manchesTeamWin === 1 ? manchesPoints : '-'}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell align="center">Manche 4</TableCell>
-                <TableCell align="center">{manchesTeamWin === 0 ? manchesPoints : '-'}</TableCell>
-                <TableCell align="center">{manchesTeamWin === 1 ? manchesPoints : '-'}</TableCell>
-              </TableRow>
+              {manchesTeamWin.map((t, index) => (
+                <TableRow>
+                  <TableCell align="center">Manche {index + 1}</TableCell>
+                  <TableCell align="center">{nbManches > index + 1 ? (t === 0 ? manchesPoints[index] : '0') : '-'}</TableCell>
+                  <TableCell align="center">{nbManches > index + 1 ? (t === 1 ? manchesPoints[index] : '0') : '-'}</TableCell>
+                </TableRow>
+              ))}
               <TableRow>
                 <TableCell align="center">Total</TableCell>
                 <TableCell align="center">{totalTeam1}</TableCell>

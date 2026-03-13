@@ -66,38 +66,80 @@ function App() {
 
   // afficher les lobbys de playroom kit
   useEffect(() => {
-    insertCoin({
-    });
+    insertCoin({});
   }, []);
 
   // gerer la fin des annonces en fonction du nombre de passe et/ou de la coinche
   useEffect(() => {
-    if (coinche) {
-      setGamePlaying(true, {reliable: true})
-      setTurnPlayer(partance, {reliable: true})
-      const annonceList = lastAnnonce.split(' ')
-      setAtout(annonceList[1], {reliable: true})
-    }
+    if (isHost()) {
+      if (coinche) {
+        setGamePlaying(true, {reliable: true})
+        setTurnPlayer(partance, {reliable: true})
+        const annonceList = lastAnnonce.split(' ')
+        setAtout(annonceList[1], {reliable: true})
 
-    if (lastAnnonce !== '' && nbPasses >= 3) {
-      setGamePlaying(true, {reliable: true})
-      setTurnPlayer(partance, {reliable: true})
-      const annonceList = lastAnnonce.split(' ')
-      setAtout(annonceList[1], {reliable: true})
-    }
+         // stocker les points faits
+        const pointsFaits = {
+          '80': 80,
+          '90': 90,
+          '100': 100,
+          '110': 110,
+          '120': 120,
+          '130': 130,
+          '140': 140,
+          '150': 150,
+          '160': 160,
+          '170': 170,
+          '180': 180,
+          'Capot': 250,
+          'Générale': 500,
+        }
+        const coinchePoints = (coinche ? pointsFaits[lastMise] : 0)
 
-    if (nbPasses >= 4 && lastAnnonce === '') {
-      setCards(distribution(decoupe(mixCards())), {reliable: true})
-      setTurnPlayer((turnPlayer + 2) % 4, {reliable: true})
-      setPartance((partance+1) % 4, {reliable: true})
-      setNbManches(nbManches + 1, {reliable: true})
-    }
+        console.log('points', lastAnnoncePlayerIndex, pointsFaits[lastMise])
 
-    if (relanceGame) {
-      setRelanceGame(false, {reliable: true}),
-      setCards(distribution(decoupe(mixCards())), {reliable: true})
-      setTurnPlayer((partance+1) % 4, {reliable: true})
-      setPartance((partance+1) % 4, {reliable: true})
+        setTeamsPoints(teamsPoints.map((t, index) => {
+          if (index === lastAnnoncePlayerIndex%2)
+            return t + pointsFaits[lastMise] + coinchePoints
+          else
+            return t
+        }), {reliable: true})
+
+        setManchesTeamWin(manchesTeamWin.map((m, index) => {
+          if (index === nbManches)
+            return lastAnnoncePlayerIndex % 2
+          else
+            return m
+        }), {reliable: true})
+
+        setManchesPoints(manchesPoints.map((m, index) => {
+          if (index === nbManches)
+            return pointsFaits[lastMise] +  coinchePoints
+          else
+            return m
+        }), {reliable: true})
+      }
+
+      if (lastAnnonce !== '' && nbPasses >= 3) {
+        setGamePlaying(true, {reliable: true})
+        setTurnPlayer(partance, {reliable: true})
+        const annonceList = lastAnnonce.split(' ')
+        setAtout(annonceList[1], {reliable: true})
+      }
+
+      if (nbPasses >= 4 && lastAnnonce === '') {
+        setCards(distribution(decoupe(mixCards())), {reliable: true})
+        setTurnPlayer((turnPlayer + 2) % 4, {reliable: true})
+        setPartance((partance+1) % 4, {reliable: true})
+        setNbManches(nbManches + 1, {reliable: true})
+      }
+
+      if (relanceGame) {
+        setRelanceGame(false, {reliable: true}),
+        setCards(distribution(decoupe(mixCards())), {reliable: true})
+        setTurnPlayer((partance+1) % 4, {reliable: true})
+        setPartance((partance+1) % 4, {reliable: true})
+      }
     }
   }, [nbPasses, coinche, lastAnnonce, relanceGame])
 
@@ -191,13 +233,29 @@ function App() {
       setNbToursJoues(0, {reliable: true})
       
       // stocker les points faits
-      const coinchePoints = (coinche ? lastMise : 0)
-      const pointsFaits = lastMise === 'Générale' ? 500 : (lastMise === 'Capot' ? 250 : lastMise)
+      const pointsFaits = {
+        '80': 80,
+        '90': 90,
+        '100': 100,
+        '110': 110,
+        '120': 120,
+        '130': 130,
+        '140': 140,
+        '150': 150,
+        '160': 160,
+        '170': 170,
+        '180': 180,
+        'Capot': 250,
+        'Générale': 500,
+      }
+      const coinchePoints = (coinche ? pointsFaits[lastMise] : 0)
+      
+      // lastMise === 'Générale' ? 500 : (lastMise === 'Capot' ? 250 : lastMise)
 
       if (isWin) {
         setTeamsPoints(teamsPoints.map((t, index) => {
           if (index === lastAnnoncePlayerIndex%2)
-            return t + lastMise + coinchePoints
+            return t + pointsFaits[lastMise] + coinchePoints
           else
             return t
         }), {reliable: true})
@@ -205,6 +263,8 @@ function App() {
         setManchesTeamWin(manchesTeamWin.map((m, index) => {
           if (index === nbManches)
             return lastAnnoncePlayerIndex % 2
+          else
+            return m
         }), {reliable: true})
       }
       else {
@@ -212,18 +272,20 @@ function App() {
           if (index === lastAnnoncePlayerIndex%2)
             return t
           else
-            return t + lastMise + coinchePoints
+            return t + pointsFaits[lastMise] + coinchePoints
         }), {reliable: true})
 
         setManchesTeamWin(manchesTeamWin.map((m, index) => {
           if (index === nbManches)
             return (lastAnnoncePlayerIndex + 1) % 2
+          else
+            return m
         }), {reliable: true})
       }
 
       setManchesPoints(manchesPoints.map((m, index) => {
         if (index === nbManches)
-          return lastMise +  coinchePoints
+          return pointsFaits[lastMise] +  coinchePoints
         else
           return m
       }), {reliable: true})
@@ -234,6 +296,7 @@ function App() {
       setLastAnnoncePlayerIndex(0, {reliable: true})
       setCoinche(false, {reliable: true})
       setOkNextGame(Array(4).fill(false), {reliable: true})
+      setNbManches(nbManches + 1, {reliable: true})
 
       setResetGame(false)
     }

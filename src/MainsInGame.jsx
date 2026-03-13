@@ -175,7 +175,7 @@ const MainInGame = ({
                 <Button 
                   key={i} 
                   className={classes.buttonCards} 
-                  disabled={(indexMe !== index || indexMe !== turnPlayer) || !putClickable}
+                  disabled={(indexMe !== index || indexMe !== turnPlayer) || !putClickable || !card}
                   onClick={() => clickCard(card, i)}
                 >
                   {card && <img src={isMe ? `/Cartes/${card}.png` : cardBack} className={classes.imgCard} />}

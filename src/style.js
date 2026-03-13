@@ -246,6 +246,7 @@ const useStyles = makeStyles(theme => ({
     paddingRight: '1em',
     paddingTop: '1em',
     // maxWidth: '1000em !important',
+    width: '600px',
   },
 
   noColorPlayer: {
@@ -253,6 +254,7 @@ const useStyles = makeStyles(theme => ({
     paddingRight: '1em',
     paddingTop: '1em',
     // maxWidth: '1000em !important',
+    width: '600px',
   },
 
   buttonDernierPli: {

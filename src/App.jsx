@@ -62,6 +62,9 @@ function App() {
       setCards(distribution(decoupe(mixCards())), {reliable: true})
       setOpenAnnonce(true, {reliable: true})
     }
+    else if (players.length < 4 && gameStarted) {
+      window.location.reload();
+    }
   }, [players]);
 
   // afficher les lobbys de playroom kit

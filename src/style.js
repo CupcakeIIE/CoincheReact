@@ -246,7 +246,7 @@ const useStyles = makeStyles(theme => ({
     paddingRight: '1em',
     paddingTop: '1em',
     // maxWidth: '1000em !important',
-    width: '600px',
+    width: '620px',
   },
 
   noColorPlayer: {
@@ -254,7 +254,15 @@ const useStyles = makeStyles(theme => ({
     paddingRight: '1em',
     paddingTop: '1em',
     // maxWidth: '1000em !important',
-    width: '600px',
+    width: '620px',
+  },
+
+  tooltipClass: {
+    display: 'flex',
+    flexDirection: 'row',
+    marginTop: '4.2em !important',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 
   buttonDernierPli: {

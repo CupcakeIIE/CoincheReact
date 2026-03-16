@@ -18,7 +18,7 @@ const ScoreDialog = ({
     setOpen(false)
   }
 
-  console.log('scores', manchesPoints, manchesTeamWin, nbManches)
+  // console.log('scores', manchesPoints, manchesTeamWin, nbManches)
 
   const totalTeam1 = nbManches === 0 
     ? '-' 

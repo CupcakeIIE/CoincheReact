@@ -1,14 +1,16 @@
-import { Button, IconButton, Tooltip, Typography } from "@mui/material";
+import { Button, IconButton, Switch, Tooltip, Typography } from "@mui/material";
 import Brightness1Icon from '@mui/icons-material/Brightness1';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import InfoOutlineIcon from '@mui/icons-material/InfoOutline';
 import RadarIcon from '@mui/icons-material/Radar';
+import FilterListIcon from '@mui/icons-material/FilterList';
+import FilterListOffIcon from '@mui/icons-material/FilterListOff';
 
 import useStyles from "./style";
 import { ordreAtout } from "./cartes";
 import { useState } from "react";
 import DernierPliDialog from "./DernierPliDialog";
-import { isJouable } from "./Coinche";
+import { isJouable, sortCards } from "./Coinche";
 import ScoreDialog from "./ScoreDialog";
 
 const MainInGame = ({
@@ -31,6 +33,8 @@ const MainInGame = ({
   players = [],
   manchesPoints = [],
   manchesTeamWin = [],
+
+  handSorted = [], setHandSorted,
 }) => {
 
   const classes = useStyles()
@@ -50,6 +54,7 @@ const MainInGame = ({
 
   const isMe = indexMe === index
   const myCards = cards.slice(index*8, (index+1)*8)
+  const myCardsSorted = sortCards(myCards, atout)
 
   const [openDernierPli, setOpenDernierPli] = useState(false)
   const [openScores, setOpenScores] = useState(false)
@@ -114,6 +119,15 @@ const MainInGame = ({
     setOpenDernierPli(true)
   }
 
+  const clickSwitchHandSorted = () => {
+    setHandSorted(handSorted.map((h, index) => {
+      if (index === indexMe)
+        return !h
+      else
+        return h
+    }))
+  }
+
   // console.log('couleur', couleurJouee)
 
   return (
@@ -169,7 +183,7 @@ const MainInGame = ({
             <Typography><b>{annonceAll[index]}</b></Typography>
           </div>
           <div>
-            {myCards.map((card, i) => {
+            {(handSorted[indexMe] ? myCardsSorted : myCards).map((card, i) => {
               const putClickable = isJouable(myCards, card, couleurJouee, atout, highestCard, cardsPlayed, indexMe)
               return (
                 <Button 
@@ -184,6 +198,17 @@ const MainInGame = ({
             )})}
           </div>
         </div>
+        {index === indexMe && 
+          <Tooltip title='Trier' className={classes.tooltipClass}>
+            <FilterListOffIcon color='secondary' />
+            <Switch 
+              checked={handSorted[indexMe]} 
+              onChange={clickSwitchHandSorted}
+              color='secondary'
+              />
+            <FilterListIcon color="secondary" />
+          </Tooltip>
+        }
         {index === indexMe &&
           <Tooltip title="Règles">
             <IconButton className={classes.buttonDernierPli} color="secondary">

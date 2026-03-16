@@ -337,4 +337,52 @@ const isJouable = (hand = [], card ='', couleurJouee = '', atout = '', highestCa
   }
 }
 
-export  {mixCards, decoupe, distribution, getHighestCard, ramasserPli, compterPoints, findIsWin, pointsDebut, isJouable}
+const sortCards = (hand = [], atout = '') => {
+  const order = ['Carreau', 'Coeur', 'Pique', 'Trèfle']
+  const orderAtout = ['Valet', '9', 'As', '10', 'Roi', 'Dame', '8', '7']
+  const orderNonAtout = ['As', '10', 'Roi', 'Dame', 'Valet', '9', '8', '7']
+
+  const sortedHand = hand.reduce((acc, carte) => {
+    const carteArray = carte.split(' ')
+    const posCouleurCarte = order.findIndex(o => o === carteArray[0])
+    const posValeurCarte = (atout === carteArray[0] ? orderAtout.findIndex(o => o === carteArray[1]) : orderNonAtout.findIndex(o => o === carteArray[1]))
+
+    const indexNewPlace = acc.findIndex(a => {
+      const aArray = a.split(' ')
+      const posCouleurA = order.findIndex(o => o === aArray[0])
+      const posValeurA = (atout === aArray[0] ? orderAtout.findIndex(o => o === aArray[1]) : orderNonAtout.findIndex(o => o === aArray[1]))
+      if (posCouleurCarte < posCouleurA)
+        return true
+      if (posCouleurCarte > posCouleurA)
+        return false
+      if (posCouleurCarte === posCouleurA && posValeurCarte < posValeurA)
+        return true
+      if (posCouleurCarte === posCouleurA && posValeurCarte > posValeurA)
+        return false
+    })
+
+    let newAcc = [...acc];
+
+    if (indexNewPlace === -1)
+      newAcc.push(carte)
+    else
+      newAcc = [...acc.slice(0, indexNewPlace), carte, ...acc.slice(indexNewPlace)]
+
+    return newAcc
+  }, [])
+
+  return sortedHand
+}
+
+export {
+  mixCards, 
+  decoupe, 
+  distribution, 
+  getHighestCard, 
+  ramasserPli, 
+  compterPoints, 
+  findIsWin, 
+  pointsDebut, 
+  isJouable, 
+  sortCards
+}

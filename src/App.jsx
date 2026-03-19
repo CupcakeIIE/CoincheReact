@@ -56,6 +56,12 @@ function App() {
   const [isWin, setIsWin] = useMultiplayerState('isWin', false)
   const [handSorted, setHandSorted] = useMultiplayerState('handSorted', Array(4).fill(false))
 
+  const [isBelote, setIsBelote] = useMultiplayerState('isBelote', false)
+  const [indexBelote, setIndexBelote] = useMultiplayerState('indexBelote', 0)
+  const [etapeBeloteSaid, setEtapeBeloteSaid] = useMultiplayerState('etapeBeloteSaid', 0)
+  const [showBelote, setShowBelote] = useMultiplayerState('showBelote', false)
+  const [beloteAskedArray, setBeloteAskedArray] = useMultiplayerState('beloteAskedArray', Array(4).fill(false))
+
   const me = myPlayer();
   const meIndex = players.findIndex(player => me.id === player.id) 
 
@@ -101,7 +107,7 @@ function App() {
 
       if (nbPasses >= 4 && lastAnnonce === '') {
         setCards(distribution(decoupe(mixCards())), {reliable: true})
-        setTurnPlayer((turnPlayer + 2) % 4, {reliable: true})
+        setTurnPlayer((partance+1) % 4, {reliable: true})
         setPartance((partance+1) % 4, {reliable: true})
         setNbManches(nbManches + 1, {reliable: true})
       }
@@ -279,7 +285,7 @@ function App() {
       setResetGame(true)
   }, [okNextGame])
 
-  console.log('switch', handSorted)
+  // console.log('switch', handSorted)
 
   return (
     <div className={classes.gameBoard}>
@@ -376,6 +382,21 @@ function App() {
 
             handSorted={handSorted}
             setHandSorted={setHandSorted}
+
+            // belote
+            isBelote={isBelote}
+            setIsBelote={setIsBelote}
+            indexBelote={indexBelote}
+            setIndexBelote={setIndexBelote}
+            etapeBeloteSaid={etapeBeloteSaid}
+            setEtapeBeloteSaid={setEtapeBeloteSaid}
+            showBelote={showBelote}
+            setShowBelote={setShowBelote}
+            beloteAskedArray={beloteAskedArray}
+            setBeloteAskedArray={setBeloteAskedArray}
+
+            pointsPlayer={pointsPlayer}
+            setPointsPlayer={setPointsPlayer}
           />
       ))}
     </div>

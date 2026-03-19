@@ -345,12 +345,12 @@ const sortCards = (hand = [], atout = '') => {
   const sortedHand = hand.reduce((acc, carte) => {
     const carteArray = carte.split(' ')
     const posCouleurCarte = order.findIndex(o => o === carteArray[0])
-    const posValeurCarte = (atout === carteArray[0] ? orderAtout.findIndex(o => o === carteArray[1]) : orderNonAtout.findIndex(o => o === carteArray[1]))
+    const posValeurCarte = (atout === carteArray[0] || atout === 'Tout' ? orderAtout.findIndex(o => o === carteArray[1]) : orderNonAtout.findIndex(o => o === carteArray[1]))
 
     const indexNewPlace = acc.findIndex(a => {
       const aArray = a.split(' ')
       const posCouleurA = order.findIndex(o => o === aArray[0])
-      const posValeurA = (atout === aArray[0] ? orderAtout.findIndex(o => o === aArray[1]) : orderNonAtout.findIndex(o => o === aArray[1]))
+      const posValeurA = (atout === aArray[0] || atout === 'Tout' ? orderAtout.findIndex(o => o === aArray[1]) : orderNonAtout.findIndex(o => o === aArray[1]))
       if (posCouleurCarte < posCouleurA)
         return true
       if (posCouleurCarte > posCouleurA)
@@ -374,6 +374,26 @@ const sortCards = (hand = [], atout = '') => {
   return sortedHand
 }
 
+const thereIsBelote = (hand = [], atout = '') => {
+  if (atout === 'Sans' || atout === 'Tout')
+    return false
+
+  let isRoi = false
+  let isDame = false
+  hand.map(carte => {
+    const carteArray = carte.split(' ')
+    if (carteArray[1] === 'Roi' && carteArray[0] === atout)
+      isRoi = true
+    else if (carteArray[1] === 'Dame' && carteArray[0] === atout)
+      isDame = true
+  })
+
+  if (isRoi && isDame)
+    return true
+  
+  return false
+}
+
 export {
   mixCards, 
   decoupe, 
@@ -384,5 +404,6 @@ export {
   findIsWin, 
   pointsDebut, 
   isJouable, 
-  sortCards
+  sortCards,
+  thereIsBelote,
 }

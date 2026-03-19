@@ -65,6 +65,8 @@ function App() {
   const me = myPlayer();
   const meIndex = players.findIndex(player => me.id === player.id) 
 
+  console.log('players', players[0]?.state?.profile)
+
   // lancer une partie si 4 personnes dans la room
   useEffect(() => {
     if (players.length === 4 && isHost()) {
@@ -325,6 +327,8 @@ function App() {
           <Main 
             indexMe={meIndex} 
             player={player?.state?.profile?.name || `Player${index}`} 
+            photo={player?.state?.profile?.photo || ''}
+            color={players[meIndex]?.state?.profile?.color || '#87fdff'}
             index={index} 
             cards={cards} 
             annonceAll={annonceAll}
@@ -358,6 +362,8 @@ function App() {
           <MainInGame
             indexMe={meIndex} 
             player={player?.state?.profile?.name || `Player${index}`} 
+            photo={player?.state?.profile?.photo || ''}
+            color={players[meIndex]?.state?.profile?.color || '#87fdff'}
             index={index} 
             cards={cards} 
             setCards={setCards}

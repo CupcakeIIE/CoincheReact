@@ -18,6 +18,8 @@ import ReglesDialog from "./ReglesDialog";
 const Main = ({
   indexMe = 0, 
   player= '', 
+  photo = '',
+  color = '#87fdff',
   index = 0, 
   cards = [], 
   annonceAll = [], setAnnonceAll, 
@@ -157,10 +159,13 @@ const Main = ({
             </IconButton>
           </Tooltip>
         } */}
-        <div className={index === turnPlayer ? classes.colorPlayer : classes.noColorPlayer}>
+        <div className={index === turnPlayer ? classes.colorPlayer : classes.noColorPlayer} style={{backgroundColor: (index === turnPlayer && color)}}>
           <div className={classes.textMain}>
             <div className={classes.nameMain}>
               {index === partance && <Brightness1Icon color='secondary' />}
+              <div>
+                <img src={photo} width='50px' />
+              </div>
               <Typography color={isMe ? 'success' : 'error'} className={classes.namePlayer} variant="h5"><b>{player}</b></Typography>
             </div>
             <Typography><b>{annonceAll[index]}</b></Typography>

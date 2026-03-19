@@ -18,6 +18,8 @@ import ReglesDialog from "./ReglesDialog";
 const MainInGame = ({
   indexMe = 0, 
   player= '', 
+  photo = '',
+  color = '#87fdff',
   index = 0, 
   cards = [], setCards,
   annonceAll = [],
@@ -237,10 +239,13 @@ const MainInGame = ({
               : (etapeBeloteSaid === 2 ? <i>Belote - ReBelote</i> : <i></i>))
             }
 
-            <div className={index === turnPlayer ? classes.colorPlayer : classes.noColorPlayer}>
+            <div className={index === turnPlayer ? classes.colorPlayer : classes.noColorPlayer} style={{backgroundColor: (index === turnPlayer && color)}}>
               <div className={classes.textMain}>
                 <div className={classes.nameMain}>
                   {index === partance && <Brightness1Icon color='secondary' />}
+                  <div>
+                    <img src={photo} width='50px' />
+                  </div>
                   <Typography color={isMe ? 'success' : 'error'} className={classes.namePlayer} variant="h5"><b>{player}</b></Typography>
                 </div>
                 <Typography><b>{annonceAll[index]}</b></Typography>
@@ -289,9 +294,6 @@ const MainInGame = ({
               onClose={handleClose}
               onOpen={handleOpen}
               open={open}
-              // FabProps={{
-              //   className: classes.speedDial
-              // }}
               FabProps={{
                 sx: { zIndex: 2, '&:focus': {
                   outline: 'none',
@@ -316,10 +318,13 @@ const MainInGame = ({
                     tooltip: {
                       open: true,
                       title: action.name,
-                      sx: {
-                        maxWidth: 'none',  
-                        width: '300px !important', 
-                      }
+                      componentsProps: {
+                        tooltip: {
+                          sx: {
+                            maxWidth: 500,
+                          },
+                        },
+                      },
                     },
                   }}
                 />

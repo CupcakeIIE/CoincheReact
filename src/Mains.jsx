@@ -13,6 +13,7 @@ import RelanceDialog from "./RelanceDialog";
 import { pointsDebut } from "./Coinche";
 import CoincheDialog from "./CoincheDialog";
 import ScoreDialog from "./ScoreDialog";
+import ReglesDialog from "./ReglesDialog";
 
 const Main = ({
   indexMe = 0, 
@@ -50,6 +51,7 @@ const Main = ({
   // const [canCoinche, setCanCoinche] = useState(true)
 
   const [openScores, setOpenScores] = useState(false)
+  const [openRegles, setOpenRegles] = useState(false)
 
   const cardBack = '/Cartes/card_back.png'
 
@@ -115,7 +117,7 @@ const Main = ({
     { icon: <ReplayIcon color='secondary' />, name: 'Relance', onClick: () => setDisplayRelance(true), show: (showRelance && lastAnnonce === '') },
     { icon: <DoDisturbIcon color='secondary' />, name: 'Coinche', onClick: () => setDisplayCoinche(true), show: (lastAnnonce !== '' && (lastAnnoncePlayerIndex%2) !== (indexMe%2) && showCoinche) },
     { icon: <RadarIcon color='secondary' />, name: 'Scores', onClick: () => setOpenScores(true), show: true },
-    { icon: <InfoOutlineIcon color='secondary' />, name: 'Règles', onClick: () => {}, show: true },
+    { icon: <InfoOutlineIcon color='secondary' />, name: 'Règles', onClick: () => setOpenRegles(true), show: true },
   ];
 
   return (
@@ -213,6 +215,10 @@ const Main = ({
             players={players}
             manchesPoints={manchesPoints}
             manchesTeamWin={manchesTeamWin}
+          />
+          <ReglesDialog
+            open={index === indexMe && openRegles}
+            setOpen={setOpenRegles}
           />
         </div>
         {indexMe === index &&

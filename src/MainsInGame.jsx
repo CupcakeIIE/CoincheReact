@@ -13,6 +13,7 @@ import DernierPliDialog from "./DernierPliDialog";
 import { isJouable, sortCards, thereIsBelote } from "./Coinche";
 import ScoreDialog from "./ScoreDialog";
 import BeloteDialog from "./BeloteDialog";
+import ReglesDialog from "./ReglesDialog";
 
 const MainInGame = ({
   indexMe = 0, 
@@ -62,6 +63,7 @@ const MainInGame = ({
 
   const [openDernierPli, setOpenDernierPli] = useState(false)
   const [openScores, setOpenScores] = useState(false)
+  const [openRegles, setOpenRegles] = useState(false)
 
   useEffect(() => {
     if (!myCards.some(carte => carte === null) && !beloteAskedArray[indexMe]) {
@@ -152,19 +154,17 @@ const MainInGame = ({
         return h
     }))
   }
-  
-  // speed dial button 
 
+  // speed dial button 
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
   
   const actions = [
     { icon: <VisibilityIcon color='secondary' />, name: 'Dernier Pli', onClick: clickDernierPli, show: (cardsDernierPli.length !== 0) },
     { icon: (handSorted[indexMe] ? <FilterListOffIcon color='secondary' /> : <FilterListIcon color='secondary' />), name: (handSorted[indexMe] ? 'De-Trier' : 'Trier'), onClick: clickSwitchHandSorted, show: true },
     { icon: <RadarIcon color='secondary' />, name: 'Scores', onClick: () => setOpenScores(true), show: true },
-    { icon: <InfoOutlineIcon color='secondary' />, name: 'Règles', onClick: () => {}, show: true },
+    { icon: <InfoOutlineIcon color='secondary' />, name: 'Règles', onClick: () => setOpenRegles(true), show: true },
   ];
 
   // console.log('belote', isBelote, indexBelote)
@@ -182,6 +182,11 @@ const MainInGame = ({
           cardsDernierPli={cardsDernierPli} 
           dernierPliWinningCard={dernierPliWinningCard}
           indexJoueur={indexMe}
+        />
+
+        <ReglesDialog
+          open={indexMe === index && openRegles}
+          setOpen={setOpenRegles}
         />
 
         <BeloteDialog

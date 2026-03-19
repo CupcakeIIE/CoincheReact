@@ -228,6 +228,15 @@ const useStyles = makeStyles(theme => ({
     }
   },
 
+  wholeDialogRegles: {
+    "& .MuiPaper-root": {
+      borderRadius: '30px !important',
+      maxWidth: '800px',
+      width: '800px',
+      height: '600px',
+    }
+  },
+
   mains: {
     position: 'absolute',
     display: 'flex',
@@ -287,6 +296,27 @@ const useStyles = makeStyles(theme => ({
     justifyContent: 'center',
     flexDirection: 'column',
   },
+
+  dialogContentRegles: {
+    padding: '2em !important',
+    display: 'flex',
+    // alignItems: 'center',
+    // justifyContent: 'center',
+    flexDirection: 'column',
+  },
+
+  reglesPoints: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: '5em',
+    margin: '2em',
+    overflow: 'auto',
+    marginRight: '1em',
+    paddingRight: '1em',
+  },
+  regles: {
+    margin: '2em',
+  }
 }));
 
 export default useStyles;

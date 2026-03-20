@@ -10,7 +10,7 @@ import useStyles from "./style";
 import { ordreAtout } from "./cartes";
 import { useEffect, useState } from "react";
 import DernierPliDialog from "./DernierPliDialog";
-import { isJouable, sortCards, thereIsBelote } from "./Coinche";
+import { getComplementaryColor, isJouable, sortCards, thereIsBelote } from "./Coinche";
 import ScoreDialog from "./ScoreDialog";
 import BeloteDialog from "./BeloteDialog";
 import ReglesDialog from "./ReglesDialog";
@@ -246,7 +246,7 @@ const MainInGame = ({
                   <div>
                     <img src={photo} width='50px' />
                   </div>
-                  <Typography color={isMe ? 'success' : 'error'} className={classes.namePlayer} variant="h5"><b>{player}</b></Typography>
+                  <Typography style={{color: (index === indexMe ? (index === turnPlayer ? getComplementaryColor(color) : color) : '#000')}} className={classes.namePlayer} variant="h5"><b>{player}</b></Typography>
                 </div>
                 <Typography><b>{annonceAll[index]}</b></Typography>
               </div>

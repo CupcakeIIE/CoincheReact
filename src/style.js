@@ -91,6 +91,19 @@ const useStyles = makeStyles(theme => ({
     // paddingBottom: '1em !important'
   },
 
+  buttonLobby: {
+    '&:focus': {
+      outline: 'none',
+    },
+    "&:hover": {
+      borderColor: '#9500ae',
+    },
+    width: '130px',
+    borderRadius: '30px !important',
+    border: '2px solid #9500ae !important',
+    // marginTop: '2em !important',
+  },
+
   buttonDialogBis: {
     '&:focus': {
       outline: 'none',
@@ -316,7 +329,17 @@ const useStyles = makeStyles(theme => ({
   },
   regles: {
     margin: '2em',
-  }
+  },
+
+  preGame: {
+    top: '50%', 
+    position: 'relative', 
+    display: 'flex', 
+    flexDirection: 'column', 
+    alignItems: 'center', 
+    justifyContent: 'center',
+    gap: '2em',
+  },
 }));
 
 export default useStyles;

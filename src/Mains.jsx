@@ -10,7 +10,7 @@ import useStyles from "./style";
 import AnnonceDialog from "./AnnonceDialog";
 import { useEffect, useState } from "react";
 import RelanceDialog from "./RelanceDialog";
-import { pointsDebut } from "./Coinche";
+import { getComplementaryColor, pointsDebut } from "./Coinche";
 import CoincheDialog from "./CoincheDialog";
 import ScoreDialog from "./ScoreDialog";
 import ReglesDialog from "./ReglesDialog";
@@ -166,7 +166,7 @@ const Main = ({
               <div>
                 <img src={photo} width='50px' />
               </div>
-              <Typography color={isMe ? 'success' : 'error'} className={classes.namePlayer} variant="h5"><b>{player}</b></Typography>
+              <Typography /* color={isMe ? 'success' : 'error'} */ style={{color: (index === indexMe ? (index === turnPlayer ? getComplementaryColor(color) : color) : '#000')}} className={classes.namePlayer} variant="h5"><b>{player}</b></Typography>
             </div>
             <Typography><b>{annonceAll[index]}</b></Typography>
           </div>

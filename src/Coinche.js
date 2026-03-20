@@ -394,6 +394,22 @@ const thereIsBelote = (hand = [], atout = '') => {
   return false
 }
 
+const getComplementaryColor = (color) => {
+  if (!color) return '#000';
+
+  // Si format hex (#rrggbb)
+  const hex = color.replace('#', '');
+  const r = parseInt(hex.substring(0,2), 16);
+  const g = parseInt(hex.substring(2,4), 16);
+  const b = parseInt(hex.substring(4,6), 16);
+
+  const compR = 255 - r;
+  const compG = 255 - g;
+  const compB = 255 - b;
+
+  return `rgb(${compR}, ${compG}, ${compB})`;
+};
+
 export {
   mixCards, 
   decoupe, 
@@ -406,4 +422,5 @@ export {
   isJouable, 
   sortCards,
   thereIsBelote,
+  getComplementaryColor,
 }

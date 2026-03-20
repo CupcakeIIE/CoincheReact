@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { usePlayersList, insertCoin, useMultiplayerState, isHost, myPlayer } from "playroomkit";
 
 import './App.css'
@@ -11,12 +11,16 @@ import VictoryDialog from "./VictoryDialog";
 import WaitDialog from "./WaitDialog";
 import NewGameDialog from "./NewGameDialog";
 import WaitingDecisionDialog from "./WaitingDecisionDialog";
+import { Button, TextField, Typography } from "@mui/material";
 
 function App() {
 
   const classes = useStyles()
 
   const players = usePlayersList();
+
+  const [inLobby, setInLobby] = useState(false)
+  const [roomName, setRoomName] = useState('')
 
   const [gameStarted, setGameStarted] = useMultiplayerState("gameStarted", false);
   const [cards, setCards] = useMultiplayerState("cards", []);
@@ -87,8 +91,9 @@ function App() {
 
   // afficher les lobbys de playroom kit
   useEffect(() => {
-    insertCoin({});
-  }, []);
+    if (inLobby)
+      insertCoin({ roomCode: roomName});
+  }, [inLobby]);
 
   // gerer la fin des annonces en fonction du nombre de passe et/ou de la coinche
   useEffect(() => {
@@ -287,124 +292,139 @@ function App() {
       setResetGame(true)
   }, [okNextGame])
 
-  // console.log('switch', handSorted)
+  const enterRoomName = (event) => {
+    const value = event.target.value
+    setRoomName(value)
+  }
+
+  console.log('roomName', roomName)
 
   return (
-    <div className={classes.gameBoard}>
-      {/* {lastAnnonce !== '' && 
-        <Typography>
-          <b>{players[lastAnnoncePlayerIndex].state.profile.name}</b> a annoncé <b>{lastAnnonce}</b>
-        </Typography>
-      } */}
+    <div>
+      {!inLobby &&
+        <div className={classes.preGame}>
+          <Typography color='secondary' variant='h2'>COINCHE</Typography>
+          <TextField label="Room ID" variant="outlined" color='secondary' onChange={enterRoomName} />
+          <Typography variant='caption'>Room ID comporte seulement 4 caractères (ne pas prendre en compte le premier R)</Typography>
+          <Button color='secondary' variant='outlined' onClick={() => setInLobby(true)} className={classes.buttonLobby}>Commencer</Button>
+        </div>
+      }
+      {inLobby && <div className={classes.gameBoard}>
+        {/* {lastAnnonce !== '' && 
+          <Typography>
+            <b>{players[lastAnnoncePlayerIndex].state.profile.name}</b> a annoncé <b>{lastAnnonce}</b>
+          </Typography>
+        } */}
 
-      <NewGameDialog 
-        open={endGame && !newGameDecision[meIndex]} 
-        newGameDecision={newGameDecision}
-        setNewGameDecision={setNewGameDecision}
-        indexPlayer={meIndex}
-      />
-      <WaitingDecisionDialog open={endGame && newGameDecision[meIndex]} />
+        <NewGameDialog 
+          open={endGame && !newGameDecision[meIndex]} 
+          newGameDecision={newGameDecision}
+          setNewGameDecision={setNewGameDecision}
+          indexPlayer={meIndex}
+        />
+        <WaitingDecisionDialog open={endGame && newGameDecision[meIndex]} />
 
-      <VictoryDialog 
-        win={isWin} 
-        open={openWinDialog && !okNextGame[meIndex]} 
-        annoncePlayerIndex={lastAnnoncePlayerIndex} 
-        players={players} annonce={lastAnnonce} 
-        pointsPlayer={pointsPlayer} 
-        nbManches={nbManches} 
-        setNbManches={setNbManches} 
-        // setResetGame={setResetGame} 
-        setOpenWinDialog={setOpenWinDialog} 
-        okNextGame={okNextGame} 
-        setOkNextGame={setOkNextGame} 
-        indexPlayer={meIndex}
-      />
-      <WaitDialog open={openWinDialog && okNextGame[meIndex]} />
+        <VictoryDialog 
+          win={isWin} 
+          open={openWinDialog && !okNextGame[meIndex]} 
+          annoncePlayerIndex={lastAnnoncePlayerIndex} 
+          players={players} annonce={lastAnnonce} 
+          pointsPlayer={pointsPlayer} 
+          nbManches={nbManches} 
+          setNbManches={setNbManches} 
+          // setResetGame={setResetGame} 
+          setOpenWinDialog={setOpenWinDialog} 
+          okNextGame={okNextGame} 
+          setOkNextGame={setOkNextGame} 
+          indexPlayer={meIndex}
+        />
+        <WaitDialog open={openWinDialog && okNextGame[meIndex]} />
 
-      {/* afficher les mains des joueurs pendant les annonces != du in game (pour plus de simplicté de compréhension) */}
-      {gameStarted && !gamePlaying && !openWinDialog &&
-        players.map((player, index) => (
-          <Main 
-            indexMe={meIndex} 
-            player={player?.state?.profile?.name || `Player${index}`} 
-            photo={player?.state?.profile?.photo || ''}
-            color={players[meIndex]?.state?.profile?.color || '#87fdff'}
-            index={index} 
-            cards={cards} 
-            annonceAll={annonceAll}
-            setAnnonceAll={setAnnonceAll}
-            turnPlayer={turnPlayer}
-            setTurnPlayer={setTurnPlayer}
-            openAnnonce={openAnnonce}
-            lastAnnonce={lastAnnonce}
-            setLastAnnonce={setLastAnnonce}
-            lastAnnoncePlayerIndex={lastAnnoncePlayerIndex}
-            setLastAnnoncePlayerIndex={setLastAnnoncePlayerIndex}
-            nbPasses={nbPasses}
-            setNbPasses={setNbPasses}
-            partance={partance}
-            setRelanceGame={setRelanceGame}
-            setCoinche={setCoinche}
-            lastMise={lastMise}
-            setLastMise={setLastMise}
+        {/* afficher les mains des joueurs pendant les annonces != du in game (pour plus de simplicté de compréhension) */}
+        {gameStarted && !gamePlaying && !openWinDialog &&
+          players.map((player, index) => (
+            <Main 
+              indexMe={meIndex} 
+              player={player?.state?.profile?.name || `Player${index}`} 
+              photo={player?.state?.profile?.photo || ''}
+              color={players[meIndex]?.state?.profile?.color || '#87fdff'}
+              index={index} 
+              cards={cards} 
+              annonceAll={annonceAll}
+              setAnnonceAll={setAnnonceAll}
+              turnPlayer={turnPlayer}
+              setTurnPlayer={setTurnPlayer}
+              openAnnonce={openAnnonce}
+              lastAnnonce={lastAnnonce}
+              setLastAnnonce={setLastAnnonce}
+              lastAnnoncePlayerIndex={lastAnnoncePlayerIndex}
+              setLastAnnoncePlayerIndex={setLastAnnoncePlayerIndex}
+              nbPasses={nbPasses}
+              setNbPasses={setNbPasses}
+              partance={partance}
+              setRelanceGame={setRelanceGame}
+              setCoinche={setCoinche}
+              lastMise={lastMise}
+              setLastMise={setLastMise}
 
-            // for scores dialog
-            nbManches={nbManches}
-            players={players}
-            manchesPoints={manchesPoints}
-            manchesTeamWin={manchesTeamWin}
-          />
-      ))}
+              // for scores dialog
+              nbManches={nbManches}
+              players={players}
+              manchesPoints={manchesPoints}
+              manchesTeamWin={manchesTeamWin}
+            />
+        ))}
 
-      {/* afficher les mains des joueurs quand la partie a commencé */}
-      {gameStarted && gamePlaying && !openWinDialog &&
-        players.map((player, index) => (
-          <MainInGame
-            indexMe={meIndex} 
-            player={player?.state?.profile?.name || `Player${index}`} 
-            photo={player?.state?.profile?.photo || ''}
-            color={players[meIndex]?.state?.profile?.color || '#87fdff'}
-            index={index} 
-            cards={cards} 
-            setCards={setCards}
-            annonceAll={annonceAll}
-            turnPlayer={turnPlayer}
-            setTurnPlayer={setTurnPlayer}
-            cardsPlayed={cardsPlayed}
-            setCardsPlayed={setCardsPlayed}
-            couleurJouee={couleurJouee}
-            setCouleurJouee={setCouleurJouee}
-            atout={atout}
-            highestCard={highestCard}
-            partance={partance}
-            cardsDernierPli={cardsDernierPli}
-            dernierPliWinningCard={dernierPliWinningCard}
+        {/* afficher les mains des joueurs quand la partie a commencé */}
+        {gameStarted && gamePlaying && !openWinDialog &&
+          players.map((player, index) => (
+            <MainInGame
+              indexMe={meIndex} 
+              player={player?.state?.profile?.name || `Player${index}`} 
+              photo={player?.state?.profile?.photo || ''}
+              color={players[meIndex]?.state?.profile?.color || '#87fdff'}
+              index={index} 
+              cards={cards} 
+              setCards={setCards}
+              annonceAll={annonceAll}
+              turnPlayer={turnPlayer}
+              setTurnPlayer={setTurnPlayer}
+              cardsPlayed={cardsPlayed}
+              setCardsPlayed={setCardsPlayed}
+              couleurJouee={couleurJouee}
+              setCouleurJouee={setCouleurJouee}
+              atout={atout}
+              highestCard={highestCard}
+              partance={partance}
+              cardsDernierPli={cardsDernierPli}
+              dernierPliWinningCard={dernierPliWinningCard}
 
-            // for scores dialog
-            nbManches={nbManches}
-            players={players}
-            manchesPoints={manchesPoints}
-            manchesTeamWin={manchesTeamWin}
+              // for scores dialog
+              nbManches={nbManches}
+              players={players}
+              manchesPoints={manchesPoints}
+              manchesTeamWin={manchesTeamWin}
 
-            handSorted={handSorted}
-            setHandSorted={setHandSorted}
+              handSorted={handSorted}
+              setHandSorted={setHandSorted}
 
-            // belote
-            isBelote={isBelote}
-            setIsBelote={setIsBelote}
-            indexBelote={indexBelote}
-            setIndexBelote={setIndexBelote}
-            etapeBeloteSaid={etapeBeloteSaid}
-            setEtapeBeloteSaid={setEtapeBeloteSaid}
-            showBelote={showBelote}
-            setShowBelote={setShowBelote}
-            beloteAskedArray={beloteAskedArray}
-            setBeloteAskedArray={setBeloteAskedArray}
+              // belote
+              isBelote={isBelote}
+              setIsBelote={setIsBelote}
+              indexBelote={indexBelote}
+              setIndexBelote={setIndexBelote}
+              etapeBeloteSaid={etapeBeloteSaid}
+              setEtapeBeloteSaid={setEtapeBeloteSaid}
+              showBelote={showBelote}
+              setShowBelote={setShowBelote}
+              beloteAskedArray={beloteAskedArray}
+              setBeloteAskedArray={setBeloteAskedArray}
 
-            pointsPlayer={pointsPlayer}
-            setPointsPlayer={setPointsPlayer}
-          />
-      ))}
+              pointsPlayer={pointsPlayer}
+              setPointsPlayer={setPointsPlayer}
+            />
+        ))}
+      </div>}
     </div>
   )
 }

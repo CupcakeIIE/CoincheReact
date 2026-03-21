@@ -231,7 +231,7 @@ const Main = ({
             <SpeedDial
               icon={<SpeedDialIcon />}
               ariaLabel="Actions du jeu"      // obligatoire ou ça plante (me demandez pas pourquoi)
-              sx={{ position: 'fixed', bottom: 16, left: '70%', zIndex: 2}}
+              sx={{ position: 'fixed', bottom: 16, left: '71%', zIndex: 2}}
               onClose={handleClose}
               onOpen={handleOpen}
               open={open}

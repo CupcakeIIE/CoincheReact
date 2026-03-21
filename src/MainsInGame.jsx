@@ -67,6 +67,8 @@ const MainInGame = ({
   const [openScores, setOpenScores] = useState(false)
   const [openRegles, setOpenRegles] = useState(false)
 
+  const [beloteRefus, setBeloteRefus] = useState(false)
+
   useEffect(() => {
     if (!myCards.some(carte => carte === null) && !beloteAskedArray[indexMe]) {
       const beloteOrNot = thereIsBelote(myCards, atout)
@@ -192,11 +194,12 @@ const MainInGame = ({
         />
 
         <BeloteDialog
-          open={indexMe === index && !showBelote && indexBelote === indexMe && isBelote && etapeBeloteSaid === 1}
+          open={indexMe === index && !showBelote && indexBelote === indexMe && isBelote && etapeBeloteSaid === 1 && !beloteRefus}
           setShowBelote={setShowBelote}
           pointsPlayer={pointsPlayer}
           setPointsPlayer={setPointsPlayer}
           indexPlayer={indexMe}
+          setBeloteRefus={setBeloteRefus}
         />
         
         <ScoreDialog
@@ -290,7 +293,7 @@ const MainInGame = ({
             <SpeedDial
               icon={<SpeedDialIcon />}
               ariaLabel="Actions du jeu"      // obligatoire ou ça plante (me demandez pas pourquoi)
-              sx={{ position: 'fixed', bottom: 16, left: '70%', zIndex: 2}}
+              sx={{ position: 'fixed', bottom: 16, left: '71%', zIndex: 2}}
               onClose={handleClose}
               onOpen={handleOpen}
               open={open}

@@ -103,6 +103,7 @@ function App() {
         setTurnPlayer(partance, {reliable: true})
         const annonceList = lastAnnonce.split(' ')
         setAtout(annonceList[1], {reliable: true})
+        setNbPasses(0, {reliable: true})
       }
 
       if (lastAnnonce !== '' && nbPasses >= 3) {
@@ -110,6 +111,7 @@ function App() {
         setTurnPlayer(partance, {reliable: true})
         const annonceList = lastAnnonce.split(' ')
         setAtout(annonceList[1], {reliable: true})
+        setNbPasses(0, {reliable: true})
       }
 
       if (nbPasses >= 4 && lastAnnonce === '') {
@@ -117,13 +119,15 @@ function App() {
         setTurnPlayer((partance+1) % 4, {reliable: true})
         setPartance((partance+1) % 4, {reliable: true})
         setNbManches(nbManches + 1, {reliable: true})
+        setNbPasses(0, {reliable: true})
       }
 
       if (relanceGame) {
         setRelanceGame(false, {reliable: true}),
         setCards(distribution(decoupe(mixCards())), {reliable: true})
-        setTurnPlayer((partance+1) % 4, {reliable: true})
-        setPartance((partance+1) % 4, {reliable: true})
+        setTurnPlayer(partance, {reliable: true})
+        setNbPasses(0, {reliable: true})
+        // setPartance((partance+1) % 4, {reliable: true})
       }
     }
   }, [nbPasses, coinche, lastAnnonce, relanceGame])

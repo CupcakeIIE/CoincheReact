@@ -7,6 +7,7 @@ const BeloteDialog = ({
   pointsPlayer = [],
   setPointsPlayer = [],
   indexPlayer = 0,
+  setBeloteRefus,
 }) => {
 
   const classes = useStyles()
@@ -23,6 +24,7 @@ const BeloteDialog = ({
 
   const clickDecisionNo = () => {
     setShowBelote(false)
+    setBeloteRefus(true)
   }
 
   return (

@@ -29,7 +29,7 @@ const NewGameDialog = ({open = false, newGameDecision = [], setNewGameDecision, 
     <Dialog open={open} className={classes.wholeDialog}>
       <DialogTitle className={classes.dialogTitle}>Nouvelle partie</DialogTitle>
       <DialogContent className={classes.dialogContentVictory}>
-        Souhaitez-vous effectuer  une nouvelle partie ?
+        Souhaitez-vous effectuer une nouvelle partie ?
       </DialogContent>
       <DialogActions className={classes.dialogActionsBis}>
         <Button color="secondary" className={classes.buttonDialog} variant='outlined' onClick={clickDecisionYes}>Oui</Button>

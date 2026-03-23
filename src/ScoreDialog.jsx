@@ -64,8 +64,8 @@ const ScoreDialog = ({
               {manchesTeamWin.map((t, index) => (
                 <TableRow>
                   <TableCell style={{backgroundColor: (index === nbManches ? '#71bf71' : 'white')}} align="center">Manche {index + 1}</TableCell>
-                  <TableCell style={{backgroundColor: (index === nbManches ? '#71bf71' : 'white')}} align="center">{nbManches > index + 1 ? (t === 0 ? manchesPoints[index] : '-') : '-'}</TableCell>
-                  <TableCell style={{backgroundColor: (index === nbManches ? '#71bf71' : 'white')}} align="center">{nbManches > index + 1 ? (t === 1 ? manchesPoints[index] : '-') : '-'}</TableCell>
+                  <TableCell style={{backgroundColor: (index === nbManches ? '#71bf71' : 'white')}} align="center">{nbManches > index + 1 ? (t === 0 && manchesPoints[index] !== 0 ? manchesPoints[index] : '-') : '-'}</TableCell>
+                  <TableCell style={{backgroundColor: (index === nbManches ? '#71bf71' : 'white')}} align="center">{nbManches > index + 1 ? (t === 1 && manchesPoints[index] !== 0 ? manchesPoints[index] : '-') : '-'}</TableCell>
                 </TableRow>
               ))}
               <TableRow>

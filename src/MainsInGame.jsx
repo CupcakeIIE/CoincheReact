@@ -254,7 +254,7 @@ const MainInGame = ({
                 <Typography><b>{annonceAll[index]}</b></Typography>
               </div>
               <div>
-                {(handSorted[indexMe] ? myCardsSorted : myCards).map((card, i) => {
+                {(handSorted[indexMe] && indexMe === index ? myCardsSorted : myCards).map((card, i) => {
                   const putClickable = isJouable(myCards, card, couleurJouee, atout, highestCard, cardsPlayed, indexMe)
                   return (
                     <Button 

@@ -12,6 +12,7 @@ import WaitDialog from "./WaitDialog";
 import NewGameDialog from "./NewGameDialog";
 import WaitingDecisionDialog from "./WaitingDecisionDialog";
 import { Button, TextField, Typography } from "@mui/material";
+import NewMancheDialog from "./NewMancheDialog";
 
 function App() {
 
@@ -34,8 +35,11 @@ function App() {
   const [coinche, setCoinche] = useMultiplayerState('coinche', false)
   const [nbPasses, setNbPasses] = useMultiplayerState('nbPasses', 0)
   const [relanceGame, setRelanceGame] = useMultiplayerState('relanceGame', false)
+  const [raison, setRaison] = useMultiplayerState('raison', '')
+  const [openNewMancheDialog, setOpenNewMancheDialog] = useMultiplayerState('openNewMancheDialog', Array(4).fill(false))
+  const [mancheProcessing, setMancheProcessing] = useMultiplayerState('mancheProcessing', false)
 
-  const [okNextGame, setOkNextGame] = useMultiplayerState('okNextGame', Array(4).fill(false))
+  const [okNextGame, setOkNextGame] = useMultiplayerState('okNextGame', Array(4).fill(true))
   const [nbManches, setNbManches] = useMultiplayerState('nbManches', 0)
   const [endGame, setEndGame] = useMultiplayerState('endGame', false)
   const [resetGame, setResetGame] = useMultiplayerState('resetGame', false)
@@ -54,6 +58,7 @@ function App() {
   const [cardsDernierPli, setCardsDernierPli] = useMultiplayerState('cardsDernierPli', [])
   const [dernierPliWinningCard, setDernierPliWinningCard] = useMultiplayerState('dernierPliWinningCard', '')
   const [pointsPlayer, setPointsPlayer] = useMultiplayerState('pointsPlayer', Array(4).fill(0))
+  const [pointsPlayerLastManche, setPointsPlayerLastManche] = useMultiplayerState('pointsPlayerLastManche', Array(4).fill(0))
   const [plisPlayer, setPlisPlayer] = useMultiplayerState('plisPlayer', Array(4).fill(0))
   const [nbToursJoues, setNbToursJoues] = useMultiplayerState('nbToursJoues', 0)
   const [openWinDialog, setOpenWinDialog] = useMultiplayerState('openWinDialog', false)
@@ -69,7 +74,7 @@ function App() {
   const me = myPlayer();
   const meIndex = players.findIndex(player => me.id === player.id) 
 
-  console.log('players', players[0]?.state?.profile)
+  // console.log('players', players[0]?.state?.profile)
 
   // lancer une partie si 4 personnes dans la room
   useEffect(() => {
@@ -95,6 +100,14 @@ function App() {
       insertCoin({ roomCode: roomName});
   }, [inLobby]);
 
+  
+
+  useEffect(() => {
+    if (nbPasses === 0 && mancheProcessing && isHost()) {
+      setMancheProcessing(false, {reliable: true});
+    }
+  }, [nbPasses]);
+
   // gerer la fin des annonces en fonction du nombre de passe et/ou de la coinche
   useEffect(() => {
     if (isHost()) {
@@ -104,6 +117,12 @@ function App() {
         const annonceList = lastAnnonce.split(' ')
         setAtout(annonceList[1], {reliable: true})
         setNbPasses(0, {reliable: true})
+        setAnnonceAll(annonceAll.map(a => {
+          if (a === 'Coinche' || a === lastAnnonce)
+            return a
+          else
+            return ''
+        }), {reliable: true})
       }
 
       if (lastAnnonce !== '' && nbPasses >= 3) {
@@ -112,14 +131,25 @@ function App() {
         const annonceList = lastAnnonce.split(' ')
         setAtout(annonceList[1], {reliable: true})
         setNbPasses(0, {reliable: true})
+        setAnnonceAll(annonceAll.map(a => {
+          if (a === 'Coinche' || a === lastAnnonce)
+            return a
+          else
+            return ''
+        }), {reliable: true})
       }
 
-      if (nbPasses >= 4 && lastAnnonce === '') {
+      if (nbPasses >= 4 && lastAnnonce === '' && !mancheProcessing) {
+        setMancheProcessing(true)
         setCards(distribution(decoupe(mixCards())), {reliable: true})
         setTurnPlayer((partance+1) % 4, {reliable: true})
         setPartance((partance+1) % 4, {reliable: true})
         setNbManches(nbManches + 1, {reliable: true})
         setNbPasses(0, {reliable: true})
+        setAnnonceAll(Array(4).fill(''), {reliable: true})
+        setOpenNewMancheDialog(Array(4).fill(true), {reliable: true})
+        setRaison('4 passes', {reliable: true})
+        console.log('passes', nbManches, nbPasses)
       }
 
       if (relanceGame) {
@@ -127,6 +157,9 @@ function App() {
         setCards(distribution(decoupe(mixCards())), {reliable: true})
         setTurnPlayer(partance, {reliable: true})
         setNbPasses(0, {reliable: true})
+        setAnnonceAll(Array(4).fill(''), {reliable: true})
+        setOpenNewMancheDialog(Array(4).fill(true), {reliable: true})
+        setRaison('relance', {reliable: true})
         // setPartance((partance+1) % 4, {reliable: true})
       }
     }
@@ -183,6 +216,8 @@ function App() {
           if (nbToursJoues + 1 >= 8) {
             setIsWin(findIsWin(pointsPlayer, plisPlayer, lastAnnonce, lastAnnoncePlayerIndex), {reliable: true})
             setOpenWinDialog(true, {reliable: true})
+            setOkNextGame(Array(4).fill(false), {reliable: true})
+            setNbToursJoues(nbToursJoues + 1, {reliable: true})
           }
           else
             setNbToursJoues(nbToursJoues + 1, {reliable: true})
@@ -219,6 +254,7 @@ function App() {
       setHighestCard('', {reliable: true})
       setCardsDernierPli(Array(4).fill(''), {reliable: true})
       setDernierPliWinningCard('', {reliable: true})
+      setPointsPlayerLastManche([...pointsPlayer])
       setPointsPlayer(Array(4).fill(''), {reliable: true})
       setPlisPlayer(Array(4).fill(''), {reliable: true})
       setNbToursJoues(0, {reliable: true})
@@ -282,26 +318,26 @@ function App() {
       }), {reliable: true})
 
       setIsWin(false, {reliable: true})
-      setOpenWinDialog(false, {reliable: true})
+      // setOpenWinDialog(false, {reliable: true})
       setLastAnnonce('', {reliable: true})
       setLastAnnoncePlayerIndex(0, {reliable: true})
       setCoinche(false, {reliable: true})
-      setOkNextGame(Array(4).fill(false), {reliable: true})
+      // setOkNextGame(Array(4).fill(true), {reliable: true})
       setNbManches(nbManches + 1, {reliable: true})
     }
   }, [resetGame])
 
   useEffect(() => {
-    if (!okNextGame.some(a => !a))
+    if (nbToursJoues >= 8)
       setResetGame(true)
-  }, [okNextGame])
+  }, [nbToursJoues])
 
   const enterRoomName = (event) => {
     const value = event.target.value
     setRoomName(value)
   }
 
-  console.log('roomName', roomName)
+  console.log('nbManches', nbManches, nbPasses)
 
   return (
     <div>
@@ -333,7 +369,7 @@ function App() {
           open={openWinDialog && !okNextGame[meIndex]} 
           annoncePlayerIndex={lastAnnoncePlayerIndex} 
           players={players} annonce={lastAnnonce} 
-          pointsPlayer={pointsPlayer} 
+          pointsPlayer={pointsPlayerLastManche} 
           nbManches={nbManches} 
           setNbManches={setNbManches} 
           // setResetGame={setResetGame} 
@@ -342,10 +378,18 @@ function App() {
           setOkNextGame={setOkNextGame} 
           indexPlayer={meIndex}
         />
-        <WaitDialog open={openWinDialog && okNextGame[meIndex]} />
+        {/* <WaitDialog open={openWinDialog && okNextGame[meIndex]} /> */}
+
+        <NewMancheDialog
+          open={openNewMancheDialog[meIndex]}
+          indexMe={meIndex}
+          openNewMancheDialog={openNewMancheDialog}
+          setOpenNewMancheDialog={setOpenNewMancheDialog}
+          raison={raison}
+        />
 
         {/* afficher les mains des joueurs pendant les annonces != du in game (pour plus de simplicté de compréhension) */}
-        {gameStarted && !gamePlaying && !openWinDialog &&
+        {gameStarted && !gamePlaying && !openNewMancheDialog[meIndex] && okNextGame[meIndex] &&
           players.map((player, index) => (
             <Main 
               indexMe={meIndex} 

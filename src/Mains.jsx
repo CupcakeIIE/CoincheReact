@@ -104,6 +104,8 @@ const Main = ({
     if (lastAnnoncePlayerIndex % 2 !== indexMe % 2 && lastAnnonce !== '') {
       setShowCoinche(true)
     }
+    else
+      setShowCoinche(false)
   }, [lastAnnoncePlayerIndex, lastAnnonce])
 
 

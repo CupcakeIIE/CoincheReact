@@ -20,8 +20,6 @@ const CoincheDialog = ({
   }
 
   const clickYes = () => {
-    setOpen(false)
-    setCoinched(true, {reliable: true})
     setAnnonceAll(
       annonceAll.map((a, index) => {
         if (index === indexPlayer)
@@ -30,6 +28,8 @@ const CoincheDialog = ({
           return a
       }),
     {reliable: true})
+    setOpen(false)
+    setCoinched(true, {reliable: true})
   }
 
   const clickNo = () => {

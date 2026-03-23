@@ -160,7 +160,7 @@ const AnnonceDialog = ({
           color="secondary" 
           className={classes.buttonDialog} 
           variant='outlined' 
-          disabled={couleur === '' || mise === ''}
+          disabled={couleur === '' || mise === '' || mise < lastMise}
           onClick={chooseOK}
         >
           OK

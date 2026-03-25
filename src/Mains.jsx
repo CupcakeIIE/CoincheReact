@@ -91,7 +91,7 @@ const Main = ({
   }
 
   useEffect(() => {
-    if (canRelance) {
+    if (canRelance && lastAnnonce === '') {
       const points = pointsDebut(myCards)
       if (points <= 10 && myCards.length > 0)
         setShowRelance(true)
@@ -106,6 +106,9 @@ const Main = ({
     }
     else
       setShowCoinche(false)
+
+    if (lastAnnonce !== '')
+      setShowRelance(false)
   }, [lastAnnoncePlayerIndex, lastAnnonce])
 
 
@@ -123,6 +126,8 @@ const Main = ({
     { icon: <RadarIcon color='secondary' />, name: 'Scores', onClick: () => setOpenScores(true), show: true },
     { icon: <InfoOutlineIcon color='secondary' />, name: 'Règles', onClick: () => setOpenRegles(true), show: true },
   ];
+
+  // console.log('relance', showRelance)
 
   return (
     <div>

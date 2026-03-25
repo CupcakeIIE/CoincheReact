@@ -70,10 +70,10 @@ const MainInGame = ({
   const [beloteRefus, setBeloteRefus] = useState(false)
 
   useEffect(() => {
-    if (!myCards.some(carte => carte === null) && !beloteAskedArray[indexMe]) {
+    if (!myCards.some(carte => carte === null) && !beloteAskedArray[indexMe] && isMe) {
       const beloteOrNot = thereIsBelote(myCards, atout)
-      // console.log('belotons', beloteOrNot)
       if (beloteOrNot) {
+        // console.log('belotons', beloteOrNot)
         setIsBelote(true)
         setIndexBelote(indexMe)
         // setShowBelote(true)
@@ -111,6 +111,15 @@ const MainInGame = ({
     if  (couleurJouee === '')
       setCouleurJouee(cardList[0], {reliable: true})
 
+    const nbCardPlayed = cardsPlayed.reduce((acc, c) => {
+      if (c !== '')
+        acc += 1
+      return acc
+    }, 0)
+
+    if (nbCardPlayed < 3)
+      setTurnPlayer((turnPlayer+1) % 4, {reliable: true})
+
     setCardsPlayed(cardsPlayed.map((c, i) => {
       if (i === turnPlayer)
         return card
@@ -122,7 +131,6 @@ const MainInGame = ({
         return ''
       else return c
     }), {reliable: true})
-    setTurnPlayer((turnPlayer+1) % 4, {reliable: true})
   }
 
 
@@ -144,6 +152,22 @@ const MainInGame = ({
       return styleTopCard
     else if (i === 3)
       return styleRightCard
+  }
+
+  const styleTopBelote = {transform: 'translate(0%, -400%)', position:'absolute'}
+  const styleLeftBelote = {transform: 'translate(0%, -400%', position:'absolute'}
+  const styleRightBelote = {transform: 'translate(0%, -400%)', position:'absolute'}
+  const styleBottomBelote = {transform: 'translate(0%, -400%', position:'absolute'}  
+  const getUsedStyleBelote = (index) => {
+    const i = (index - indexMe + 4) % 4;
+    if (i === 0)
+      return styleBottomBelote
+    else if (i === 1)
+      return styleLeftBelote
+    else if (i === 2)
+      return styleTopBelote
+    else if (i === 3)
+      return styleRightBelote
   }
 
   const clickDernierPli = () => {
@@ -171,7 +195,7 @@ const MainInGame = ({
     { icon: <InfoOutlineIcon color='secondary' />, name: 'Règles', onClick: () => setOpenRegles(true), show: true },
   ];
 
-  // console.log('belote', isBelote, indexBelote)
+  // console.log('belote', isBelote, indexBelote, etapeBeloteSaid)
 
   return (
     <div>
@@ -236,11 +260,12 @@ const MainInGame = ({
               </IconButton>
             </Tooltip>
           } */}
-          <div>
-            {index === indexBelote && showBelote &&
-              (etapeBeloteSaid === 1 ? <i>Belote</i>
-              : (etapeBeloteSaid === 2 ? <i>Belote - ReBelote</i> : <i></i>))
-            }
+          <div style={getUsedStyleBelote(index)}>
+          {index === indexBelote && showBelote &&
+            (etapeBeloteSaid === 1 ? <i>Belote</i>
+            : (etapeBeloteSaid === 2 ? <i>Belote - ReBelote</i> : <i></i>))
+          }
+          </div>
 
             <div className={index === turnPlayer ? classes.colorPlayer : classes.noColorPlayer} style={{backgroundColor: (index === turnPlayer && color)}}>
               <div className={classes.textMain}>
@@ -268,7 +293,7 @@ const MainInGame = ({
                     </Button>
                 )})}
               </div>
-            </div>
+            {/* </div> */}
           </div>
           {/* {index === indexMe && 
             <Tooltip title='Trier' className={classes.tooltipClass}>

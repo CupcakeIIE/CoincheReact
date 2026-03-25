@@ -75,7 +75,24 @@ const AnnonceDialog = ({
     setPosMise(allMises.findIndex(m => m === lastMise) + 1)
   }, [lastMise])
 
-  // console.log('mise', lastMise)
+  
+  const possileMisesInNumber = {
+    '80': 80,
+    '90': 90,
+    '100': 100,
+    '110': 110,
+    '120': 120,
+    '130': 130,
+    '140': 140,
+    '150': 150,
+    '160': 160,
+    '170': 170,
+    '180': 180,
+    'Capot': 250,
+    'Générale': 500,
+  }
+
+  // console.log('mise', mise, lastMise, mise >= lastMise, couleur)
 
   return (
     <Dialog open={open} className={classes.wholeDialog}>
@@ -160,7 +177,7 @@ const AnnonceDialog = ({
           color="secondary" 
           className={classes.buttonDialog} 
           variant='outlined' 
-          disabled={couleur === '' || mise === '' || mise < lastMise}
+          disabled={couleur === '' || mise === '' || possileMisesInNumber[mise] < possileMisesInNumber[lastMise]}
           onClick={chooseOK}
         >
           OK

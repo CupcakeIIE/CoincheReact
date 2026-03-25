@@ -23,6 +23,7 @@ function App() {
   const [inLobby, setInLobby] = useState(false)
   const [roomName, setRoomName] = useState('')
 
+  const [gameLaunched, setGameLaunched] = useMultiplayerState('gameLaunched', false)
   const [gameStarted, setGameStarted] = useMultiplayerState("gameStarted", false);
   const [cards, setCards] = useMultiplayerState("cards", []);
   const [annonceAll, setAnnonceAll] = useMultiplayerState('annonceAll', Array(4).fill(''))
@@ -78,7 +79,7 @@ function App() {
 
   // lancer une partie si 4 personnes dans la room
   useEffect(() => {
-    if (players.length === 4 && isHost()) {
+    if (players.length === 4 && isHost()/*  && gameLaunched */) {
       setGameStarted(true, {reliable: true})
       setCards(distribution(decoupe(mixCards())), {reliable: true})
       setOpenAnnonce(true, {reliable: true})
@@ -89,15 +90,19 @@ function App() {
     else if (endGame && newGameDecision.some(d => d === false))
       window.location.reload()
     else if (endGame && !newGameDecision.some(d => d === false)) {
-      setNbManches(-1)
-      setEndGame(false)
+      setNbManches(-1, {reliable: true})
+      setEndGame(false, {reliable: true})
     }
-  }, [players, newGameDecision, endGame]);
+  }, [players, newGameDecision, endGame/* , gameLaunched */]);
 
   // afficher les lobbys de playroom kit
   useEffect(() => {
     if (inLobby)
-      insertCoin({ roomCode: roomName});
+      // insertCoin({
+      //   options: { roomCode: roomName, maxPlayersPerRoom: 4 },
+      //   // onLaunchCallback: () => setGameLaunched(true)
+      // });
+      insertCoin({ roomCode: roomName})
   }, [inLobby]);
 
   
@@ -149,7 +154,7 @@ function App() {
         setAnnonceAll(Array(4).fill(''), {reliable: true})
         setOpenNewMancheDialog(Array(4).fill(true), {reliable: true})
         setRaison('4 passes', {reliable: true})
-        console.log('passes', nbManches, nbPasses)
+        // console.log('passes', nbManches, nbPasses)
       }
 
       if (relanceGame) {
@@ -173,7 +178,7 @@ function App() {
       
       let newHighestCard;
       // console.log('cards + dernier pli', cardsPlayed, cardsDernierPli)
-      if (cardsPlayed.some(c => c !== '' && !cardsPlayed.some((c, index) => c === cardsDernierPli[index]))) {
+      if (cardsPlayed.some(c => c !== '') && !cardsPlayed.some((c, index) => c === cardsDernierPli[index])) {
         newHighestCard = getHighestCard(cardsPlayed, couleurJouee, atout)
         setHighestCard(newHighestCard, {reliable: true})
 
@@ -181,6 +186,7 @@ function App() {
         // console.log('cards + toourFini', cardsPlayed, isTourPasFini)
         if (!isTourPasFini) {
           const indexHighestCard = cardsPlayed.findIndex(c => c === newHighestCard)
+          console.log('index + carte', indexHighestCard, newHighestCard)
 
           // compter les points et attribuer le pli
           const dixDer = nbToursJoues === 7 ? 10 : 0
@@ -258,6 +264,7 @@ function App() {
       setPointsPlayer(Array(4).fill(''), {reliable: true})
       setPlisPlayer(Array(4).fill(''), {reliable: true})
       setNbToursJoues(0, {reliable: true})
+      setBeloteAskedArray(Array(4).fill(false), {reliable: true})
       
       // stocker les points faits
       const pointsFaits = {
@@ -337,7 +344,7 @@ function App() {
     setRoomName(value)
   }
 
-  console.log('nbManches', nbManches, nbPasses)
+  // console.log('nbManches', nbManches, nbPasses)
 
   return (
     <div>

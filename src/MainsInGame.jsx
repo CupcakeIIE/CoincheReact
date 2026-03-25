@@ -321,7 +321,7 @@ const MainInGame = ({
               sx={{ position: 'fixed', bottom: 16, left: '71%', zIndex: 2}}
               onClose={handleClose}
               onOpen={handleOpen}
-              open={open}
+              open={true}
               FabProps={{
                 sx: { zIndex: 2, '&:focus': {
                   outline: 'none',
@@ -346,12 +346,13 @@ const MainInGame = ({
                     tooltip: {
                       open: true,
                       title: action.name,
-                      componentsProps: {
-                        tooltip: {
-                          sx: {
-                            maxWidth: 500,
-                          },
-                        },
+                    },
+                    staticTooltipLabel: {
+                      sx: {
+                          width: '120px',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          display: 'flex',
                       },
                     },
                   }}

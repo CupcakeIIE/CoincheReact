@@ -242,13 +242,12 @@ const Main = ({
               onClose={handleClose}
               onOpen={handleOpen}
               open={open}
-              // FabProps={{
-              //   className: classes.speedDial
-              // }}
               FabProps={{
-                sx: { zIndex: 2, '&:focus': {
-                  outline: 'none',
-                }, },
+                sx: { zIndex: 2,
+                  '&:focus': {
+                      outline: 'none',
+                    }
+                  },
                 color: 'secondary',
               }}
             >
@@ -269,10 +268,14 @@ const Main = ({
                     tooltip: {
                       open: true,
                       title: action.name,
+                    },
+                    staticTooltipLabel: {
                       sx: {
-                        maxWidth: 'none',  
-                        width: '300px !important', 
-                      }
+                          width: '120px',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          display: 'flex',
+                      },
                     },
                   }}
                 />

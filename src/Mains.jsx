@@ -35,6 +35,7 @@ const Main = ({
   
   // for scores dialog
   nbManches = 0,
+  setNbManchesBis,
   players = [],
   manchesPoints = [],
   manchesTeamWin = [],
@@ -199,6 +200,8 @@ const Main = ({
             // setShowCoinche={setShowCoinche}
             lastMise={lastMise}
             setLastMise={setLastMise}
+            nbManches={nbManches}
+            setNbManchesBis={setNbManchesBis}
           />
           <RelanceDialog 
             open={indexMe === index && showRelance && lastAnnonce === '' && displayRelance}

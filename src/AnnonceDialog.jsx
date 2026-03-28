@@ -16,6 +16,7 @@ const AnnonceDialog = ({
   setShowAnnonce,
   // setShowCoinche,
   lastMise = 0, setLastMise,
+  nbManches = 0, setNbManchesBis,
 }) => {
 
   const classes = useStyles()
@@ -37,6 +38,7 @@ const AnnonceDialog = ({
   }
 
   const choosePass = () => {
+    setNbManchesBis(nbManches)
     setAnnonceAll(
       annonceAll.map((a, index) => {
         if (index === indexPlayer)
@@ -51,6 +53,7 @@ const AnnonceDialog = ({
   }
 
   const chooseOK = () => {
+    setNbManchesBis(nbManches)
     setAnnonceAll(
       annonceAll.map((a, index) => {
         if (index === indexPlayer)

@@ -21,6 +21,7 @@ function App() {
   const players = usePlayersList();
 
   const [inLobby, setInLobby] = useState(false)
+  const [accueil, setAccueil] = useState(true)
   const [roomName, setRoomName] = useState('')
 
   const [gameLaunched, setGameLaunched] = useMultiplayerState('gameLaunched', false)
@@ -42,6 +43,7 @@ function App() {
 
   const [okNextGame, setOkNextGame] = useMultiplayerState('okNextGame', Array(4).fill(true))
   const [nbManches, setNbManches] = useMultiplayerState('nbManches', 0)
+  const [nbManchesBis, setNbManchesBis] = useMultiplayerState('nbManchesBis', 0)
   const [endGame, setEndGame] = useMultiplayerState('endGame', false)
   const [resetGame, setResetGame] = useMultiplayerState('resetGame', false)
   const [teamsPoints, setTeamsPoints] = useMultiplayerState('teamsPoints', [0, 0])
@@ -75,6 +77,8 @@ function App() {
   const me = myPlayer();
   const meIndex = players.findIndex(player => me.id === player.id) 
 
+  console.log('roomName', roomName)
+
   // console.log('players', players[0]?.state?.profile)
 
   // lancer une partie si 4 personnes dans la room
@@ -85,24 +89,26 @@ function App() {
       setOpenAnnonce(true, {reliable: true})
     }
     else if (players.length < 4 && gameStarted) {
-      window.location.reload();
+      window.location.assign('/');
     }
     else if (endGame && newGameDecision.some(d => d === false))
-      window.location.reload()
+      window.location.assign('/')
+
     else if (endGame && !newGameDecision.some(d => d === false)) {
       setNbManches(-1, {reliable: true})
       setEndGame(false, {reliable: true})
     }
-  }, [players, newGameDecision, endGame/* , gameLaunched */]);
+
+    // else if (!inLobby) {
+    //   window.location.assign('/')
+    // }
+  }, [players, newGameDecision, endGame, inLobby/* , gameLaunched */]);
 
   // afficher les lobbys de playroom kit
   useEffect(() => {
-    if (inLobby)
-      // insertCoin({
-      //   options: { roomCode: roomName, maxPlayersPerRoom: 4 },
-      //   // onLaunchCallback: () => setGameLaunched(true)
-      // });
+    if (inLobby) {
       insertCoin({ roomCode: roomName})
+    }
   }, [inLobby]);
 
   
@@ -144,7 +150,7 @@ function App() {
         }), {reliable: true})
       }
 
-      if (nbPasses >= 4 && lastAnnonce === '' && !mancheProcessing) {
+      if (nbPasses >= 4 && lastAnnonce === '' && !mancheProcessing && nbManches === nbManchesBis) {
         setMancheProcessing(true)
         setCards(distribution(decoupe(mixCards())), {reliable: true})
         setTurnPlayer((partance+1) % 4, {reliable: true})
@@ -424,6 +430,7 @@ function App() {
 
               // for scores dialog
               nbManches={nbManches}
+              setNbManchesBis={setNbManchesBis}
               players={players}
               manchesPoints={manchesPoints}
               manchesTeamWin={manchesTeamWin}

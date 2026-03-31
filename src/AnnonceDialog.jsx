@@ -38,7 +38,7 @@ const AnnonceDialog = ({
   }
 
   const choosePass = () => {
-    setNbManchesBis(nbManches)
+    setNbManchesBis(nbManches, {reliable: true})
     setAnnonceAll(
       annonceAll.map((a, index) => {
         if (index === indexPlayer)
@@ -53,7 +53,7 @@ const AnnonceDialog = ({
   }
 
   const chooseOK = () => {
-    setNbManchesBis(nbManches)
+    setNbManchesBis(nbManches, {reliable: true})
     setAnnonceAll(
       annonceAll.map((a, index) => {
         if (index === indexPlayer)

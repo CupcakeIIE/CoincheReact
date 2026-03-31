@@ -28,7 +28,11 @@ function App() {
   // afficher les lobbys de playroom kit
   useEffect(() => {
     if (inLobby) {
-      insertCoin({ roomCode: roomName}).then(() => setInGame(true))
+      insertCoin({ roomCode: roomName, maxPlayersPerRoom : 4})
+        .then(() => setInGame(true))
+        .catch((error) => {
+          setInLobby(false)
+        });
     }
   }, [inLobby]);
 

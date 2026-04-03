@@ -81,6 +81,7 @@ const Game = (/* {gameLaunched = false} */) => {
   // console.log('roomName', roomName)
 
   // console.log('players', players[0]?.state?.profile)
+  console.log('ingame', players)
 
   // lancer une partie si 4 personnes dans la room
   useEffect(() => {

@@ -26,24 +26,31 @@ function App() {
   const [roomName, setRoomName] = useState('')
 
   // afficher les lobbys de playroom kit
+  // useEffect(() => {
+  //   if (inLobby) {
+  //     insertCoin({ roomCode: roomName/* , maxPlayersPerRoom : 4 */})
+  //     .then(() => /* {
+  //       console.log('players', players, players.length)
+  //       if (players.length === 4) { */
+  //           setInGame(true)
+  //           /* setInLobby(false)
+  //         }
+  //         // else {
+  //         //   window.location.assign('/')
+  //         // }
+  //       } */)
+  //       .catch((error) => {
+  //         setInLobby(false)
+  //       });
+  //   }
+  // }, [inLobby, players]);
   useEffect(() => {
     if (inLobby) {
-      insertCoin({ roomCode: roomName/* , maxPlayersPerRoom : 4 */})
-      .then(() => /* {
-        console.log('players', players, players.length)
-        if (players.length === 4) { */
-            setInGame(true)
-            /* setInLobby(false)
-          }
-          // else {
-          //   window.location.assign('/')
-          // }
-        } */)
-        .catch((error) => {
-          setInLobby(false)
-        });
+      insertCoin({ roomCode: roomName, maxPlayersPerRoom : 4})
+      .then(() => setInGame(true))
+      .catch((error) => setInLobby(false))
     }
-  }, [inLobby, players]);
+  }, [inLobby]);
 
   // useEffect(() => {
   //   if (players.length === 4/*  && isHost() */) {
@@ -51,6 +58,11 @@ function App() {
   //     setInLobby(false)
   //   }
   // }, [players])
+
+  useEffect(() => {
+    if (inGame && players.length !== 4)
+      window.location.assign('/')
+   }, [inGame])
 
  
   // console.log('players', players, players.length)
@@ -70,7 +82,7 @@ function App() {
           <Button color='secondary' variant='outlined' onClick={() => setInLobby(true)} className={classes.buttonLobby}>Commencer</Button>
         </div>
       }
-      {inGame &&
+      {inGame && players.length === 4 &&
         <Game />
       }
     </div>

@@ -484,6 +484,7 @@ const Game = (/* {gameLaunched = false} */) => {
               setShowBelote={setShowBelote}
               beloteAskedArray={beloteAskedArray}
               setBeloteAskedArray={setBeloteAskedArray}
+              beloteDialogOpen={beloteDialogOpen}
               setBeloteDialogOpen={setBeloteDialogOpen}
 
               pointsPlayer={pointsPlayer}

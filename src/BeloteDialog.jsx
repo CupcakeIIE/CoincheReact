@@ -9,17 +9,18 @@ const BeloteDialog = ({
   setPointsPlayer = [],
   indexPlayer = 0,
   setBeloteRefus,
+  beloteDialogOpen = false,
   setBeloteDialogOpen,
 }) => {
 
   const classes = useStyles()
 
-  // useEffect(() => {
-  //   if (open)
-  //     setBeloteDialogOpen(true, {reliable: true})
-  //   else
-  //     setBeloteDialogOpen(false, {reliable: true})
-  // }, [open])
+  useEffect(() => {
+    if (open && !beloteDialogOpen)
+      setBeloteDialogOpen(true, {reliable: true})
+    else if (!open && beloteDialogOpen)
+      setBeloteDialogOpen(false, {reliable: true})
+  }, [open, beloteDialogOpen])
 
   const clickDecisionYes = () => {
     setShowBelote(true)

@@ -48,7 +48,7 @@ const MainInGame = ({
 
   pointsPlayer = [], setPointsPlayer,
 
-  setBeloteDialogOpen,
+  beloteDialogOpen, setBeloteDialogOpen,
 }) => {
 
   const classes = useStyles()
@@ -229,6 +229,7 @@ const MainInGame = ({
           setPointsPlayer={setPointsPlayer}
           indexPlayer={indexMe}
           setBeloteRefus={setBeloteRefus}
+          beloteDialogOpen={beloteDialogOpen}
           setBeloteDialogOpen={setBeloteDialogOpen}
         />
         

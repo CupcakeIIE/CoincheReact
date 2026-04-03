@@ -28,15 +28,33 @@ function App() {
   // afficher les lobbys de playroom kit
   useEffect(() => {
     if (inLobby) {
-      insertCoin({ roomCode: roomName, maxPlayersPerRoom : 4})
-        .then(() => setInGame(true))
+      insertCoin({ roomCode: roomName/* , maxPlayersPerRoom : 4 */})
+      .then(() => /* {
+        console.log('players', players, players.length)
+        if (players.length === 4) { */
+            setInGame(true)
+            /* setInLobby(false)
+          }
+          // else {
+          //   window.location.assign('/')
+          // }
+        } */)
         .catch((error) => {
           setInLobby(false)
         });
     }
-  }, [inLobby]);
+  }, [inLobby, players]);
+
+  // useEffect(() => {
+  //   if (players.length === 4/*  && isHost() */) {
+  //     setInGame(true)
+  //     setInLobby(false)
+  //   }
+  // }, [players])
 
  
+  // console.log('players', players, players.length)
+
   const enterRoomName = (event) => {
     const value = event.target.value
     setRoomName(value)
@@ -44,7 +62,7 @@ function App() {
 
   return (
     <div>
-      {!inLobby &&
+      {!inLobby && !inGame &&
         <div className={classes.preGame}>
           <Typography color='secondary' variant='h2'>COINCHE</Typography>
           <TextField label="Room ID" variant="outlined" color='secondary' onChange={enterRoomName} />

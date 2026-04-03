@@ -73,6 +73,7 @@ const Game = (/* {gameLaunched = false} */) => {
   const [etapeBeloteSaid, setEtapeBeloteSaid] = useMultiplayerState('etapeBeloteSaid', 0)
   const [showBelote, setShowBelote] = useMultiplayerState('showBelote', false)
   const [beloteAskedArray, setBeloteAskedArray] = useMultiplayerState('beloteAskedArray', Array(4).fill(false))
+  const [beloteDialogOpen, setBeloteDialogOpen] = useMultiplayerState('beloteDialogOpen', false)
 
   const me = myPlayer();
   const meIndex = players.findIndex(player => me.id === player.id) 
@@ -176,11 +177,12 @@ const Game = (/* {gameLaunched = false} */) => {
     }
   }, [nbPasses, coinche, lastAnnonce, relanceGame])
 
+  // console.log('belotedialogopne', beloteDialogOpen)
 
   // savoir quelle carte est la plus forte dans celles déjà jouées
   // on recalcule à chaque fois qu'une carte est jouée
   useEffect(() => {
-    if (isHost()) {
+    if (isHost() && !beloteDialogOpen) {
       
       let newHighestCard;
       // console.log('cards + dernier pli', cardsPlayed, cardsDernierPli)
@@ -236,7 +238,7 @@ const Game = (/* {gameLaunched = false} */) => {
         }
       }
     }
-  }, [cardsPlayed])
+  }, [cardsPlayed, beloteDialogOpen])
 
 
   // si le nombre de manches dépasse 4 => indiquer la fin de la partie avec une dialog
@@ -481,6 +483,7 @@ const Game = (/* {gameLaunched = false} */) => {
               setShowBelote={setShowBelote}
               beloteAskedArray={beloteAskedArray}
               setBeloteAskedArray={setBeloteAskedArray}
+              setBeloteDialogOpen={setBeloteDialogOpen}
 
               pointsPlayer={pointsPlayer}
               setPointsPlayer={setPointsPlayer}

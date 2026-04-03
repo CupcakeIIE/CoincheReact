@@ -1,5 +1,6 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import useStyles from "./style";
+import { useEffect } from "react";
 
 const BeloteDialog = ({
   open = false, 
@@ -8,9 +9,17 @@ const BeloteDialog = ({
   setPointsPlayer = [],
   indexPlayer = 0,
   setBeloteRefus,
+  setBeloteDialogOpen,
 }) => {
 
   const classes = useStyles()
+
+  // useEffect(() => {
+  //   if (open)
+  //     setBeloteDialogOpen(true, {reliable: true})
+  //   else
+  //     setBeloteDialogOpen(false, {reliable: true})
+  // }, [open])
 
   const clickDecisionYes = () => {
     setShowBelote(true)

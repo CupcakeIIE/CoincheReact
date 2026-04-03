@@ -47,6 +47,8 @@ const MainInGame = ({
   beloteAskedArray = [], setBeloteAskedArray,
 
   pointsPlayer = [], setPointsPlayer,
+
+  setBeloteDialogOpen,
 }) => {
 
   const classes = useStyles()
@@ -106,6 +108,9 @@ const MainInGame = ({
 
     if (atout !== 'Sans' && atout !== 'Tout' && cardList[0] === atout && (cardList[1] === 'Roi' || cardList[1] === 'Dame'))
       setEtapeBeloteSaid(etapeBeloteSaid + 1)
+
+    if (etapeBeloteSaid === 1)
+      setBeloteDialogOpen(true, {reliable: true})
 
     // si première carte du pli, sauvegarder la couleur
     if  (couleurJouee === '')
@@ -224,6 +229,7 @@ const MainInGame = ({
           setPointsPlayer={setPointsPlayer}
           indexPlayer={indexMe}
           setBeloteRefus={setBeloteRefus}
+          setBeloteDialogOpen={setBeloteDialogOpen}
         />
         
         <ScoreDialog
@@ -321,7 +327,7 @@ const MainInGame = ({
               sx={{ position: 'fixed', bottom: 16, left: '71%', zIndex: 2}}
               onClose={handleClose}
               onOpen={handleOpen}
-              open={true}
+              open={open}
               FabProps={{
                 sx: { zIndex: 2, '&:focus': {
                   outline: 'none',

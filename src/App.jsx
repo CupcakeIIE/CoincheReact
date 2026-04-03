@@ -62,7 +62,7 @@ function App() {
   useEffect(() => {
     if (inGame && players.length !== 4)
       window.location.assign('/')
-   }, [inGame])
+   }, [inGame, players])
 
  
   // console.log('players', players, players.length)

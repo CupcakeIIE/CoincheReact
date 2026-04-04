@@ -81,7 +81,7 @@ const Game = (/* {gameLaunched = false} */) => {
   // console.log('roomName', roomName)
 
   // console.log('players', players[0]?.state?.profile)
-  console.log('ingame', players)
+  // console.log('ingame', players)
 
   // lancer une partie si 4 personnes dans la room
   useEffect(() => {
@@ -178,7 +178,7 @@ const Game = (/* {gameLaunched = false} */) => {
     }
   }, [nbPasses, coinche, lastAnnonce, relanceGame])
 
-  // console.log('belotedialogopne', beloteDialogOpen)
+  console.log('belotedialogopne', beloteDialogOpen)
 
   // savoir quelle carte est la plus forte dans celles déjà jouées
   // on recalcule à chaque fois qu'une carte est jouée

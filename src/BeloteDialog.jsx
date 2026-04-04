@@ -9,18 +9,18 @@ const BeloteDialog = ({
   setPointsPlayer = [],
   indexPlayer = 0,
   setBeloteRefus,
-  beloteDialogOpen = false,
+  // beloteDialogOpen = false,
   setBeloteDialogOpen,
 }) => {
 
   const classes = useStyles()
 
-  useEffect(() => {
-    if (open && !beloteDialogOpen)
-      setBeloteDialogOpen(true, {reliable: true})
-    else if (!open && beloteDialogOpen)
-      setBeloteDialogOpen(false, {reliable: true})
-  }, [open, beloteDialogOpen])
+  // useEffect(() => {
+  //   if (open && !beloteDialogOpen)
+  //     setBeloteDialogOpen(true, {reliable: true})
+  //   else if (!open && beloteDialogOpen)
+  //     setBeloteDialogOpen(false, {reliable: true})
+  // }, [open, beloteDialogOpen])
 
   const clickDecisionYes = () => {
     setShowBelote(true)
@@ -30,11 +30,13 @@ const BeloteDialog = ({
       else
         return p
     }))
+    setBeloteDialogOpen(false, {reliable: true})
   }
 
   const clickDecisionNo = () => {
     setShowBelote(false)
     setBeloteRefus(true)
+    setBeloteDialogOpen(false, {reliable: true})
   }
 
   return (

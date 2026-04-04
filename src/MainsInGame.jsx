@@ -106,11 +106,14 @@ const MainInGame = ({
   const clickCard = (card, indexCarte) => {
     const cardList = card.split(' ')
 
+    if (etapeBeloteSaid === 0 && atout !== 'Sans' && atout !== 'Tout' && cardList[0] === atout && (cardList[1] === 'Roi' || cardList[1] === 'Dame'))
+      setBeloteDialogOpen(true, {reliable: true})
+
     if (atout !== 'Sans' && atout !== 'Tout' && cardList[0] === atout && (cardList[1] === 'Roi' || cardList[1] === 'Dame'))
       setEtapeBeloteSaid(etapeBeloteSaid + 1)
 
-    if (etapeBeloteSaid === 1)
-      setBeloteDialogOpen(true, {reliable: true})
+    // if (etapeBeloteSaid === 1)
+    //   setBeloteDialogOpen(true, {reliable: true})
 
     // si première carte du pli, sauvegarder la couleur
     if  (couleurJouee === '')

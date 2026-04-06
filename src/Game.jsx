@@ -91,10 +91,10 @@ const Game = (/* {gameLaunched = false} */) => {
       setOpenAnnonce(true, {reliable: true})
     }
     else if (players.length < 4 && gameStarted) {
-      window.location.assign('/');
+      window.location.assign('/CoincheReact/');
     }
     else if (endGame && newGameDecision.some(d => d === false))
-      window.location.assign('/')
+      window.location.assign('/CoincheReact/')
 
     else if (endGame && !newGameDecision.some(d => d === false || d === null)) {
       setNbManches(-1, {reliable: true})

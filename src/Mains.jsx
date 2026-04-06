@@ -56,7 +56,7 @@ const Main = ({
   const [openScores, setOpenScores] = useState(false)
   const [openRegles, setOpenRegles] = useState(false)
 
-  const cardBack = '/Cartes/card_back.png'
+  const cardBack = './Cartes/card_back.png'
 
   // see for -212px => strange should be universal for all kind of screens
   // const styleTop = {top: '0px', transform: 'rotate(180deg)'}
@@ -181,7 +181,7 @@ const Main = ({
           <div>
             {myCards.map((card, index) => (
               <Button key={index} className={classes.buttonCards} disabled>
-                <img src={isMe ? `/Cartes/${card}.png` : cardBack} className={classes.imgCard} />
+                <img src={isMe ? `./Cartes/${card}.png` : cardBack} className={classes.imgCard} />
               </Button>
             ))}
           </div>

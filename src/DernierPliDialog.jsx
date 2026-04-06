@@ -37,7 +37,7 @@ const DernierPliDialog = ({
       <DialogContent className={classes.dialogContentDernierPli}>
         {cardsDernierPli.map((carte, i) => (
           <div className={classes.boxCarte} style={getUsedStyleInGame(i)}>
-            {carte && <img src={`/Cartes/${carte}.png`} className={classes.imgCard} />}
+            {carte && <img src={`./Cartes/${carte}.png`} className={classes.imgCard} />}
             {carte && carte === dernierPliWinningCard && <div className={classes.cardOverlayDernierPli}></div>}
           </div>
         ))}

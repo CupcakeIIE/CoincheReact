@@ -61,7 +61,7 @@ function App() {
 
   useEffect(() => {
     if (inGame && players.length !== 4)
-      window.location.assign('/')
+      window.location.assign('/CoincheReact/')
    }, [inGame, players])
 
   

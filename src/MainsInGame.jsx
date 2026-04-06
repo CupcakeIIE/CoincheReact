@@ -53,7 +53,7 @@ const MainInGame = ({
 
   const classes = useStyles()
 
-  const cardBack = '/Cartes/card_back.png'
+  const cardBack = './Cartes/card_back.png'
 
   // see for -212px => strange should be universal for all kind of screens
   const styleTop = {top: '0px', transform: 'translate(-50%, 0%) rotate(180deg)', zIndex: 0}
@@ -251,7 +251,7 @@ const MainInGame = ({
         {index === indexMe &&
           cardsPlayed.map((carte, i) => (
             <div className={classes.boxCarte} style={getUsedStyleInGame(i)}>
-              {carte && <img src={`/Cartes/${carte}.png`} className={classes.imgCard} />}
+              {carte && <img src={`./Cartes/${carte}.png`} className={classes.imgCard} />}
             </div>
         ))}
 
@@ -298,7 +298,7 @@ const MainInGame = ({
                       disabled={(indexMe !== index || indexMe !== turnPlayer) || !putClickable || !card}
                       onClick={() => clickCard(card, i)}
                     >
-                      {card && <img src={isMe ? `/Cartes/${card}.png` : cardBack} className={classes.imgCard} />}
+                      {card && <img src={isMe ? `./Cartes/${card}.png` : cardBack} className={classes.imgCard} />}
                       {card && isMe && indexMe === turnPlayer && putClickable && <div className={classes.cardOverlay}></div>}
                     </Button>
                 )})}

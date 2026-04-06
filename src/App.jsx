@@ -85,7 +85,7 @@ function App() {
     setRoomName(value)
   }
 
-  console.log('roomCode', getRoomCode())
+  // console.log('roomCode', getRoomCode())
 
   return (
     <div>

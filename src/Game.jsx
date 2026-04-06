@@ -178,7 +178,7 @@ const Game = (/* {gameLaunched = false} */) => {
     }
   }, [nbPasses, coinche, lastAnnonce, relanceGame])
 
-  console.log('belotedialogopne', beloteDialogOpen)
+  // console.log('belotedialogopne', beloteDialogOpen)
 
   // savoir quelle carte est la plus forte dans celles déjà jouées
   // on recalcule à chaque fois qu'une carte est jouée

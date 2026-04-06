@@ -60,8 +60,10 @@ function App() {
   // }, [players])
 
   useEffect(() => {
-    if (inGame && players.length !== 4)
-      window.location.assign('/CoincheReact/')
+    if (inGame && players.length !== 4) {
+      window.location.href = import.meta.env.BASE_URL
+      // window.location.assign('/CoincheReact/')
+    }
    }, [inGame, players])
 
   

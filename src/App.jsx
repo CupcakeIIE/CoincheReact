@@ -24,6 +24,7 @@ function App() {
   const [inLobby, setInLobby] = useState(false)
   const [inGame, setInGame] = useState(false)
   const [roomName, setRoomName] = useState('')
+  const [roomId, setRoomId] = useState('')
 
   // afficher les lobbys de playroom kit
   // useEffect(() => {
@@ -84,7 +85,12 @@ function App() {
 
   const enterRoomName = (event) => {
     const value = event.target.value
-    setRoomName(value)
+    setRoomId(value)
+  }
+
+  const joinRoom = () => {
+    setRoomName(roomId)
+    setInLobby(true)
   }
 
   // console.log('roomCode', getRoomCode())
@@ -96,7 +102,7 @@ function App() {
           <Typography color='secondary' variant='h2'>COINCHE</Typography>
           <TextField label="Room ID" variant="outlined" color='secondary' onChange={enterRoomName} />
           <Typography variant='caption'>Room ID comporte seulement 4 caractères (ne pas prendre en compte le premier R)</Typography>
-          <Button color='secondary' variant='outlined' onClick={() => setInLobby(true)} className={classes.buttonLobby}>Commencer</Button>
+          <Button color='secondary' variant='outlined' onClick={joinRoom} className={classes.buttonLobby}>Commencer</Button>
         </div>
       }
       {inGame && players.length === 4 &&

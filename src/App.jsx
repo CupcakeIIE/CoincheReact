@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { usePlayersList, insertCoin, useMultiplayerState, isHost, myPlayer } from "playroomkit";
+import { usePlayersList, insertCoin, useMultiplayerState, isHost, myPlayer, getRoomCode } from "playroomkit";
 
 import './App.css'
 import useStyles from "./style";
@@ -45,12 +45,12 @@ function App() {
   //   }
   // }, [inLobby, players]);
   useEffect(() => {
-    if (inLobby) {
+    if (inLobby || roomName !== '') {
       insertCoin({ roomCode: roomName, maxPlayersPerRoom : 4})
       .then(() => setInGame(true))
       .catch((error) => setInLobby(false))
     }
-  }, [inLobby]);
+  }, [inLobby, roomName]);
 
   // useEffect(() => {
   //   if (players.length === 4/*  && isHost() */) {
@@ -64,6 +64,19 @@ function App() {
       window.location.assign('/')
    }, [inGame, players])
 
+  
+  useEffect(() => {
+    const hash = window.location.hash
+    if (hash) {
+      const params = new URLSearchParams(hash.substring(1)); // enlève le "#"
+      const r = params.get("r"); // "RP6R3"
+
+      if (r) {
+        setRoomName(r.substring(1)); // "P6R3"
+      }
+    }
+  }, [])
+
  
   // console.log('players', players, players.length)
 
@@ -72,9 +85,11 @@ function App() {
     setRoomName(value)
   }
 
+  console.log('roomCode', getRoomCode())
+
   return (
     <div>
-      {!inLobby && !inGame &&
+      {!inLobby && !inGame && roomName === '' &&
         <div className={classes.preGame}>
           <Typography color='secondary' variant='h2'>COINCHE</Typography>
           <TextField label="Room ID" variant="outlined" color='secondary' onChange={enterRoomName} />

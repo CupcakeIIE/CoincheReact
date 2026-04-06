@@ -96,9 +96,10 @@ const Game = (/* {gameLaunched = false} */) => {
     else if (endGame && newGameDecision.some(d => d === false))
       window.location.assign('/')
 
-    else if (endGame && !newGameDecision.some(d => d === false)) {
+    else if (endGame && !newGameDecision.some(d => d === false || d === null)) {
       setNbManches(-1, {reliable: true})
       setEndGame(false, {reliable: true})
+      setResetGame(true, {reliable: true})
     }
 
     // else if (!inLobby) {
@@ -160,9 +161,11 @@ const Game = (/* {gameLaunched = false} */) => {
         setNbManches(nbManches + 1, {reliable: true})
         setNbPasses(0, {reliable: true})
         setAnnonceAll(Array(4).fill(''), {reliable: true})
-        setOpenNewMancheDialog(Array(4).fill(true), {reliable: true})
-        setRaison('4 passes', {reliable: true})
-        // console.log('passes', nbManches, nbPasses)
+        if (nbManches < 3) {
+          setOpenNewMancheDialog(Array(4).fill(true), {reliable: true})
+          setRaison('4 passes', {reliable: true})
+          // console.log('passes', nbManches, nbPasses)
+        }
       }
 
       if (relanceGame) {
@@ -247,6 +250,8 @@ const Game = (/* {gameLaunched = false} */) => {
     if (nbManches >= 4)
       setEndGame(true)
   }, [nbManches])
+
+  // console.log('endGame', endGame, nbManches)
 
   // lancer la manche suivante => reset pleins de var
   useEffect(() => {
@@ -373,7 +378,7 @@ const Game = (/* {gameLaunched = false} */) => {
         } */}
 
         <NewGameDialog 
-          open={endGame && !newGameDecision[meIndex]} 
+          open={endGame && newGameDecision[meIndex] === null} 
           newGameDecision={newGameDecision}
           setNewGameDecision={setNewGameDecision}
           indexPlayer={meIndex}
@@ -405,7 +410,7 @@ const Game = (/* {gameLaunched = false} */) => {
         />
 
         {/* afficher les mains des joueurs pendant les annonces != du in game (pour plus de simplicté de compréhension) */}
-        {gameStarted && !gamePlaying && !openNewMancheDialog[meIndex] && okNextGame[meIndex] &&
+        {gameStarted && !gamePlaying && !openNewMancheDialog[meIndex] && okNextGame[meIndex] && !endGame &&
           players.map((player, index) => (
             <Main 
               indexMe={meIndex} 
@@ -441,7 +446,7 @@ const Game = (/* {gameLaunched = false} */) => {
         ))}
 
         {/* afficher les mains des joueurs quand la partie a commencé */}
-        {gameStarted && gamePlaying && !openWinDialog &&
+        {gameStarted && gamePlaying && !openWinDialog && !endGame &&
           players.map((player, index) => (
             <MainInGame
               indexMe={meIndex} 

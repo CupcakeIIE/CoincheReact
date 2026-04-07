@@ -1,6 +1,9 @@
 import { makeStyles } from '@mui/styles';
+import { createTheme } from "@mui/material/styles";
 
-const useStyles = makeStyles(theme => ({
+const theme = createTheme();
+
+const useStyles = makeStyles({
   gameBoard: {
     // position: 'relative',
     justifyContent: 'center',
@@ -13,8 +16,16 @@ const useStyles = makeStyles(theme => ({
       outline: "none",
     },
     padding: '0px !important',
-    width: '70px',
-    height: '100px',
+    // width: '70px',
+    // height: '100px',
+    // width: '10.1vh',
+    width: 'auto',
+    height: '14.5vh',
+  
+    // [theme.breakpoints.down('md')]: {
+    //   width: '2vw',
+    //   height: '10vh',
+    // },
   },
 
   iconButton: {
@@ -49,8 +60,11 @@ const useStyles = makeStyles(theme => ({
   boxCarte: {
     position: 'absolute',
     padding: '0px !important',
-    width: '70px',
-    height: '100px',
+    // width: '70px',
+    // height: '100px',
+    // width: '10.1vh',
+    width: 'auto',
+    height: '15%',
   },
 
   imgCard: {
@@ -340,6 +354,6 @@ const useStyles = makeStyles(theme => ({
     justifyContent: 'center',
     gap: '2em',
   },
-}));
+});
 
 export default useStyles;

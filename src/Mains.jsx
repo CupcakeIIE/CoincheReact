@@ -65,10 +65,15 @@ const Main = ({
   // const styleRight = {right: '0px', transform: 'translate(-0%, 200%) rotate(270deg)'}
   // const styleRight = {right: '-212px', transform: 'rotate(270deg)'}
   // const styleBottom = {bottom: '0px'}
-  const styleTop = {top: '0px', transform: 'translate(-50%, 0%) rotate(180deg)', zIndex: 0}
-  const styleLeft = {left: '0px', top: '50%', transform: 'translate(-0%, -50%) rotate(90deg)', zIndex: 0}
-  const styleRight = {right: '0px', top: '50%', transform: 'translate(0%, -50%) rotate(270deg)', zIndex: 0}
-  const styleBottom = {bottom: '0px', transform: 'translate(-50%, 0%)', zIndex: 0}
+  const styleTop = {top: '0px', zIndex: 0}
+  const styleLeft = {left: '0px', zIndex: 0}
+  const styleRight = {right: '0px', zIndex: 0}
+  const styleBottom = {bottom: '0px', zIndex: 0}
+
+  const styleTopBis = {transform: 'translate(-0%, 50%) rotate(180deg)'}
+  const styleLeftBis = {transform: 'translate(15%, -0%) rotate(90deg)'}
+  const styleRightBis = {transform: 'translate(-15%, 0%) rotate(270deg)'}
+  const styleBottomBis = {transform: 'translate(-0%, -50%)',}
 
   const isMe = indexMe === index
   const myCards = cards.slice(indexMe*8, (indexMe+1)*8)
@@ -85,6 +90,17 @@ const Main = ({
       return styleTop
     else if (i === 3)
       return styleRight
+  }
+  const getUsedStyleBis = (index) => {
+    const i = (index - indexMe + 4) % 4;
+    if (i === 0)
+      return styleBottomBis
+    else if (i === 1)
+      return styleLeftBis
+    else if (i === 2)
+      return styleTopBis
+    else if (i === 3)
+      return styleRightBis
   }
 
   const clickShowAnnonce = () => {
@@ -137,161 +153,163 @@ const Main = ({
       <Backdrop open={open} sx={{zIndex: 1, pointerEvents: 'none'}} />}
 
       <div style={getUsedStyle(index)} className={classes.mains}>
-        
-        {/* {index === indexMe &&
-          <Tooltip title="Scores">
-            <IconButton className={classes.buttonDernierPli} color="secondary" onClick={() => setOpenScores(true)}>
-              <RadarIcon />
-            </IconButton>
-          </Tooltip>
-        } */}
+        <div style={getUsedStyleBis(index)} className={classes.mains}>
+          
+          {/* {index === indexMe &&
+            <Tooltip title="Scores">
+              <IconButton className={classes.buttonDernierPli} color="secondary" onClick={() => setOpenScores(true)}>
+                <RadarIcon />
+              </IconButton>
+            </Tooltip>
+          } */}
 
-        {/* {index === indexMe && turnPlayer === indexMe && !showRelance && !showCoinche &&
-          <Tooltip title="Annoncer">
-            <IconButton className={classes.buttonDernierPli} color="secondary" onClick={clickShowAnnonce}>
-              <VisibilityIcon />
-            </IconButton>
-          </Tooltip>
-        } */}
-        {/* {index === indexMe && showRelance && lastAnnonce === '' &&
-          <Tooltip title="Relancer">
-            <IconButton className={classes.buttonDernierPli} color="secondary" onClick={() => setDisplayRelance(true)}>
-              <ReplayIcon />
-            </IconButton>
-          </Tooltip>
-        } */}
-        {/* {indexMe === index && lastAnnonce !== '' && (lastAnnoncePlayerIndex%2) !== (indexMe%2) && showCoinche &&
-          <Tooltip title="Coincher">
-            <IconButton className={classes.buttonDernierPli} color="secondary" onClick={() => setDisplayCoinche(true)}>
-              <DoDisturbIcon />
-            </IconButton>
-          </Tooltip>
-        } */}
-        <div className={index === turnPlayer ? classes.colorPlayer : classes.noColorPlayer} style={{backgroundColor: (index === turnPlayer && color)}}>
-          <div className={classes.textMain}>
-            <div className={classes.nameMain}>
-              {index === partance && <Brightness1Icon color='secondary' />}
-              <div>
-                <img src={photo} width='50px' />
+          {/* {index === indexMe && turnPlayer === indexMe && !showRelance && !showCoinche &&
+            <Tooltip title="Annoncer">
+              <IconButton className={classes.buttonDernierPli} color="secondary" onClick={clickShowAnnonce}>
+                <VisibilityIcon />
+              </IconButton>
+            </Tooltip>
+          } */}
+          {/* {index === indexMe && showRelance && lastAnnonce === '' &&
+            <Tooltip title="Relancer">
+              <IconButton className={classes.buttonDernierPli} color="secondary" onClick={() => setDisplayRelance(true)}>
+                <ReplayIcon />
+              </IconButton>
+            </Tooltip>
+          } */}
+          {/* {indexMe === index && lastAnnonce !== '' && (lastAnnoncePlayerIndex%2) !== (indexMe%2) && showCoinche &&
+            <Tooltip title="Coincher">
+              <IconButton className={classes.buttonDernierPli} color="secondary" onClick={() => setDisplayCoinche(true)}>
+                <DoDisturbIcon />
+              </IconButton>
+            </Tooltip>
+          } */}
+          <div className={index === turnPlayer ? classes.colorPlayer : classes.noColorPlayer} style={{backgroundColor: (index === turnPlayer && color)}}>
+            <div className={classes.textMain}>
+              <div className={classes.nameMain}>
+                {index === partance && <Brightness1Icon color='secondary' />}
+                <div>
+                  <img src={photo} width='50px' />
+                </div>
+                <Typography /* color={isMe ? 'success' : 'error'} */ style={{color: (index === indexMe ? (index === turnPlayer ? getComplementaryColor(color) : color) : '#000')}} className={classes.namePlayer} variant="h5"><b>{player}</b></Typography>
               </div>
-              <Typography /* color={isMe ? 'success' : 'error'} */ style={{color: (index === indexMe ? (index === turnPlayer ? getComplementaryColor(color) : color) : '#000')}} className={classes.namePlayer} variant="h5"><b>{player}</b></Typography>
+              <Typography><b>{annonceAll[index]}</b></Typography>
             </div>
-            <Typography><b>{annonceAll[index]}</b></Typography>
+            <div>
+              {myCards.map((card, index) => (
+                <Button key={index} className={classes.buttonCards} disabled>
+                  <img src={isMe ? `./Cartes/${card}.png` : cardBack} className={classes.imgCard} />
+                </Button>
+              ))}
+            </div>
+            <AnnonceDialog 
+              open={turnPlayer === indexMe && indexMe === index && openAnnonce && showAnnonce && !showRelance && !showCoinche} 
+              turnPlayer={turnPlayer} 
+              setTurnPlayer={setTurnPlayer} 
+              annonceAll={annonceAll}
+              setAnnonceAll={setAnnonceAll}
+              indexPlayer={indexMe}
+              setLastAnnonce={setLastAnnonce}
+              setLastAnnoncePlayerIndex={setLastAnnoncePlayerIndex}
+              nbPasses={nbPasses}
+              setNbPasses={setNbPasses}
+              setShowAnnonce={setShowAnnonce}
+              // setShowCoinche={setShowCoinche}
+              lastMise={lastMise}
+              setLastMise={setLastMise}
+              nbManches={nbManches}
+              setNbManchesBis={setNbManchesBis}
+            />
+            <RelanceDialog 
+              open={indexMe === index && showRelance && lastAnnonce === '' && displayRelance}
+              setOpen={setShowRelance}
+              setCanRelance={setCanRelance}
+              setRelanceGame={setRelanceGame}
+              setDisplayRelance={setDisplayRelance}
+            />
+            <CoincheDialog
+              open={indexMe === index && lastAnnonce !== '' && (lastAnnoncePlayerIndex%2) !== (indexMe%2) && showCoinche && displayCoinche}
+              setOpen={setShowCoinche}
+              lastAnnonce={lastAnnonce}
+              setCoinched={setCoinche}
+              setDisplayCoinche={setDisplayCoinche}
+              // setCanCoinche={setCanCoinche}
+              annonceAll={annonceAll}
+              setAnnonceAll={setAnnonceAll}
+              indexPlayer={indexMe}
+            />
+            <ScoreDialog
+              open={openScores && index === indexMe}
+              setOpen={setOpenScores}
+              
+              // for scores dialog
+              nbManches={nbManches}
+              players={players}
+              manchesPoints={manchesPoints}
+              manchesTeamWin={manchesTeamWin}
+            />
+            <ReglesDialog
+              open={index === indexMe && openRegles}
+              setOpen={setOpenRegles}
+            />
           </div>
-          <div>
-            {myCards.map((card, index) => (
-              <Button key={index} className={classes.buttonCards} disabled>
-                <img src={isMe ? `./Cartes/${card}.png` : cardBack} className={classes.imgCard} />
-              </Button>
-            ))}
-          </div>
-          <AnnonceDialog 
-            open={turnPlayer === indexMe && indexMe === index && openAnnonce && showAnnonce && !showRelance && !showCoinche} 
-            turnPlayer={turnPlayer} 
-            setTurnPlayer={setTurnPlayer} 
-            annonceAll={annonceAll}
-            setAnnonceAll={setAnnonceAll}
-            indexPlayer={indexMe}
-            setLastAnnonce={setLastAnnonce}
-            setLastAnnoncePlayerIndex={setLastAnnoncePlayerIndex}
-            nbPasses={nbPasses}
-            setNbPasses={setNbPasses}
-            setShowAnnonce={setShowAnnonce}
-            // setShowCoinche={setShowCoinche}
-            lastMise={lastMise}
-            setLastMise={setLastMise}
-            nbManches={nbManches}
-            setNbManchesBis={setNbManchesBis}
-          />
-          <RelanceDialog 
-            open={indexMe === index && showRelance && lastAnnonce === '' && displayRelance}
-            setOpen={setShowRelance}
-            setCanRelance={setCanRelance}
-            setRelanceGame={setRelanceGame}
-            setDisplayRelance={setDisplayRelance}
-          />
-          <CoincheDialog
-            open={indexMe === index && lastAnnonce !== '' && (lastAnnoncePlayerIndex%2) !== (indexMe%2) && showCoinche && displayCoinche}
-            setOpen={setShowCoinche}
-            lastAnnonce={lastAnnonce}
-            setCoinched={setCoinche}
-            setDisplayCoinche={setDisplayCoinche}
-            // setCanCoinche={setCanCoinche}
-            annonceAll={annonceAll}
-            setAnnonceAll={setAnnonceAll}
-            indexPlayer={indexMe}
-          />
-          <ScoreDialog
-            open={openScores && index === indexMe}
-            setOpen={setOpenScores}
-            
-            // for scores dialog
-            nbManches={nbManches}
-            players={players}
-            manchesPoints={manchesPoints}
-            manchesTeamWin={manchesTeamWin}
-          />
-          <ReglesDialog
-            open={index === indexMe && openRegles}
-            setOpen={setOpenRegles}
-          />
-        </div>
-        {indexMe === index &&
-          <Portal>
-            <SpeedDial
-              icon={<SpeedDialIcon />}
-              ariaLabel="Actions du jeu"      // obligatoire ou ça plante (me demandez pas pourquoi)
-              sx={{ position: 'fixed', bottom: 16, left: '71%', zIndex: 2}}
-              onClose={handleClose}
-              onOpen={handleOpen}
-              open={open}
-              FabProps={{
-                sx: { zIndex: 2,
-                  '&:focus': {
-                      outline: 'none',
-                    }
-                  },
-                color: 'secondary',
-              }}
-            >
-              {actions.map((action) => (action.show &&
-                <SpeedDialAction
-                  key={action.name}
-                  icon={action.icon}
-                  onClick={action.onClick}
-                  slotProps={{
-                    fab: {
-                      sx: {
-                        '&:focus': {
-                          outline: 'none',
-                          boxShadow: 'none',
+          {indexMe === index &&
+            <Portal>
+              <SpeedDial
+                icon={<SpeedDialIcon />}
+                ariaLabel="Actions du jeu"      // obligatoire ou ça plante (me demandez pas pourquoi)
+                sx={{ position: 'fixed', bottom: 16, left: '71%', zIndex: 2}}
+                onClose={handleClose}
+                onOpen={handleOpen}
+                open={open}
+                FabProps={{
+                  sx: { zIndex: 2,
+                    '&:focus': {
+                        outline: 'none',
+                      }
+                    },
+                  color: 'secondary',
+                }}
+              >
+                {actions.map((action) => (action.show &&
+                  <SpeedDialAction
+                    key={action.name}
+                    icon={action.icon}
+                    onClick={action.onClick}
+                    slotProps={{
+                      fab: {
+                        sx: {
+                          '&:focus': {
+                            outline: 'none',
+                            boxShadow: 'none',
+                          },
                         },
                       },
-                    },
-                    tooltip: {
-                      open: true,
-                      title: action.name,
-                    },
-                    staticTooltipLabel: {
-                      sx: {
-                          width: '120px',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          display: 'flex',
+                      tooltip: {
+                        open: true,
+                        title: action.name,
                       },
-                    },
-                  }}
-                />
-              ))}
-            </SpeedDial>
-          </Portal>}
-        {/* {index === indexMe &&
-          <Tooltip title="Règles">
-            <IconButton className={classes.buttonDernierPli} color="secondary">
-              <InfoOutlineIcon />
-            </IconButton>
-          </Tooltip>
-        } */}
+                      staticTooltipLabel: {
+                        sx: {
+                            width: '120px',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            display: 'flex',
+                        },
+                      },
+                    }}
+                  />
+                ))}
+              </SpeedDial>
+            </Portal>}
+          {/* {index === indexMe &&
+            <Tooltip title="Règles">
+              <IconButton className={classes.buttonDernierPli} color="secondary">
+                <InfoOutlineIcon />
+              </IconButton>
+            </Tooltip>
+          } */}
+        </div>
       </div>
     </div>
   )

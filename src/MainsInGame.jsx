@@ -55,11 +55,15 @@ const MainInGame = ({
 
   const cardBack = './Cartes/card_back.png'
 
-  // see for -212px => strange should be universal for all kind of screens
-  const styleTop = {top: '0px', transform: 'translate(-50%, 0%) rotate(180deg)', zIndex: 0}
-  const styleLeft = {left: '0px', top: '50%', transform: 'translate(-0%, -50%) rotate(90deg)', zIndex: 0}
-  const styleRight = {right: '0px', top: '50%', transform: 'translate(0%, -50%) rotate(270deg)', zIndex: 0}
-  const styleBottom = {bottom: '0px', transform: 'translate(-50%, 0%)', zIndex: 0}
+  const styleTop = {top: '0px', zIndex: 0}
+  const styleLeft = {left: '0px', zIndex: 0}
+  const styleRight = {right: '0px', zIndex: 0}
+  const styleBottom = {bottom: '0px', zIndex: 0}
+
+  const styleTopBis = {transform: 'translate(-0%, 50%) rotate(180deg)'}
+  const styleLeftBis = {transform: 'translate(15%, -0%) rotate(90deg)'}
+  const styleRightBis = {transform: 'translate(-15%, 0%) rotate(270deg)'}
+  const styleBottomBis = {transform: 'translate(-0%, -50%)',}
 
   const isMe = indexMe === index
   const myCards = cards.slice(index*8, (index+1)*8)
@@ -101,6 +105,17 @@ const MainInGame = ({
       return styleTop
     else if (i === 3)
       return styleRight
+  }
+  const getUsedStyleBis = (index) => {
+    const i = (index - indexMe + 4) % 4;
+    if (i === 0)
+      return styleBottomBis
+    else if (i === 1)
+      return styleLeftBis
+    else if (i === 2)
+      return styleTopBis
+    else if (i === 3)
+      return styleRightBis
   }
 
   const clickCard = (card, indexCarte) => {
@@ -256,120 +271,122 @@ const MainInGame = ({
         ))}
 
         <div style={getUsedStyle(index)} className={classes.mains}>
-          {/* {index === indexMe &&
-            <Tooltip title="Scores">
-              <IconButton className={classes.buttonDernierPli} color="secondary" onClick={() => setOpenScores(true)}>
-                <RadarIcon />
-              </IconButton>
-            </Tooltip>
-          } */}
-          {/* {index === indexMe && cardsDernierPli.length !== 0 &&
-            <Tooltip title="Consulter le dernier pli">
-              <IconButton className={classes.buttonDernierPli} color="secondary" onClick={clickDernierPli}>
-                <VisibilityIcon />
-              </IconButton>
-            </Tooltip>
-          } */}
-          <div style={getUsedStyleBelote(index)}>
-          {index === indexBelote && showBelote &&
-            (etapeBeloteSaid === 1 ? <i>Belote</i>
-            : (etapeBeloteSaid === 2 ? <i>Belote - ReBelote</i> : <i></i>))
-          }
-          </div>
+          <div style={getUsedStyleBis(index)} className={classes.mains}>
+            {/* {index === indexMe &&
+              <Tooltip title="Scores">
+                <IconButton className={classes.buttonDernierPli} color="secondary" onClick={() => setOpenScores(true)}>
+                  <RadarIcon />
+                </IconButton>
+              </Tooltip>
+            } */}
+            {/* {index === indexMe && cardsDernierPli.length !== 0 &&
+              <Tooltip title="Consulter le dernier pli">
+                <IconButton className={classes.buttonDernierPli} color="secondary" onClick={clickDernierPli}>
+                  <VisibilityIcon />
+                </IconButton>
+              </Tooltip>
+            } */}
+            <div style={getUsedStyleBelote(index)}>
+            {index === indexBelote && showBelote &&
+              (etapeBeloteSaid === 1 ? <i>Belote</i>
+              : (etapeBeloteSaid === 2 ? <i>Belote - ReBelote</i> : <i></i>))
+            }
+            </div>
 
-            <div className={index === turnPlayer ? classes.colorPlayer : classes.noColorPlayer} style={{backgroundColor: (index === turnPlayer && color)}}>
-              <div className={classes.textMain}>
-                <div className={classes.nameMain}>
-                  {index === partance && <Brightness1Icon color='secondary' />}
-                  <div>
-                    <img src={photo} width='50px' />
+              <div className={index === turnPlayer ? classes.colorPlayer : classes.noColorPlayer} style={{backgroundColor: (index === turnPlayer && color)}}>
+                <div className={classes.textMain}>
+                  <div className={classes.nameMain}>
+                    {index === partance && <Brightness1Icon color='secondary' />}
+                    <div>
+                      <img src={photo} width='50px' />
+                    </div>
+                    <Typography style={{color: (index === indexMe ? (index === turnPlayer ? getComplementaryColor(color) : color) : '#000')}} className={classes.namePlayer} variant="h5"><b>{player}</b></Typography>
                   </div>
-                  <Typography style={{color: (index === indexMe ? (index === turnPlayer ? getComplementaryColor(color) : color) : '#000')}} className={classes.namePlayer} variant="h5"><b>{player}</b></Typography>
+                  <Typography><b>{annonceAll[index]}</b></Typography>
                 </div>
-                <Typography><b>{annonceAll[index]}</b></Typography>
-              </div>
-              <div>
-                {(handSorted[indexMe] && indexMe === index ? myCardsSorted : myCards).map((card, i) => {
-                  const putClickable = isJouable(myCards, card, couleurJouee, atout, highestCard, cardsPlayed, indexMe)
-                  return (
-                    <Button 
-                      key={i} 
-                      className={classes.buttonCards} 
-                      disabled={(indexMe !== index || indexMe !== turnPlayer) || !putClickable || !card}
-                      onClick={() => clickCard(card, i)}
-                    >
-                      {card && <img src={isMe ? `./Cartes/${card}.png` : cardBack} className={classes.imgCard} />}
-                      {card && isMe && indexMe === turnPlayer && putClickable && <div className={classes.cardOverlay}></div>}
-                    </Button>
-                )})}
-              </div>
-            {/* </div> */}
-          </div>
-          {/* {index === indexMe && 
-            <Tooltip title='Trier' className={classes.tooltipClass}>
-              <FilterListOffIcon color='secondary' />
-              <Switch 
-                checked={handSorted[indexMe]} 
-                onChange={clickSwitchHandSorted}
-                color='secondary'
-                />
-              <FilterListIcon color="secondary" />
-            </Tooltip>
-          }
-          {index === indexMe &&
-            <Tooltip title="Règles">
-              <IconButton className={classes.buttonDernierPli} color="secondary">
-                <InfoOutlineIcon />
-              </IconButton>
-            </Tooltip>
-          } */}
-          {indexMe === index &&
-          <Portal>
-            <SpeedDial
-              icon={<SpeedDialIcon />}
-              ariaLabel="Actions du jeu"      // obligatoire ou ça plante (me demandez pas pourquoi)
-              sx={{ position: 'fixed', bottom: 16, left: '71%', zIndex: 2}}
-              onClose={handleClose}
-              onOpen={handleOpen}
-              open={open}
-              FabProps={{
-                sx: { zIndex: 2, '&:focus': {
-                  outline: 'none',
-                }, },
-                color: 'secondary',
-              }}
-            >
-              {actions.map((action) => (action.show &&
-                <SpeedDialAction
-                  key={action.name}
-                  icon={action.icon}
-                  onClick={action.onClick}
-                  slotProps={{
-                    fab: {
-                      sx: {
-                        '&:focus': {
-                          outline: 'none',
-                          boxShadow: 'none',
+                <div>
+                  {(handSorted[indexMe] && indexMe === index ? myCardsSorted : myCards).map((card, i) => {
+                    const putClickable = isJouable(myCards, card, couleurJouee, atout, highestCard, cardsPlayed, indexMe)
+                    return (
+                      <Button 
+                        key={i} 
+                        className={classes.buttonCards} 
+                        disabled={(indexMe !== index || indexMe !== turnPlayer) || !putClickable || !card}
+                        onClick={() => clickCard(card, i)}
+                      >
+                        {card && <img src={isMe ? `./Cartes/${card}.png` : cardBack} className={classes.imgCard} />}
+                        {card && isMe && indexMe === turnPlayer && putClickable && <div className={classes.cardOverlay}></div>}
+                      </Button>
+                  )})}
+                </div>
+              {/* </div> */}
+            </div>
+            {/* {index === indexMe && 
+              <Tooltip title='Trier' className={classes.tooltipClass}>
+                <FilterListOffIcon color='secondary' />
+                <Switch 
+                  checked={handSorted[indexMe]} 
+                  onChange={clickSwitchHandSorted}
+                  color='secondary'
+                  />
+                <FilterListIcon color="secondary" />
+              </Tooltip>
+            }
+            {index === indexMe &&
+              <Tooltip title="Règles">
+                <IconButton className={classes.buttonDernierPli} color="secondary">
+                  <InfoOutlineIcon />
+                </IconButton>
+              </Tooltip>
+            } */}
+            {indexMe === index &&
+            <Portal>
+              <SpeedDial
+                icon={<SpeedDialIcon />}
+                ariaLabel="Actions du jeu"      // obligatoire ou ça plante (me demandez pas pourquoi)
+                sx={{ position: 'fixed', bottom: 16, left: '71%', zIndex: 2}}
+                onClose={handleClose}
+                onOpen={handleOpen}
+                open={open}
+                FabProps={{
+                  sx: { zIndex: 2, '&:focus': {
+                    outline: 'none',
+                  }, },
+                  color: 'secondary',
+                }}
+              >
+                {actions.map((action) => (action.show &&
+                  <SpeedDialAction
+                    key={action.name}
+                    icon={action.icon}
+                    onClick={action.onClick}
+                    slotProps={{
+                      fab: {
+                        sx: {
+                          '&:focus': {
+                            outline: 'none',
+                            boxShadow: 'none',
+                          },
                         },
                       },
-                    },
-                    tooltip: {
-                      open: true,
-                      title: action.name,
-                    },
-                    staticTooltipLabel: {
-                      sx: {
-                          width: '120px',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          display: 'flex',
+                      tooltip: {
+                        open: true,
+                        title: action.name,
                       },
-                    },
-                  }}
-                />
-              ))}
-            </SpeedDial>
-          </Portal>}
+                      staticTooltipLabel: {
+                        sx: {
+                            width: '120px',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            display: 'flex',
+                        },
+                      },
+                    }}
+                  />
+                ))}
+              </SpeedDial>
+            </Portal>}
+          </div>
         </div>
       </div>
     </div>

@@ -100,6 +100,7 @@ function App() {
       {!inLobby && !inGame && roomName === '' &&
         <div className={classes.preGame}>
           <Typography color='secondary' variant='h2'>COINCHE</Typography>
+          <Typography variant='h6' color='warning'>Jouable uniquement sur PC pour le moment</Typography>
           <TextField label="Room ID" variant="outlined" color='secondary' onChange={enterRoomName} />
           <Typography variant='caption'>Room ID comporte seulement 4 caractères (ne pas prendre en compte le premier R)</Typography>
           <Button color='secondary' variant='outlined' onClick={joinRoom} className={classes.buttonLobby}>Commencer</Button>

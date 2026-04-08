@@ -21,11 +21,6 @@ const useStyles = makeStyles({
     // width: '10.1vh',
     width: 'auto',
     height: '14.5vh',
-  
-    // [theme.breakpoints.down('md')]: {
-    //   width: '2vw',
-    //   height: '10vh',
-    // },
   },
 
   iconButton: {

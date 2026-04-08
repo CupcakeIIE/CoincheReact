@@ -1,4 +1,4 @@
-import { Backdrop, Button, IconButton, Portal, setRef, SpeedDial, SpeedDialAction, SpeedDialIcon, Tooltip, Typography } from "@mui/material";
+import { Backdrop, Button, IconButton, Portal, setRef, SpeedDial, SpeedDialAction, SpeedDialIcon, Tooltip, Typography, useMediaQuery } from "@mui/material";
 import Brightness1Icon from '@mui/icons-material/Brightness1';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import InfoOutlineIcon from '@mui/icons-material/InfoOutline';
@@ -43,6 +43,8 @@ const Main = ({
 
   const classes = useStyles()
 
+  const matches = useMediaQuery('(min-height:600px)');
+
   const [showAnnonce, setShowAnnonce] = useState(true)
 
   const [showRelance, setShowRelance] = useState(false)
@@ -72,7 +74,9 @@ const Main = ({
 
   const styleTopBis = {transform: 'translate(-0%, 50%) rotate(180deg)'}
   const styleLeftBis = {transform: 'translate(15%, -0%) rotate(90deg)'}
+  const styleLeftBisTel = {transform: 'translate(14%, -0%) rotate(90deg)'}
   const styleRightBis = {transform: 'translate(-15%, 0%) rotate(270deg)'}
+  const styleRightBisTel = {transform: 'translate(-14%, 0%) rotate(270deg)'}
   const styleBottomBis = {transform: 'translate(-0%, -50%)',}
 
   const isMe = indexMe === index
@@ -95,12 +99,16 @@ const Main = ({
     const i = (index - indexMe + 4) % 4;
     if (i === 0)
       return styleBottomBis
-    else if (i === 1)
+    else if (i === 1 && matches)
       return styleLeftBis
+    else if (i === 1)
+      return styleLeftBisTel
     else if (i === 2)
       return styleTopBis
-    else if (i === 3)
+    else if (i === 3 && matches)
       return styleRightBis
+    else if (i === 3)
+      return styleRightBisTel
   }
 
   const clickShowAnnonce = () => {
@@ -144,7 +152,7 @@ const Main = ({
     { icon: <InfoOutlineIcon color='secondary' />, name: 'Règles', onClick: () => setOpenRegles(true), show: true },
   ];
 
-  // console.log('relance', showRelance)
+  console.log('min height 600px', matches)
 
   return (
     <div>
@@ -184,20 +192,23 @@ const Main = ({
               </IconButton>
             </Tooltip>
           } */}
-          <div className={index === turnPlayer ? classes.colorPlayer : classes.noColorPlayer} style={{backgroundColor: (index === turnPlayer && color)}}>
-            <div className={classes.textMain}>
+          <div className={index === turnPlayer ? classes.colorPlayer : classes.noColorPlayer} style={{backgroundColor: (index === turnPlayer && color), width: `${(matches || isMe) ? '600px' : '300px'}`}}>
+            <div className={classes.textMain} style={{flexDirection: `${(matches || isMe) ? 'row' : 'column'}`}}>
               <div className={classes.nameMain}>
                 {index === partance && <Brightness1Icon color='secondary' />}
                 <div>
-                  <img src={photo} width='50px' />
+                  <img src={photo} width={(matches || isMe) ? '50px' : '30px'} />
                 </div>
-                <Typography /* color={isMe ? 'success' : 'error'} */ style={{color: (index === indexMe ? (index === turnPlayer ? getComplementaryColor(color) : color) : '#000')}} className={classes.namePlayer} variant="h5"><b>{player}</b></Typography>
+                <Typography /* color={isMe ? 'success' : 'error'} */ style={{color: (index === indexMe ? (index === turnPlayer ? getComplementaryColor(color) : color) : '#000')}} className={classes.namePlayer} variant={(matches || isMe) ? 'h5' : 'body1'}><b>{player}</b></Typography>
               </div>
-              <Typography><b>{annonceAll[index]}</b></Typography>
+              {(matches || isMe)
+                ? <Typography><b>{annonceAll[index]}</b></Typography>
+                : <Typography><i>{annonceAll[index]}</i></Typography>
+              }
             </div>
             <div>
-              {myCards.map((card, index) => (
-                <Button key={index} className={classes.buttonCards} disabled>
+              {(matches || isMe) && myCards.map((card, index) => (
+                <Button key={index} className={classes.buttonCards} disabled style={{width: '70px', height: '100px'}}>
                   <img src={isMe ? `./Cartes/${card}.png` : cardBack} className={classes.imgCard} />
                 </Button>
               ))}
@@ -258,7 +269,7 @@ const Main = ({
               <SpeedDial
                 icon={<SpeedDialIcon />}
                 ariaLabel="Actions du jeu"      // obligatoire ou ça plante (me demandez pas pourquoi)
-                sx={{ position: 'fixed', bottom: 16, left: '71%', zIndex: 2}}
+                sx={{ position: 'fixed', bottom: 16, left: `${matches ? '71%' : '83%'}`, zIndex: 2}}
                 onClose={handleClose}
                 onOpen={handleOpen}
                 open={open}

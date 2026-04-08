@@ -11,13 +11,15 @@ import VictoryDialog from "./VictoryDialog";
 import WaitDialog from "./WaitDialog";
 import NewGameDialog from "./NewGameDialog";
 import WaitingDecisionDialog from "./WaitingDecisionDialog";
-import { Button, TextField, Typography } from "@mui/material";
+import { Button, TextField, Typography, useMediaQuery } from "@mui/material";
 import NewMancheDialog from "./NewMancheDialog";
 import Game from "./Game";
 
 function App() {
 
   const classes = useStyles()
+
+  const matches = useMediaQuery('(min-width:600px)');
 
   const players = usePlayersList();
 
@@ -97,17 +99,20 @@ function App() {
 
   return (
     <div>
-      {!inLobby && !inGame && roomName === '' &&
+      {!inLobby && !inGame && roomName === '' && matches &&
         <div className={classes.preGame}>
           <Typography color='secondary' variant='h2'>COINCHE</Typography>
-          <Typography variant='h6' color='warning'>Jouable uniquement sur PC pour le moment</Typography>
+          {/* <Typography variant='h6' color='warning'>Jouable uniquement sur PC pour le moment</Typography> */}
           <TextField label="Room ID" variant="outlined" color='secondary' onChange={enterRoomName} />
           <Typography variant='caption'>Room ID comporte seulement 4 caractères (ne pas prendre en compte le premier R)</Typography>
           <Button color='secondary' variant='outlined' onClick={joinRoom} className={classes.buttonLobby}>Commencer</Button>
         </div>
       }
-      {inGame && players.length === 4 &&
+      {inGame && players.length === 4 && matches &&
         <Game />
+      }
+      {!matches &&
+        <Typography color='warning'>Veuillez changer de taille d'écran pour pouvoir jouer dans des conditions optimales</Typography>
       }
     </div>
   )

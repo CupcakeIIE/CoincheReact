@@ -1,4 +1,4 @@
-import { Backdrop, Button, IconButton, Portal, SpeedDial, SpeedDialAction, SpeedDialIcon, Switch, Tooltip, Typography } from "@mui/material";
+import { Backdrop, Button, IconButton, Portal, SpeedDial, SpeedDialAction, SpeedDialIcon, Switch, Tooltip, Typography, useMediaQuery } from "@mui/material";
 import Brightness1Icon from '@mui/icons-material/Brightness1';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import InfoOutlineIcon from '@mui/icons-material/InfoOutline';
@@ -53,6 +53,8 @@ const MainInGame = ({
 
   const classes = useStyles()
 
+  const matches = useMediaQuery('(min-height:600px)');
+
   const cardBack = './Cartes/card_back.png'
 
   const styleTop = {top: '0px', zIndex: 0}
@@ -62,7 +64,9 @@ const MainInGame = ({
 
   const styleTopBis = {transform: 'translate(-0%, 50%) rotate(180deg)'}
   const styleLeftBis = {transform: 'translate(15%, -0%) rotate(90deg)'}
+  const styleLeftBisTel = {transform: 'translate(14%, -0%) rotate(90deg)'}
   const styleRightBis = {transform: 'translate(-15%, 0%) rotate(270deg)'}
+  const styleRightBisTel = {transform: 'translate(-14%, 0%) rotate(270deg)'}
   const styleBottomBis = {transform: 'translate(-0%, -50%)',}
 
   const isMe = indexMe === index
@@ -110,12 +114,16 @@ const MainInGame = ({
     const i = (index - indexMe + 4) % 4;
     if (i === 0)
       return styleBottomBis
-    else if (i === 1)
+    else if (i === 1 && matches)
       return styleLeftBis
+    else if (i === 1)
+      return styleLeftBisTel
     else if (i === 2)
       return styleTopBis
-    else if (i === 3)
+    else if (i === 3 && matches)
       return styleRightBis
+    else if (i === 3)
+      return styleRightBisTel
   }
 
   const clickCard = (card, indexCarte) => {
@@ -293,31 +301,34 @@ const MainInGame = ({
             }
             </div>
 
-              <div className={index === turnPlayer ? classes.colorPlayer : classes.noColorPlayer} style={{backgroundColor: (index === turnPlayer && color)}}>
-                <div className={classes.textMain}>
+              <div className={index === turnPlayer ? classes.colorPlayer : classes.noColorPlayer} style={{backgroundColor: (index === turnPlayer && color), width: `${(matches || isMe) ? '600px' : '300px'}`}}>
+                <div className={classes.textMain} style={{flexDirection: `${(matches || isMe) ? 'row' : 'column'}`}}>
                   <div className={classes.nameMain}>
                     {index === partance && <Brightness1Icon color='secondary' />}
                     <div>
-                      <img src={photo} width='50px' />
+                      <img src={photo} width={(matches || isMe) ? '50px' : '30px'} />
                     </div>
-                    <Typography style={{color: (index === indexMe ? (index === turnPlayer ? getComplementaryColor(color) : color) : '#000')}} className={classes.namePlayer} variant="h5"><b>{player}</b></Typography>
+                    <Typography style={{color: (index === indexMe ? (index === turnPlayer ? getComplementaryColor(color) : color) : '#000')}} className={classes.namePlayer} variant={(matches || isMe) ? 'h5' : 'body1'}><b>{player}</b></Typography>
                   </div>
-                  <Typography><b>{annonceAll[index]}</b></Typography>
+                  {(matches || isMe)
+                    ? <Typography><b>{annonceAll[index]}</b></Typography>
+                    : <Typography><i>{annonceAll[index]}</i></Typography>
+                  }
                 </div>
                 <div>
-                  {(handSorted[indexMe] && indexMe === index ? myCardsSorted : myCards).map((card, i) => {
+                  {(matches || isMe) && ((handSorted[indexMe] && indexMe === index ? myCardsSorted : myCards).map((card, i) => {
                     const putClickable = isJouable(myCards, card, couleurJouee, atout, highestCard, cardsPlayed, indexMe)
                     return (
                       <Button 
                         key={i} 
                         className={classes.buttonCards} 
                         disabled={(indexMe !== index || indexMe !== turnPlayer) || !putClickable || !card}
-                        onClick={() => clickCard(card, i)}
+                        onClick={() => clickCard(card, i)} style={{width: '70px', height: '100px'}}
                       >
                         {card && <img src={isMe ? `./Cartes/${card}.png` : cardBack} className={classes.imgCard} />}
                         {card && isMe && indexMe === turnPlayer && putClickable && <div className={classes.cardOverlay}></div>}
                       </Button>
-                  )})}
+                  )}))}
                 </div>
               {/* </div> */}
             </div>
@@ -344,7 +355,7 @@ const MainInGame = ({
               <SpeedDial
                 icon={<SpeedDialIcon />}
                 ariaLabel="Actions du jeu"      // obligatoire ou ça plante (me demandez pas pourquoi)
-                sx={{ position: 'fixed', bottom: 16, left: '71%', zIndex: 2}}
+                sx={{ position: 'fixed', bottom: 16, left: `${matches ? '71%' : '83%'}`, zIndex: 2}}
                 onClose={handleClose}
                 onOpen={handleOpen}
                 open={open}

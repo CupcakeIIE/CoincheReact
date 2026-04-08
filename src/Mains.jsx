@@ -152,7 +152,7 @@ const Main = ({
     { icon: <InfoOutlineIcon color='secondary' />, name: 'Règles', onClick: () => setOpenRegles(true), show: true },
   ];
 
-  console.log('min height 600px', matches)
+  // console.log('min height 600px', matches)
 
   return (
     <div>
@@ -192,7 +192,7 @@ const Main = ({
               </IconButton>
             </Tooltip>
           } */}
-          <div className={index === turnPlayer ? classes.colorPlayer : classes.noColorPlayer} style={{backgroundColor: (index === turnPlayer && color), width: `${(matches || isMe) ? '600px' : '300px'}`}}>
+          <div className={index === turnPlayer ? classes.colorPlayer : classes.noColorPlayer} style={{backgroundColor: (index === turnPlayer && color), width: `${(matches || isMe) ? '600px' : '300px'}`, minHeight: '75px'}}>
             <div className={classes.textMain} style={{flexDirection: `${(matches || isMe) ? 'row' : 'column'}`}}>
               <div className={classes.nameMain}>
                 {index === partance && <Brightness1Icon color='secondary' />}

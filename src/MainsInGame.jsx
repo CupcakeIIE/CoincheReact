@@ -169,20 +169,33 @@ const MainInGame = ({
   const styleLeftCard = {left: '50%', top:' 50%', transform: 'translate(-200%, -50%) rotate(90deg)'}
   const styleRightCard = {right: '50%', top: '50%', transform: 'translate(200%, -50%) rotate(270deg)'}
   const styleBottomCard = {bottom: '50%', left: '50%', transform: 'translate(-50%, 150%'}  
+
+  const styleTopCardTel = {top: '42%', left: '50%', transform: 'translate(-50%, -150%) rotate(180deg)'}
+  const styleLeftCardTel = {left: '50%', top:' 42%', transform: 'translate(-200%, -50%) rotate(90deg)'}
+  const styleRightCardTel = {right: '50%', top: '42%', transform: 'translate(200%, -50%) rotate(270deg)'}
+  const styleBottomCardTel = {bottom: '58%', left: '50%', transform: 'translate(-50%, 150%'}  
   // const styleTopCard = {top: '0px', transform: 'rotate(180deg)'}
   // const styleLeftCard = {left: '-212px', transform: 'rotate(90deg)'}
   // const styleRightCard = {right: '-212px', transform: 'rotate(270deg)'}
   // const styleBottomCard = {bottom: '0px'}
   const getUsedStyleInGame = (index) => {
     const i = (index - indexMe + 4) % 4;
-    if (i === 0)
+    if (i === 0 && matches)
       return styleBottomCard
-    else if (i === 1)
+    else if (i === 0)
+      return styleBottomCardTel
+    else if (i === 1 && matches)
       return styleLeftCard
-    else if (i === 2)
+    else if (i === 1)
+      return styleLeftCardTel
+    else if (i === 2 && matches)
       return styleTopCard
-    else if (i === 3)
+    else if (i === 2)
+      return styleTopCardTel
+    else if (i === 3 && matches)
       return styleRightCard
+    else if (i === 3)
+      return styleRightCardTel
   }
 
   const styleTopBelote = {transform: 'translate(0%, -400%)', position:'absolute'}
@@ -273,7 +286,7 @@ const MainInGame = ({
         {/* afficher au centre les cartes jouées pour ce pli */}
         {index === indexMe &&
           cardsPlayed.map((carte, i) => (
-            <div className={classes.boxCarte} style={getUsedStyleInGame(i)}>
+            <div className={classes.boxCarte} style={{...getUsedStyleInGame(i)/* , width: `${matches ? '70px' : '5px'}`, height: `${matches ? '100px' : '80px'}` */}}>
               {carte && <img src={`./Cartes/${carte}.png`} className={classes.imgCard} />}
             </div>
         ))}
@@ -301,7 +314,7 @@ const MainInGame = ({
             }
             </div>
 
-              <div className={index === turnPlayer ? classes.colorPlayer : classes.noColorPlayer} style={{backgroundColor: (index === turnPlayer && color), width: `${(matches || isMe) ? '600px' : '300px'}`}}>
+              <div className={index === turnPlayer ? classes.colorPlayer : classes.noColorPlayer} style={{backgroundColor: (index === turnPlayer && color), width: `${(matches || isMe) ? '600px' : '300px'}`, minHeight: '75px'}}>
                 <div className={classes.textMain} style={{flexDirection: `${(matches || isMe) ? 'row' : 'column'}`}}>
                   <div className={classes.nameMain}>
                     {index === partance && <Brightness1Icon color='secondary' />}
@@ -323,7 +336,8 @@ const MainInGame = ({
                         key={i} 
                         className={classes.buttonCards} 
                         disabled={(indexMe !== index || indexMe !== turnPlayer) || !putClickable || !card}
-                        onClick={() => clickCard(card, i)} style={{width: '70px', height: '100px'}}
+                        onClick={() => clickCard(card, i)} /* style={{width: '70px', height: '100px'}} */
+                        // style={{width: `${matches ? '70px' : '5px'}`, height: `${matches ? '100px' : '80px'}`}}
                       >
                         {card && <img src={isMe ? `./Cartes/${card}.png` : cardBack} className={classes.imgCard} />}
                         {card && isMe && indexMe === turnPlayer && putClickable && <div className={classes.cardOverlay}></div>}

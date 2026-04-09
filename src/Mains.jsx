@@ -208,7 +208,7 @@ const Main = ({
             </div>
             <div>
               {(matches || isMe) && myCards.map((card, index) => (
-                <Button key={index} className={classes.buttonCards} disabled style={{width: '70px', height: '100px'}}>
+                <Button key={index} className={classes.buttonCards} disabled /* style={{width: `${matches ? '70px' : '5px'}`, height: `${matches ? '100px' : '80px'}`}} */>
                   <img src={isMe ? `./Cartes/${card}.png` : cardBack} className={classes.imgCard} />
                 </Button>
               ))}

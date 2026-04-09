@@ -20,7 +20,7 @@ const useStyles = makeStyles({
     // height: '100px',
     // width: '10.1vh',
     width: 'auto',
-    height: '14.5vh',
+    height: '15%',
   },
 
   iconButton: {
@@ -65,7 +65,7 @@ const useStyles = makeStyles({
   imgCard: {
     width: '100%',
     height: '100%',
-    objectFit: 'cover',
+    objectFit: 'fill',
     display: 'block',
   },
 
@@ -189,7 +189,7 @@ const useStyles = makeStyles({
   },
 
   dialogContentDernierPli: {
-    minHeight: '23em !important',
+    // minHeight: '23em !important',  
     minWidth: '35em !important',
   },
 

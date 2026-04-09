@@ -1,4 +1,4 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, useMediaQuery } from "@mui/material";
 import useStyles from "./style";
 
 const DernierPliDialog = ({
@@ -10,6 +10,8 @@ const DernierPliDialog = ({
 }) => {
 
   const classes = useStyles()
+  
+  const matches = useMediaQuery('(min-height:600px)');
 
   const clickRevenirJeu = () => {
     setOpenDernierPli(false)
@@ -34,7 +36,7 @@ const DernierPliDialog = ({
   return (
     <Dialog open={openDernierPli} className={classes.wholeDialog}>
       <DialogTitle className={classes.dialogTitle}>Dernier Pli</DialogTitle>
-      <DialogContent className={classes.dialogContentDernierPli}>
+      <DialogContent className={classes.dialogContentDernierPli} sx={{minHeight: `${(matches) ? '23em !important' : '12em !important'}`}}>
         {cardsDernierPli.map((carte, i) => (
           <div className={classes.boxCarte} style={getUsedStyleInGame(i)}>
             {carte && <img src={`./Cartes/${carte}.png`} className={classes.imgCard} />}

@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { usePlayersList, insertCoin, useMultiplayerState, isHost, myPlayer, getRoomCode } from "playroomkit";
 
+import InfoOutlineIcon from '@mui/icons-material/InfoOutline';
+
 import './App.css'
 import useStyles from "./style";
 import Main from "./Mains";
@@ -11,9 +13,10 @@ import VictoryDialog from "./VictoryDialog";
 import WaitDialog from "./WaitDialog";
 import NewGameDialog from "./NewGameDialog";
 import WaitingDecisionDialog from "./WaitingDecisionDialog";
-import { Button, TextField, Typography, useMediaQuery } from "@mui/material";
+import { Button, IconButton, TextField, Typography, useMediaQuery } from "@mui/material";
 import NewMancheDialog from "./NewMancheDialog";
 import Game from "./Game";
+import ReglesDialog from "./ReglesDialog";
 
 function App() {
 
@@ -27,6 +30,8 @@ function App() {
   const [inGame, setInGame] = useState(false)
   const [roomName, setRoomName] = useState('')
   const [roomId, setRoomId] = useState('')
+
+  const [regles, setRegles] = useState(false)
 
   // afficher les lobbys de playroom kit
   // useEffect(() => {
@@ -95,13 +100,22 @@ function App() {
     setInLobby(true)
   }
 
+  const openInfoCoinche = () => {
+    setRegles(true)
+  }
+
   // console.log('roomCode', getRoomCode())
 
   return (
     <div>
       {!inLobby && !inGame && roomName === '' && matches &&
         <div className={classes.preGame}>
-          <Typography color='secondary' variant='h2'>COINCHE</Typography>
+          <div style={{display: 'flex', flexDirection: "row", gap: '2em', alignItems: 'center'}}>
+            <Typography color='secondary' variant='h2'>COINCHE</Typography>
+            <IconButton onClick={openInfoCoinche} sx={{'&:focus': { outline: 'none', }, border: '1px solid #9500ae !important', height: '40px'}}>
+              <InfoOutlineIcon color='secondary' />
+            </IconButton>
+          </div>
           {/* <Typography variant='h6' color='warning'>Jouable uniquement sur PC pour le moment</Typography> */}
           <TextField label="Room ID" variant="outlined" color='secondary' onChange={enterRoomName} />
           <Typography variant='caption'>Room ID comporte seulement 4 caractères (ne pas prendre en compte le premier R)</Typography>
@@ -113,6 +127,9 @@ function App() {
       }
       {!matches &&
         <Typography color='warning'>Veuillez changer de taille d'écran pour pouvoir jouer dans des conditions optimales</Typography>
+      }
+      {regles &&
+        <ReglesDialog open={regles} setOpen={setRegles} />
       }
     </div>
   )

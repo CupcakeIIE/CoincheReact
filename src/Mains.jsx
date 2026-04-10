@@ -73,9 +73,9 @@ const Main = ({
   const styleBottom = {bottom: '0px', zIndex: 0}
 
   const styleTopBis = {transform: 'translate(-0%, 50%) rotate(180deg)'}
-  const styleLeftBis = {transform: 'translate(15%, -0%) rotate(90deg)'}
+  const styleLeftBis = {transform: 'translate(14.5%, -0%) rotate(90deg)'}
   const styleLeftBisTel = {transform: 'translate(14%, -0%) rotate(90deg)'}
-  const styleRightBis = {transform: 'translate(-15%, 0%) rotate(270deg)'}
+  const styleRightBis = {transform: 'translate(-14.5%, 0%) rotate(270deg)'}
   const styleRightBisTel = {transform: 'translate(-14%, 0%) rotate(270deg)'}
   const styleBottomBis = {transform: 'translate(-0%, -50%)',}
 
